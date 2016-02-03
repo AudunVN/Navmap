@@ -355,7 +355,7 @@
 		});
 		
 		$.get(infocardFile, function(data) {
-			var rawInfocardArray = data.split("\r\n");
+			var rawInfocardArray = data.split("\n");
 			for (i = 0; i < rawInfocardArray.length-1; i += 2) { 
 				infocardArray[rawInfocardArray[i].toString()] = rawInfocardArray[i+1].toString();
 			}
