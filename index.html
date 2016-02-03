@@ -364,7 +364,7 @@
 		});
 		
 		$.get(systemPathFile, function(data) {
-			var rawPathFileArray = data.split("\r\n");
+			var rawPathFileArray = data.split("\n");
 			for (i = 0; i < rawPathFileArray.length; i++) { 
 				if (rawPathFileArray[i].indexOf("Path =") != -1) {
 					var currentConnection = rawPathFileArray[i].match(pathRegex).join().substring(7).replace(/ /g,"").split(",");
@@ -384,7 +384,7 @@
 		});
 		
 		$.get(systemLegalPathFile, function(data) {
-			var rawLegalPathFileArray = data.split("\r\n");
+			var rawLegalPathFileArray = data.split("\n");
 			for (i = 0; i < rawLegalPathFileArray.length; i++) { 
 				if (rawLegalPathFileArray[i].indexOf("Path =") != -1) {
 					var currentConnection = rawLegalPathFileArray[i].match(pathRegex).join().substring(7).replace(/ /g,"").split(",");
