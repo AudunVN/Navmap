@@ -71,6 +71,7 @@
 	var searchTimedOut = "nope";
 	var universeFileGetResult;
 	var prevResponsiveState;
+	var prevResponsiveModeState;
 	var prevLabelMoveState;
 	var lastSearch;
 	var longSystemName;
@@ -183,6 +184,7 @@
 		repopulateFormElements();
 		// initialise rising/falling edge detector
 		prevResponsiveState = "init";
+		prevResponsiveModeState = "init";
 		prevLabelMoveState = "init";
 		updateConfigClasses();
 	});
@@ -214,6 +216,21 @@
 			$(".map .object.wreck label").hAlign();
 		} else {
 			$(".object.wreck label").addClass("hidden");
+		}
+		if (document.querySelector(".configOption#responsive input").checked) {
+			if (document.querySelector(".configOption#responsiveMode input").checked && (prevResponsiveModeState == "unchecked" | prevResponsiveModeState == "init")) {
+				$(".systemConnection").remove();
+				$("body").addClass("scaleWidth");
+				$("body").removeClass("scaleHeight");
+				prevResponsiveModeState = "checked";
+				generateSystemConnections();
+			} else if (!document.querySelector(".configOption#responsiveMode input").checked && (prevResponsiveModeState == "checked" | prevResponsiveModeState == "init")) {
+				$(".systemConnection").remove();
+				$("body").addClass("scaleHeight");
+				$("body").removeClass("scaleWidth");
+				prevResponsiveModeState = "unchecked";
+				generateSystemConnections();
+			}
 		}
 		if (document.querySelector(".configOption#responsive input").checked && (prevResponsiveState == "unchecked" | prevResponsiveState == "init")) {
 			$(".systemConnection").remove();
