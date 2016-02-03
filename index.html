@@ -36,8 +36,8 @@
 	var objectRegex = /(\n[^\r\n;]*\[[Oo]bject\])([^;\[]*(?=\n\w*|$))/g;
 	var zoneRegex = /(\n[^\r\n;]*\[[Zz]one\])([^;\[]*(?=\n\w*|$))/g;
 	var zoneNicknameRegex = /zone = ([^\r\n;]*)/g;
-	var asteroidsRegex = /(\[Asteroids\])(\r\n.+)*/g;
-	var lootableZoneRegex = /(\n[^\r\n;]*\[LootableZone\])([^;\[]*(?=\n\w*|$))/g;
+	var asteroidsRegex = /(\[[Aa]steroids\])(\r\n.+)*/g;
+	var lootableZoneRegex = /(\n[^\r\n;]*\[[Ll]ootable[Zz]one\])([^;\[]*(?=\n\w*|$))/g;
 	var lootableZoneDynamicCommodityRegex = /dynamic_loot_commodity = (.*)/g;
 	var lootableZoneDynamicDifficultyRegex = /dynamic_loot_difficulty = (.*)/g;
 	var lootableZoneDynamicCountRegex = /dynamic_loot_count = (.*)/g;
@@ -45,7 +45,7 @@
 	var lootableZoneAsteroidDifficultyRegex = /asteroid_loot_difficulty = (.*)/g;
 	var lootableZoneAsteroidCountRegex = /asteroid_loot_count = (.*)/g;
 	var activeAsteroidGetRequests = -1;
-	var ambientRegex = /(\[Ambient\])(\r\n.+)*/g;
+	var ambientRegex = /(\n[^\r\n;]*\[[Aa]mbient\])([^;\[]*(?=\n\w*|$))/g;
 	var systemRegex = /(\n[^\r\n;]*\[[Ss]ystem\])([^;\[]*(?=\n\w*|$))/g;
 	var solarRegex = /(\n[^\r\n;]*\[[Ss]olar\])([^;\[]*(?=\n\w*|$))/g;
 	var baseRegex = /(\[Base\])(\r\n.+)*/g;
