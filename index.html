@@ -48,7 +48,7 @@
 	var ambientRegex = /(\n[^\r\n;]*\[[Aa]mbient\])([^;\[]*(?=\n\w*|$))/g;
 	var systemRegex = /(\n[^\r\n;]*\[[Ss]ystem\])([^;\[]*(?=\n\w*|$))/g;
 	var solarRegex = /(\n[^\r\n;]*\[[Ss]olar\])([^;\[]*(?=\n\w*|$))/g;
-	var baseRegex = /(\[Base\])(\r\n.+)*/g;
+	var baseRegex = /(\n[^\r\n;]*\[[Bb]ase\])([^;\[]*(?=\n\w*|$))/g;
 	var posRegex = /pos = (.*)/g;
 	var sizeRegex = /size = (.*)/g;
 	var repRegex = /reputation = (.*)/g;
