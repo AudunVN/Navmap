@@ -11,8 +11,10 @@
 	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	<script>
+	/* jquery cookie management methods */
 	!function(e){"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e(require("jquery")):e(jQuery)}(function(e){function n(e){return u.raw?e:encodeURIComponent(e)}function o(e){return u.raw?e:decodeURIComponent(e)}function i(e){return n(u.json?JSON.stringify(e):String(e))}function t(e){0===e.indexOf('"')&&(e=e.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\/g,"\\"));try{return e=decodeURIComponent(e.replace(c," ")),u.json?JSON.parse(e):e}catch(n){}}function r(n,o){var i=u.raw?n:t(n);return e.isFunction(o)?o(i):i}var c=/\+/g,u=e.cookie=function(t,c,s){if(arguments.length>1&&!e.isFunction(c)){if(s=e.extend({},u.defaults,s),"number"==typeof s.expires){var a=s.expires,d=s.expires=new Date;d.setMilliseconds(d.getMilliseconds()+864e5*a)}return document.cookie=[n(t),"=",i(c),s.expires?"; expires="+s.expires.toUTCString():"",s.path?"; path="+s.path:"",s.domain?"; domain="+s.domain:"",s.secure?"; secure":""].join("")}for(var f=t?void 0:{},p=document.cookie?document.cookie.split("; "):[],l=0,m=p.length;m>l;l++){var x=p[l].split("="),g=o(x.shift()),j=x.join("=");if(t===g){f=r(j,c);break}t||void 0===(j=r(j))||(f[g]=j)}return f};u.defaults={},e.removeCookie=function(n,o){return e.cookie(n,"",e.extend({},o,{expires:-1})),!e.cookie(n)}});
 	var dataRootPath = "v48841/";
+	var currentSystem;
 	var nameRegex = /nickname = (.*)/g;
 	var idsNameRegex = /ids_name = (.*)/g;
 	var idsSysNameRegex = /strid_name = (.*)/g;
@@ -48,7 +50,7 @@
 	var ambientRegex = /(\n[^\r\n;]*\[[Aa]mbient\])([^;\[]*(?=\n\w*|$))/g;
 	var systemRegex = /(\n[^\r\n;]*\[[Ss]ystem\])([^;\[]*(?=\n\w*|$))/g;
 	var solarRegex = /(\n[^\r\n;]*\[[Ss]olar\])([^;\[]*(?=\n\w*|$))/g;
-	var baseRegex = /(\[Base\])(\r\n.+)*/g;
+	var baseRegex = /(\n[^\r\n;]*\[[Bb]ase\])([^;\[]*(?=\n\w*|$))/g;
 	var posRegex = /pos = (.*)/g;
 	var sizeRegex = /size = (.*)/g;
 	var repRegex = /reputation = (.*)/g;
@@ -66,11 +68,13 @@
 	var textureFileRegex = /(\\)([^;\\\r\n\.]*)(?=[\.\r\n])/;
 	var rotationRegex = /rotate = (.*)/g;
 	var textRegex = /(<(text|TEXT)>.+?<\/(text|TEXT)>|<(para|PARA)\/>)/g;
+	/* oorpArray contains systems which should be considered as OORP or inaccessible by the universe map. See also:  */
 	var oorpArray = ["hi22","rh11","rh12","iw07","rh10","li11","br17","br19","ew63","ga11","ga13","ga09","ga12","ga05","ga06","ga10","ga14","br10","iw09","li06","ca01","ev01","bw14", "bw13","st02c","st03b","hi19","hi08","hi08","ew37", "ku15", "li07"];
 	var systemScaleFactor = 1;
 	var searchTimedOut = "nope";
 	var universeFileGetResult;
 	var prevResponsiveState;
+	var prevResponsiveModeState;
 	var prevLabelMoveState;
 	var lastSearch;
 	var longSystemName;
@@ -109,6 +113,8 @@
 	var universeMapState = "nope";
 	var sysLootableZoneArray = {};
 	var asteroidsURIArray = {};
+	
+	/* zoneFlagArray is a special lookup array that sets zone classes depending on their zoneFlag attribute. */
 	var zoneFlagArray = {
 		0: "zoneHidden",
 		64: "zoneRockAsteroids",
@@ -144,6 +150,7 @@
 	};
 	
 	function updateCookie(){
+		/* checks for and stores config changes between sessions */
 		var elementValues = {};
 		$(":checkbox").each(function(){
 		  elementValues[this.id] = this.checked;
@@ -154,6 +161,7 @@
 	}
 
 	function repopulateFormElements(){
+		/* readds config changes if there are any stored ones when the page loads */
 		var elementValues = $.cookie('elementValues');
 		if (elementValues){
 			Object.keys(elementValues).forEach(function(element) {
@@ -181,13 +189,15 @@
 
 		$.cookie.json = true;
 		repopulateFormElements();
-		// initialise rising/falling edge detector
+		/* initialise rising/falling edge detector */
 		prevResponsiveState = "init";
+		prevResponsiveModeState = "init";
 		prevLabelMoveState = "init";
 		updateConfigClasses();
 	});
 	
 	function toggleConfigMenu () {
+		/* Toggles the config menu and closes it if the user clicks outside the menu. */
 		$(".configMenu").toggleClass("closed");
 		if (document.querySelector(".configMenu").className.indexOf("closed") == -1) {
 			$('html').click(function() {
@@ -203,18 +213,39 @@
 	}
 		
 	function updateConfigClasses() {
+		/* Runs when the map script determines that there has been a change in configuration -
+		   such as an option being changed in the config menu - which requires further action. */
+
 		if (document.querySelector(".configOption#wrecks  input").checked) {
 			$(".object.wreck").removeClass("hidden");
 			$(".map .object.wreck label").hAlign();
 		} else {
 			$(".object.wreck").addClass("hidden");
 		}
+		
 		if (document.querySelector(".configOption#wreckLabels  input").checked) {
 			$(".object.wreck label").removeClass("hidden");
 			$(".map .object.wreck label").hAlign();
 		} else {
 			$(".object.wreck label").addClass("hidden");
 		}
+		
+		if (document.querySelector(".configOption#responsive input").checked) {
+			if (document.querySelector(".configOption#responsiveMode input").checked && (prevResponsiveModeState == "unchecked" | prevResponsiveModeState == "init")) {
+				$(".systemConnection").remove();
+				$("body").addClass("scaleWidth");
+				$("body").removeClass("scaleHeight");
+				prevResponsiveModeState = "checked";
+				generateSystemConnections();
+			} else if (!document.querySelector(".configOption#responsiveMode input").checked && (prevResponsiveModeState == "checked" | prevResponsiveModeState == "init")) {
+				$(".systemConnection").remove();
+				$("body").addClass("scaleHeight");
+				$("body").removeClass("scaleWidth");
+				prevResponsiveModeState = "unchecked";
+				generateSystemConnections();
+			}
+		}
+		
 		if (document.querySelector(".configOption#responsive input").checked && (prevResponsiveState == "unchecked" | prevResponsiveState == "init")) {
 			$(".systemConnection").remove();
 			$("body").addClass("responsive");
@@ -226,6 +257,7 @@
 			prevResponsiveState = "unchecked";
 			generateSystemConnections();
 		}
+		
 		if (document.querySelector(".configOption#labelMove input").checked && (prevLabelMoveState == "unchecked" | prevLabelMoveState == "init")) {
 			prevLabelMoveState = "checked";
 			if (document.querySelector(".map .system") == null && currentSystemNickname != "Sirius") {
@@ -234,18 +266,21 @@
 		} else if (!document.querySelector(".configOption#labelMove input").checked && (prevLabelMoveState == "checked" | prevLabelMoveState == "init")) {
 			prevLabelMoveState = "unchecked";
 		}
+		
 		if (document.querySelector(".configOption#zoneLabels  input").checked) {
 			$(".zone label").not($(".mineable label")).removeClass("hidden");
 			$(".map .zone label").hAlign();
 		} else {
 			$(".zone label").not($(".mineable label")).addClass("hidden");
 		}
+		
 		if (document.querySelector(".configOption#zones  input").checked) {
 			$(".zone").removeClass("hidden");
 			$(".map .zone label").hAlign();
 		} else {
 			$(".zone").addClass("hidden");
 		}
+		
 		if (document.querySelector(".configOption#connections  input").checked
 			&& document.querySelector(".systemConnectionProp") == null) {
 				generateSystemConnections();
@@ -258,16 +293,20 @@
 			&& document.querySelector(".map .system") !== null) {
 			$(".systemConnectionProp").show();
 		}
+		
 		if (document.querySelector(".configOption#oorp  input").checked) {
 			$(".oorp").removeClass("hidden");
 			$(".map .system.oorp label").hAlign();
 		} else {
 			$(".oorp").addClass("hidden");
 		}
+		
 		generateSystemScale(currentSystem);
+		
 		if (document.querySelector(".map .system") == null) {
 			$(".systemConnectionProp").hide();
 		}
+		
 		if (document.querySelector(".configOption#universeLabels  input").checked
 			&& document.querySelector(".map .system") !== null) {
 			$(".map div label").removeClass("labelDisabled");
@@ -275,6 +314,7 @@
 		} else if (document.querySelector(".map .system") !== null) {
 			$(".map div label").addClass("labelDisabled");
 		}
+		
 		if (document.querySelector(".configOption#systemLabels  input").checked
 			&& document.querySelector(".map .system") == null) {
 			$(".map div label").removeClass("labelDisabled");
@@ -282,10 +322,9 @@
 		} else if (document.querySelector(".map .system") == null) {
 			$(".map div label").addClass("labelDisabled");
 		}
+		
 		console.log("Config classes updated");
 	}
-	
-	var currentSystem;
       
 	function generateSystemScale(system) {
 		if (document.querySelector(".mapScale") != null) {
@@ -306,6 +345,11 @@
 	}
       
 	function generateLookupArrays() {
+		/* contains all the AJAX .get requests responsible for generating the lookup arrays. */
+		
+		/* baseNameArray references internal nicknames to base names from the IONCROSS data included with the mod. This is... unused? Uh. Should probably be removed! */
+		/* Using the IONCROSS files was mostly a relic from the early days of the map, when they seemed like the quickest way to get the data I was looking for, but 
+		   they are relatively seldom updated and /not/ recommended for use. */
 		$.get(baseNameFile, function(data) {
 			var nameArray = data.split("\n");
 			for (i = 0; i < nameArray.length; i++) { 
@@ -315,6 +359,9 @@
 			console.log("Base nickname lookup array generated");
 		});
 		
+		/* systemNameArray and systemClassArray reference internal nicknames to system names and classes (i.e. houses). */
+		/* systemClassArray and systemNameFile are a bit special, as systemNameFile is not automagically generated; 
+		   there is no resource to do so, so these are set in special_systems.txt in the current data directory. */
 		$.get(systemNameFile, function(data) {
 			var nameArray = data.split("\n");
 			for (i = 0; i < nameArray.length; i++) { 
@@ -326,6 +373,8 @@
 			console.log("System nickname lookup array generated");
 		});
 
+		/* commodityNameArray references internal nicknames to commodity names. */
+		/* This is another IONCROSS data-based function that is pending replacement. */
 		$.get(commodityNameFile, function(data) {
 			var nameArray = data.split("\n");
 			for (i = 0; i < nameArray.length; i++) { 
@@ -334,7 +383,9 @@
 			}
 			console.log("Commodity nickname lookup array generated");
 		});
-
+		
+		/* factionNameArray references internal nicknames to faction names. */
+		/* This is another IONCROSS data-based function that is pending replacement. */
 		$.get(factionNameFile, function(data) {
 			var nameArray = data.split("\n");
 			for (i = 0; i < nameArray.length; i++) { 
@@ -344,6 +395,9 @@
 			console.log("Faction nickname lookup array generated");
 		});
 		
+		/* infocardMapArray lists any extra infocards associated with each infocard. */
+		/* This is used for base and planet descriptions, which occasionally use another infocard for 
+		   block text in addition to the main infocard with "technical data" or similar content. */
 		$.get(infocardMapFile, function(data) {
 			var mapArray = data.replace(commentRegex,"").match(infocardMapRegex);
 			for (i = 0; i < mapArray.length; i++) { 
@@ -354,6 +408,7 @@
 			console.log("Infocard map lookup array generated");
 		});
 		
+		/* infocardMapArray references infocard IDS numbers to infocards. */		
 		$.get(infocardFile, function(data) {
 			var rawInfocardArray = data.split("\n");
 			for (i = 0; i < rawInfocardArray.length-1; i += 2) { 
@@ -363,6 +418,7 @@
 			console.log("Infocard lookup array generated");
 		});
 		
+		/* systemPathArray lists systems connected to the input system (by jump gate or jump hole). */
 		$.get(systemPathFile, function(data) {
 			var rawPathFileArray = data.split("\n");
 			for (i = 0; i < rawPathFileArray.length; i++) { 
@@ -383,6 +439,7 @@
 			console.log("Connection lookup array generated");
 		});
 		
+		/* jgConnectionArray lists systems connected to the input system (by jump gate only). */
 		$.get(systemLegalPathFile, function(data) {
 			var rawLegalPathFileArray = data.split("\n");
 			for (i = 0; i < rawLegalPathFileArray.length; i++) { 
@@ -403,6 +460,15 @@
 			console.log("Jumpgate connection lookup array generated");
 		});
 		
+		/* solarArchArray maps object solarArch attributes to object textures. */
+		/* This is a fun one! It's only used for planets so far, 
+		   and is used for applying whichever texture 01.jpg happens to be to the planet in question. 
+		   01.jpg is the result of a bulk rename option run on the exported textures, as there is no 
+		   lookup array to the correct name of the texture inside each .utf file - they are originally
+		   relatively randomly named, so bulk renaming is just a somewhat cheap solution to ensure that
+		   the script finds at least one of the textures in the relevant folder. The drawback of this is
+		   that it is random whether it finds the up/down/left/right/bottom/top face of the planet texture,
+		   but it's not really a noticeable problem nor one that's fixable easily. */
 		$.get(solarArchFile, function(data) {
 			var solarArray = data.replace(commentRegex,"").match(solarRegex);
 			for (i = 0; i < solarArray.length; i++) {
@@ -417,6 +483,11 @@
 			console.log("Texture lookup array generated");
 		});
 		
+		/* systemIdsNameArray maps system nicknames to IDS infocard numbers for their in-game names. */
+		/* systemPosArray maps system nicknames to their positions on the in-game universe map.
+           Please note that some of these are overidden manually by using CSS or by replacing
+		   their positions in systemPosArray after generation, as seen with system ev01 below. */
+		/* systemScaleFactorArray maps system nicknames to their respective system navmap scale factors. */
 		$.get(universeFile, function(data) {
 			universeFileGetResult = data.replace(commentRegex,"");
 			var universeArray = universeFileGetResult.match(systemRegex);
@@ -449,16 +520,20 @@
 	}
 	
 	function generateSearchArray() {
+		/* generates the search lookup array used for the search box and map links. */
 		if (infocardArrayState != "ready" | systemIdsNameArrayState != "ready") {
 			setTimeout(function(){generateSearchArray()},10);
 		} else {
+			/* add system names to search array */
 			for (systemNickname in systemIdsNameArray) {
 				if(systemNickname.toLowerCase().indexOf("sector") == -1) {
 					matchArray.push(infocardArray[systemIdsNameArray[systemNickname]]);
 					searchArray[infocardArray[systemIdsNameArray[systemNickname]]] = systemNickname;
+					console.log(systemNickname);
 					searchArray[infocardArray[systemIdsNameArray[systemNickname]].toLowerCase()] = systemNickname;
 				}
 			}
+			/* add base names to search array */
 			var universeBaseArray = universeFileGetResult.match(baseRegex);
 			for (i = 0; i < universeBaseArray.length; i++) {
 				if (universeBaseArray[i].toLowerCase().indexOf("proxy_base") == -1 
@@ -485,6 +560,8 @@
 	}
 	
 	function parseInfocard(infocard) {
+		/* Parses an MSXML infocard into displayable HTML. */
+		/* Note: This currently ignores all formatting, and requires a rework. */
 		console.log(infocard);
 		if (infocard.toLowerCase().indexOf("<text>") == -1) {
 			return infocard;
@@ -500,6 +577,7 @@
 	}
 	
 	function scrollUp() {
+		/* Used on the up/close button for the infocard container. */
 		history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(longSystemName));
 		$('html, body').animate({ scrollTop: 0}, 300, function(){
 			while (document.querySelector(".infocardContainer").firstChild) {
@@ -510,6 +588,7 @@
 	}
 	
 	function showObjectInfo(idsNameNumber, idsInfoNumber, classString, zPosition, factionNickname, systemNickname, dynamicCommodity, dynamicDifficulty, dynamicCount, nickname) {
+		/* Used to generate content for the infocard container when an object or zone is clicked. */
 		$(".highlighter").remove();
 		document.querySelector(".infocardContainer").style.display = "block";
 		var scaleFactor = 1;
@@ -576,6 +655,7 @@
 	}
 	
 	function findObjectName(internalNickname, classString) {
+		/* Attempts to return an object name based on internal nickname if one cannot be determined by IDS number. */
 		if (typeof classString !== "undefined" && typeof internalNickname !== "undefined" && classString.indexOf("jump") != -1) {
 			if (classString.indexOf("hole") != -1) {
 				var jumpSystems = internalNickname.slice(0,-5).split("_to_");
@@ -597,6 +677,7 @@
 	}
 	
 	function createLoadAnimation() {
+		/* Adds the loading overlay. Used on page state transitions and the first load. */
 		if (document.querySelector(".loadingOverlay") == null) {
 			$('html, body').animate({ scrollTop: 0 }, 300);
 			var loader = document.createElement("div");
@@ -606,14 +687,16 @@
 		}
 	}
 	
-	// case-insensitive contains filter
+	
 	$.extend($.expr[":"], {
+		/* case-insensitive contains filter */
 		"containsNC": function(elem, i, match, array) {
 			return (elem.textContent || elem.innerText || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
 		}
 	});
 	
 	function createHighlightAnimation(element) {
+		/* Adds and sets the animation used to highlight search results or linking to objects. */
 		$(".highlighter").remove();
 		console.log("Attempted to create highlight for "+element);
 		if ($(element).length) {
@@ -631,6 +714,7 @@
 	}
 	
 	function generateUniverseMap() {
+		/* Generates the... Well, you get the idea. The rest of the code might be worse. */
 		createLoadAnimation();
 		document.querySelector(".navContainer #showUniverseMap").style.display = "none";
 		$(".grid").children().hide();
@@ -640,6 +724,7 @@
 		if (currentSystemNickname != "Sirius") {
 			history.replaceState("Sirius", "Discovery Navmap", ".");
 		}
+		/* checks to see if the map needs generate system connections or not. */
 		if (document.querySelector(".configOption#connections  input").checked) {
 			if (systemConnectionState = "ready") {
 				var systemConnectionsEvaluated = true;
@@ -661,7 +746,7 @@
 			currentSystemNickname = "Sirius";
 			document.querySelector(".grid").style.background = "url('SiriusMap.jpg') black"
 			document.querySelector(".grid").style.backgroundSize = "cover !important"
-			// empty the map div before doing anything else
+			/* empty the map div before doing anything else */
 			$(".map").children().not(".systemConnectionProp").remove();
 			while (document.querySelector(".infocardContainer").firstChild) {
 				document.querySelector(".infocardContainer").removeChild(document.querySelector(".infocardContainer").firstChild);
@@ -684,6 +769,7 @@
 			}
 			systemTitle.innerHTML = "Sirius";
 			systemTitle.className = "systemTitle";
+			/* add all systems to the map */
 			for (var systemName in systemPosArray) {
 				if (systemPosArray.hasOwnProperty(systemName)) {
 					if (typeof systemIdsNameArray[systemName] !== "undefined" && systemName.toLowerCase().indexOf("sector") == -1) {
@@ -711,6 +797,7 @@
 			$(".map div label").hAlign();
 			document.querySelector("body").removeChild(document.querySelector(".loadingOverlay"));
 			universeMapState = "ready";
+			/* check for search field input once we're done generating the map, just in case we missed anything. */
 			$("#searchField").keyup();
 		}
 	}
@@ -736,6 +823,7 @@
 									}
 									var connection = new Line(x1, x2, y1, y2, "systemConnection oneWayConnection", propClass, ".map", system, connectionArray[system][i]);
 								} else {
+									/* if this code is run twice for the same systems, we've got a two-way connection: remove the oneWayConnection class. */
 									$("[data-connected-points~="+connectionArray[system][i]+"]"+"[data-connected-points~="+system+"]").removeClass("oneWayConnection").addClass("twoWayConnection");
 								}
 							}
@@ -2806,45 +2894,55 @@
 	
 	/* responsive option styles */
 	
-	body.responsive .mapContainer {
+	body.responsive.scaleWidth .mapContainer {
 		height: 95vw;
 		width: 95vw;
 	}
 	
+	body.responsive.scaleHeight .mapContainer {
+		height: 88vh;
+		width: 88vh;
+	}
+	
 	body.responsive {
 		min-width: 0;
+		min-height: 0;
+	}
+	
+	body.responsive {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
 	}
 	
 	@media (max-width: 64.999999em) {
 		/* responsive option styles */
 		
-		body.responsive {
+		body.responsive.scaleWidth {
 			padding: 2em;
 			padding-top: 0;
 			padding-bottom: 0.5em;
 		}
 		
-		body.responsive.screenshotMode .navContainer #screenshotButton {
+		body.responsive.scaleWidth.screenshotMode .navContainer #screenshotButton {
 			top: 5em;
 		}
 		
-		body.responsive .shortLabel {
+		body.responsive.scaleWidth .shortLabel {
 			display: inline;
 		}
 		
-		body.responsive .longLabel {
+		body.responsive.scaleWidth .longLabel {
 			display: none;
 		}
 		
-		body.responsive .mapContainer {
-			margin-left: -1.1em !important;
+		body.responsive.scaleWidth .mapContainer {
 		}
 		
-		body.responsive .infocardContainer {
-			width: auto;
+		body.responsive.scaleWidth .infocardContainer {
+			width: 86vw;
 		}
 		
-		body.responsive #configButton, body.responsive #screenshotButton, body.responsive #helpLink, body.responsive #showUniverseMap, body.responsive #navSystemTitle {
+		body.responsive.scaleWidth #configButton, body.responsive.scaleWidth #screenshotButton, body.responsive.scaleWidth #helpLink, body.responsive.scaleWidth #showUniverseMap, body.responsive.scaleWidth #navSystemTitle {
 			float: left;
 			left: auto;
 			top: auto;
@@ -2852,32 +2950,40 @@
 			position: relative;
 		}
 		
-		body.responsive #helpLink .infoText, body.responsive #showUniverseMap .infoText {
+		body.responsive.scaleWidth #helpLink .infoText, body.responsive.scaleWidth #showUniverseMap .infoText {
 			display: none;
 		}
 		
-		body.responsive .navContainer, body.responsive .configMenu {
-			margin-left: 0em !important;
-			left: 0;
+		body.responsive.scaleWidth .navContainer, body.responsive.scaleWidth .configMenu {
+			left: 0 !important;
+			right: 0 !important;
+			margin: 0 auto;
+		}
+		
+		body.responsive.scaleWidth .navContainer, body.responsive.scaleWidth .configMenu {
 			width: 90vw;
 		}
 		
-		body.responsive .mapLegend {
-			left: auto;
-			width: 90vw;
+		body.responsive.scaleWidth .mapLegend {
+			left: 0 !important;
+			right: 0 !important;
+			margin: 0 auto;
 			top: 2.2em;
 		}
 		
-		body.responsive #navSystemTitle {
+		body.responsive.scaleWidth .mapLegend {
+			width: 90vw;
+		}
+		
+		body.responsive.scaleWidth #navSystemTitle {
 			display: none !important;
 		}
 		
-		body.responsive .configMenu {
-			left: auto !important;
+		body.responsive.scaleWidth .configMenu {
 			top: 2.2em;
 		}
 		
-		body.responsive .searchBox {
+		body.responsive.scaleWidth .searchBox {
 			right: 0.2em;
 			position: relative;
 			top: 0.25em;
@@ -2888,21 +2994,21 @@
 			left: 0;
 		}
 		
-		body.responsive #searchField {
+		body.responsive.scaleWidth #searchField {
 		    width: 100%;
 		    position: absolute;
 		    right: 0;
 		}
 		
-		body.responsive #inputIndicator {
+		body.responsive.scaleWidth #inputIndicator {
 			left: -1em;
 		}
 		
-		/*body.responsive .mapContainer .zone label {
+		/*body.responsive.scaleWidth .mapContainer .zone label {
 			display: none;
 		}
 		
-		body.responsive .mapContainer .zone.mineable label {
+		body.responsive.scaleWidth .mapContainer .zone.mineable label {
 			display: block;
 		}*/
 	/*
@@ -2917,6 +3023,105 @@
 		}
 	*/
 	}
+	
+	/* version of the above responsive rules for height scale mode */
+
+		body.responsive.scaleHeight .navContainer {
+			left: 0 !important;
+			right: 0 !important;
+		}
+		
+		body.responsive.scaleHeight .configMenu, body.responsive.scaleHeight .mapLegend {
+			margin: 0px auto !important;
+			left: 0 !important;
+			right: 0 !important;
+		}
+
+		body.responsive.scaleHeight {
+			padding: 2em;
+			padding-top: 0;
+			padding-bottom: 0.5em;
+		}
+		
+		body.responsive.scaleHeight.screenshotMode .navContainer #screenshotButton {
+			top: 5em;
+		}
+		
+		body.responsive.scaleHeight .shortLabel {
+			display: inline;
+		}
+		
+		body.responsive.scaleHeight .longLabel {
+			display: none;
+		}
+		
+		body.responsive.scaleHeight .mapContainer {
+			top: 2.2em !important;
+		}
+		
+		body.responsive.scaleHeight .infocardContainer {
+			top: 2.2em !important;
+			width: 84vh;
+		}
+		
+		body.responsive.scaleHeight #configButton, body.responsive.scaleHeight #screenshotButton, body.responsive #helpLink, body.responsive.scaleHeight #showUniverseMap, body.responsive.scaleHeight #navSystemTitle {
+			float: left;
+			left: auto;
+			top: auto;
+			padding: 0.45em;
+			position: relative;
+		}
+		
+		body.responsive.scaleHeight #helpLink .infoText, body.responsive.scaleHeight #showUniverseMap .infoText {
+			display: none;
+		}
+		
+		body.responsive.scaleHeight .navContainer, body.responsive.scaleHeight .configMenu {
+			position: absolute !important;
+		}
+		
+		body.responsive.scaleHeight .navContainer, body.responsive.scaleHeight .configMenu {
+			width: 86vh;
+		}
+		
+		body.responsive.scaleHeight .mapLegend {
+			top: 2.2em;
+		}
+		
+		body.responsive.scaleHeight .mapLegend {
+			width: 86vh;
+		}
+		
+		body.responsive.scaleHeight #navSystemTitle {
+			display: none !important;
+		}
+		
+		body.responsive.scaleHeight .configMenu {
+			top: 2.2em;
+		}
+		
+		body.responsive.scaleHeight .searchBox {
+			right: 0.2em;
+			position: relative;
+			top: 0.25em;
+			margin-left: 7.35em;
+			margin-right: 0.25em;
+			width: auto;
+			height: 1.5em;
+			left: 0;
+		}
+		
+		body.responsive.scaleHeight #searchField {
+		    width: 100%;
+		    position: absolute;
+		    right: 0;
+		}
+		
+		body.responsive.scaleHeight #inputIndicator {
+			left: -1em;
+		}
+	
+	/* responsive styles end */
 	
 	/* responsive styles end */
 	
@@ -2999,6 +3204,10 @@
 		<div class="configOption" id="responsive">
 			<input type="checkbox" id="switch6" name="switch6" class="switch" />
 			<label for="switch6">auto-scale</label>
+		</div>
+		<div class="configOption" id="responsiveMode">
+			<input type="checkbox" id="switch12" name="switch12" class="switch" />
+			<label for="switch12">scale by height/width</label>
 		</div>
 		<div id="dsaceConnectionContainer"><span>To enable usage of the "/map system/base" command in-game, choose your DSAce.log file here: </span><input type='file' id="dsaceInput" accept='.log' onchange="openFile(event)"></div>
 	</div>
