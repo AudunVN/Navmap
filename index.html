@@ -410,7 +410,7 @@
 		
 		/* infocardMapArray references infocard IDS numbers to infocards. */		
 		$.get(infocardFile, function(data) {
-			var rawInfocardArray = data.split("\n");
+			var rawInfocardArray = data.replace(/\r/g,"").split("\n");
 			for (i = 0; i < rawInfocardArray.length-1; i += 2) { 
 				infocardArray[rawInfocardArray[i].toString()] = rawInfocardArray[i+1].toString();
 			}
@@ -420,7 +420,7 @@
 		
 		/* systemPathArray lists systems connected to the input system (by jump gate or jump hole). */
 		$.get(systemPathFile, function(data) {
-			var rawPathFileArray = data.split("\n");
+			var rawPathFileArray = data.replace(/\r/g,"").split("\n");
 			for (i = 0; i < rawPathFileArray.length; i++) { 
 				if (rawPathFileArray[i].indexOf("Path =") != -1) {
 					var currentConnection = rawPathFileArray[i].match(pathRegex).join().substring(7).replace(/ /g,"").split(",");
@@ -441,7 +441,7 @@
 		
 		/* jgConnectionArray lists systems connected to the input system (by jump gate only). */
 		$.get(systemLegalPathFile, function(data) {
-			var rawLegalPathFileArray = data.split("\n");
+			var rawLegalPathFileArray = data.replace(/\r/g,"").split("\n");
 			for (i = 0; i < rawLegalPathFileArray.length; i++) { 
 				if (rawLegalPathFileArray[i].indexOf("Path =") != -1) {
 					var currentConnection = rawLegalPathFileArray[i].match(pathRegex).join().substring(7).replace(/ /g,"").split(",");
