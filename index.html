@@ -1740,6 +1740,8 @@
 	
 	.configMenu.closed {
 		top: -100vh !important;
+		transition: z-index 1s ease, top 1s ease, opacity 1s ease;
+		z-index: -1;
 		opacity: 0;
 	}
 	
