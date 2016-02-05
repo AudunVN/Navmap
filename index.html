@@ -529,6 +529,7 @@
 				if(systemNickname.toLowerCase().indexOf("sector") == -1) {
 					matchArray.push(infocardArray[systemIdsNameArray[systemNickname]]);
 					searchArray[infocardArray[systemIdsNameArray[systemNickname]]] = systemNickname;
+					console.log(systemNickname);
 					searchArray[infocardArray[systemIdsNameArray[systemNickname]].toLowerCase()] = systemNickname;
 				}
 			}
@@ -2893,45 +2894,55 @@
 	
 	/* responsive option styles */
 	
-	body.responsive .mapContainer {
+	body.responsive.scaleWidth .mapContainer {
 		height: 95vw;
 		width: 95vw;
 	}
 	
+	body.responsive.scaleHeight .mapContainer {
+		height: 88vh;
+		width: 88vh;
+	}
+	
 	body.responsive {
 		min-width: 0;
+		min-height: 0;
+	}
+	
+	body.responsive {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
 	}
 	
 	@media (max-width: 64.999999em) {
 		/* responsive option styles */
 		
-		body.responsive {
+		body.responsive.scaleWidth {
 			padding: 2em;
 			padding-top: 0;
 			padding-bottom: 0.5em;
 		}
 		
-		body.responsive.screenshotMode .navContainer #screenshotButton {
+		body.responsive.scaleWidth.screenshotMode .navContainer #screenshotButton {
 			top: 5em;
 		}
 		
-		body.responsive .shortLabel {
+		body.responsive.scaleWidth .shortLabel {
 			display: inline;
 		}
 		
-		body.responsive .longLabel {
+		body.responsive.scaleWidth .longLabel {
 			display: none;
 		}
 		
-		body.responsive .mapContainer {
-			margin-left: -1.1em !important;
+		body.responsive.scaleWidth .mapContainer {
 		}
 		
-		body.responsive .infocardContainer {
-			width: auto;
+		body.responsive.scaleWidth .infocardContainer {
+			width: 86vw;
 		}
 		
-		body.responsive #configButton, body.responsive #screenshotButton, body.responsive #helpLink, body.responsive #showUniverseMap, body.responsive #navSystemTitle {
+		body.responsive.scaleWidth #configButton, body.responsive.scaleWidth #screenshotButton, body.responsive.scaleWidth #helpLink, body.responsive.scaleWidth #showUniverseMap, body.responsive.scaleWidth #navSystemTitle {
 			float: left;
 			left: auto;
 			top: auto;
@@ -2939,32 +2950,40 @@
 			position: relative;
 		}
 		
-		body.responsive #helpLink .infoText, body.responsive #showUniverseMap .infoText {
+		body.responsive.scaleWidth #helpLink .infoText, body.responsive.scaleWidth #showUniverseMap .infoText {
 			display: none;
 		}
 		
-		body.responsive .navContainer, body.responsive .configMenu {
-			margin-left: 0em !important;
-			left: 0;
+		body.responsive.scaleWidth .navContainer, body.responsive.scaleWidth .configMenu {
+			left: 0 !important;
+			right: 0 !important;
+			margin: 0 auto;
+		}
+		
+		body.responsive.scaleWidth .navContainer, body.responsive.scaleWidth .configMenu {
 			width: 90vw;
 		}
 		
-		body.responsive .mapLegend {
-			left: auto;
-			width: 90vw;
+		body.responsive.scaleWidth .mapLegend {
+			left: 0 !important;
+			right: 0 !important;
+			margin: 0 auto;
 			top: 2.2em;
 		}
 		
-		body.responsive #navSystemTitle {
+		body.responsive.scaleWidth .mapLegend {
+			width: 90vw;
+		}
+		
+		body.responsive.scaleWidth #navSystemTitle {
 			display: none !important;
 		}
 		
-		body.responsive .configMenu {
-			left: auto !important;
+		body.responsive.scaleWidth .configMenu {
 			top: 2.2em;
 		}
 		
-		body.responsive .searchBox {
+		body.responsive.scaleWidth .searchBox {
 			right: 0.2em;
 			position: relative;
 			top: 0.25em;
@@ -2975,21 +2994,21 @@
 			left: 0;
 		}
 		
-		body.responsive #searchField {
+		body.responsive.scaleWidth #searchField {
 		    width: 100%;
 		    position: absolute;
 		    right: 0;
 		}
 		
-		body.responsive #inputIndicator {
+		body.responsive.scaleWidth #inputIndicator {
 			left: -1em;
 		}
 		
-		/*body.responsive .mapContainer .zone label {
+		/*body.responsive.scaleWidth .mapContainer .zone label {
 			display: none;
 		}
 		
-		body.responsive .mapContainer .zone.mineable label {
+		body.responsive.scaleWidth .mapContainer .zone.mineable label {
 			display: block;
 		}*/
 	/*
@@ -3004,6 +3023,105 @@
 		}
 	*/
 	}
+	
+	/* version of the above responsive rules for height scale mode */
+
+		body.responsive.scaleHeight .navContainer {
+			left: 0 !important;
+			right: 0 !important;
+		}
+		
+		body.responsive.scaleHeight .configMenu, body.responsive.scaleHeight .mapLegend {
+			margin: 0px auto !important;
+			left: 0 !important;
+			right: 0 !important;
+		}
+
+		body.responsive.scaleHeight {
+			padding: 2em;
+			padding-top: 0;
+			padding-bottom: 0.5em;
+		}
+		
+		body.responsive.scaleHeight.screenshotMode .navContainer #screenshotButton {
+			top: 5em;
+		}
+		
+		body.responsive.scaleHeight .shortLabel {
+			display: inline;
+		}
+		
+		body.responsive.scaleHeight .longLabel {
+			display: none;
+		}
+		
+		body.responsive.scaleHeight .mapContainer {
+			top: 2.2em !important;
+		}
+		
+		body.responsive.scaleHeight .infocardContainer {
+			top: 2.2em !important;
+			width: 84vh;
+		}
+		
+		body.responsive.scaleHeight #configButton, body.responsive.scaleHeight #screenshotButton, body.responsive #helpLink, body.responsive.scaleHeight #showUniverseMap, body.responsive.scaleHeight #navSystemTitle {
+			float: left;
+			left: auto;
+			top: auto;
+			padding: 0.45em;
+			position: relative;
+		}
+		
+		body.responsive.scaleHeight #helpLink .infoText, body.responsive.scaleHeight #showUniverseMap .infoText {
+			display: none;
+		}
+		
+		body.responsive.scaleHeight .navContainer, body.responsive.scaleHeight .configMenu {
+			position: absolute !important;
+		}
+		
+		body.responsive.scaleHeight .navContainer, body.responsive.scaleHeight .configMenu {
+			width: 86vh;
+		}
+		
+		body.responsive.scaleHeight .mapLegend {
+			top: 2.2em;
+		}
+		
+		body.responsive.scaleHeight .mapLegend {
+			width: 86vh;
+		}
+		
+		body.responsive.scaleHeight #navSystemTitle {
+			display: none !important;
+		}
+		
+		body.responsive.scaleHeight .configMenu {
+			top: 2.2em;
+		}
+		
+		body.responsive.scaleHeight .searchBox {
+			right: 0.2em;
+			position: relative;
+			top: 0.25em;
+			margin-left: 7.35em;
+			margin-right: 0.25em;
+			width: auto;
+			height: 1.5em;
+			left: 0;
+		}
+		
+		body.responsive.scaleHeight #searchField {
+		    width: 100%;
+		    position: absolute;
+		    right: 0;
+		}
+		
+		body.responsive.scaleHeight #inputIndicator {
+			left: -1em;
+		}
+	
+	/* responsive styles end */
 	
 	/* responsive styles end */
 	
@@ -3086,6 +3204,10 @@
 		<div class="configOption" id="responsive">
 			<input type="checkbox" id="switch6" name="switch6" class="switch" />
 			<label for="switch6">auto-scale</label>
+		</div>
+		<div class="configOption" id="responsiveMode">
+			<input type="checkbox" id="switch12" name="switch12" class="switch" />
+			<label for="switch12">scale by height/width</label>
 		</div>
 		<div id="dsaceConnectionContainer"><span>To enable usage of the "/map system/base" command in-game, choose your DSAce.log file here: </span><input type='file' id="dsaceInput" accept='.log' onchange="openFile(event)"></div>
 	</div>
