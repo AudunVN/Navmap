@@ -917,7 +917,7 @@
 			}
 			longSystemName = infocardArray[systemIdsNameArray[system.toLowerCase()]];
 			systemTitle.innerHTML = longSystemName;
-			_gaq.push(["_trackEvent","mapModule","generated map for",longSystemName,system.toLowerCase()]);
+			_gaq.push(["_trackEvent","mapModule","generated map for",longSystemName,0]);
 			document.querySelector(".map").dataset.systemNickname = system.toLowerCase();
 			document.querySelector("#navSystemTitle").innerHTML = "Current System: " + longSystemName;
 			systemTitle.className = "systemTitle";
