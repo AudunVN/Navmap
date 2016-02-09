@@ -1072,7 +1072,7 @@
 						if (sysZoneArray[i].indexOf("property_fog_color") != -1) {
 							var fogColourString = sysZoneArray[i].match(fogColourRegex).join().substring(21).replace(/ /g,"");
 							var fogColourArray = fogColourString.split(",");
-							var fogColourString = "rgba("+parseInt(fogColourArray[0])+","+parseInt(fogColourArray[1])+","+parseInt(fogColourArray[2])+",0.35)";
+							var fogColourString = "rgba("+parseInt(fogColourArray[0])+","+parseInt(fogColourArray[1])+","+parseInt(fogColourArray[2])+",0.45)";
 							zone.style.backgroundColor = fogColourString;
 						}
 						if (sysZoneArray[i].indexOf("property_flags") != -1) {
