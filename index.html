@@ -1636,11 +1636,24 @@
 		margin: 0;
 		padding: 1.5em;
 		min-width: 61em;
-		background: url("blue_space_with_planets_by_darkdissolution-updCont.jpg") black;
-		/* too slow: background-attachment: fixed; */
-		background-size: cover;
 		/* fixes a font rendering issue on OS X */
 		-webkit-font-smoothing: subpixel-antialiased;
+		background-color: transparent;
+	}
+	
+	body:after {
+		content: '';
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background: url("blue_space_with_planets_by_darkdissolution-updCont.jpg") black;
+		background-size: cover;
+		z-index: -1;
+		/* create new paint layer */
+		transform: translateZ(0);
+		-webkit-transform: translateZ(0);
 	}
 	
 	body.screenshotMode {
