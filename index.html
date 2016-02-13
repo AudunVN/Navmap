@@ -347,6 +347,11 @@
 	function generateLookupArrays() {
 		/* contains all the AJAX .get requests responsible for generating the lookup arrays. */
 		
+		/* there is no case where caching would cause issues: the content for each mod directory is static. */
+		$.ajaxSetup({
+			cache: true
+		});
+		
 		/* baseNameArray references internal nicknames to base names from the IONCROSS data included with the mod. This is... unused? Uh. Should probably be removed! */
 		/* Using the IONCROSS files was mostly a relic from the early days of the map, when they seemed like the quickest way to get the data I was looking for, but 
 		   they are relatively seldom updated and /not/ recommended for use. */
