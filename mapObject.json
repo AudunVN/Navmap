@@ -50,5 +50,5 @@
             "required": ["xPos", "yPos", "zPos"]
         }
     },
-    "required": ["id", "class", "position"]
+    "required": ["id", "class", "physicalProperties"]
 }
