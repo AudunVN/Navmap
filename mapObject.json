@@ -36,6 +36,18 @@
         "infocardNumber": {
             "description": "References a pre-defined infocard to use for the description.",
             "type": "integer"
+        },
+        "physicalProperties": {
+            "type": "object",
+            "properties": {
+                "xPos": {"type": "number"},
+                "yPos": {"type": "number"},
+                "zPos": {"type": "number"},
+                "xRot": {"type": "number"},
+                "yRot": {"type": "number"},
+                "zRot": {"type": "number"}
+            },
+            "required": ["xPos", "yPos", "zPos"]
         }
     },
     "required": ["id", "class", "position"]
