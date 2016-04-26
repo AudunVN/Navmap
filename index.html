@@ -347,6 +347,10 @@
 			$(".map").removeClass("showInfocardedObjectLabels");
 		}
 		
+		if (document.querySelector(".map .system") == null) {
+			generateTooltips();
+		}
+		
 		console.log("Config classes updated");
 	}
       
@@ -1234,7 +1238,6 @@
 				console.log("Map for "+system+" generated");
 				$(".map div label").hAlign();
 				addLootableZoneData();
-				generateTooltips();
 				// wait for asteroid get requests to finish
 				removeLoadingOverlayWhenReady();
 				$("#searchField").keyup();
@@ -1466,20 +1469,41 @@
 	
 	function generateTooltips() {
 		$( ".qtip" ).remove();
-		$('.zone[data-z-pos!=""][data-z-pos!=0], .object[data-z-pos!=""][data-z-pos!=0]').qtip({
+		$('.zone[data-z-pos][data-z-pos!=""][data-z-pos!=0], .object[data-z-pos][data-z-pos!=""][data-z-pos!=0], .object[data-ids-name]:has(label:hidden), .zone[data-ids-name]:has(label:hidden), .object.unclassified').qtip({
 			content: {
 				text: function(event, api) {
-					var scaleFactor = 1;
-					var systemNickname = document.querySelector(".map").dataset.systemNickname;
-					if (typeof systemScaleFactorArray[systemNickname] !== "undefined") {
-						scaleFactor = parseFloat(systemScaleFactorArray[systemNickname]);
+					var tooltipString = "";
+
+					if ($(this).has("label:hidden").length !== 0 && $(this).attr('data-ids-name') !== "undefined" && typeof infocardArray[$(this).attr('data-ids-name')] !== "undefined") {
+						if (parseInfocard(infocardArray[$(this).attr('data-ids-name')]).trim() == "") {
+							/* this is a trade lane or something else with a blank infocard. */
+							if ($(this).hasClass("tradelane")) {
+								tooltipString += "Trade Lane";
+							}
+						} else {
+							tooltipString += parseInfocard(infocardArray[$(this).attr('data-ids-name')]);
+						}
+					} else if ($(this).hasClass("unclassified")) {
+						tooltipString += $(this).attr('data-internal-nickname')
 					}
-					var planePosition;
-					var zHeight = parseFloat((Math.round(parseFloat($(this).attr('data-z-pos'))/(scaleFactor*1000)*10) / 10).toFixed(2))
-					if (zHeight > 0) {
-						return Math.abs(zHeight)+"K up";
-					} else {
-						return Math.abs(zHeight)+"K down";
+					if ($(this).attr('data-z-pos') !== "undefined" && $(this).attr('data-z-pos') !== "0") {
+						if (tooltipString !== "") {
+							tooltipString += ", ";
+						}
+						var scaleFactor = 1;
+						var systemNickname = document.querySelector(".map").dataset.systemNickname;
+						if (typeof systemScaleFactorArray[systemNickname] !== "undefined") {
+							scaleFactor = parseFloat(systemScaleFactorArray[systemNickname]);
+						}
+						var zHeight = parseFloat((Math.round(parseFloat($(this).attr('data-z-pos'))/(scaleFactor*1000)*10) / 10).toFixed(2));
+						if (zHeight > 0) {
+							tooltipString += Math.abs(zHeight)+"K up";
+						} else {
+							tooltipString += Math.abs(zHeight)+"K down";
+						}
+					}
+					if (tooltipString !== "") {
+						return tooltipString;
 					}
 				}
 			},
@@ -2203,7 +2227,7 @@
 		display: block !important;
 	}
 	
-	.showAllObjects.showAllObjectLabels .object.unclassified label {
+	.showAllObjects.showAllObjectLabels .object.unclassified label:not(.labelDisabled) {
 		display: block !important;
 	}
 	
@@ -2215,8 +2239,16 @@
 		background: #4B8BCC;
 		z-index: -1;
 	}
+	
+	.object.unclassified[data-ids-info] {
+		width: 0.275em;
+		height: 0.275em;
+		background: #EC7F1F;
+	}
 
-	.object.unclassified label {
+	.object.unclassified label,
+	.object.noName label,
+	.object:not([data-ids-info]) label{
 		display: none;
 	}
 	
