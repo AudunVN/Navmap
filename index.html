@@ -323,6 +323,30 @@
 			$(".map div label").addClass("labelDisabled");
 		}
 		
+		if (document.querySelector(".configOption#showAllObjects input").checked
+			&& document.querySelector(".map .system") == null) {
+			$(".map").addClass("showAllObjects");
+			$(".map div label").hAlign();
+		} else if (document.querySelector(".map .system") == null) {
+			$(".map").removeClass("showAllObjects");
+		}
+		
+		if (document.querySelector(".configOption#showAllObjectLabels input").checked
+			&& document.querySelector(".map .system") == null) {
+			$(".map").addClass("showAllObjectLabels");
+			$(".map div label").hAlign();
+		} else if (document.querySelector(".map .system") == null) {
+			$(".map").removeClass("showAllObjectLabels");
+		}
+		
+		if (document.querySelector(".configOption#showInfocardedObjectLabels input").checked
+			&& document.querySelector(".map .system") == null) {
+			$(".map").addClass("showInfocardedObjectLabels");
+			$(".map div label").hAlign();
+		} else if (document.querySelector(".map .system") == null) {
+			$(".map").removeClass("showInfocardedObjectLabels");
+		}
+		
 		console.log("Config classes updated");
 	}
       
@@ -676,7 +700,7 @@
 		} else if (baseNameArray[internalNickname.toLowerCase()+"_base"] != null) {
 			return baseNameArray[internalNickname.toLowerCase()+"_base"];
 		} else {
-			return internalNickname + "???";
+			return internalNickname + " (int)";
 		}
 	}
 	
@@ -1204,7 +1228,7 @@
 						}
 					}
 					if (object.className == "object") {
-						object.style.display = "none";
+						object.className = "object unclassified";
 					}
 				}
 				console.log("Map for "+system+" generated");
@@ -2173,6 +2197,30 @@
 	
 	.map div.object.star label {
 		top: 65%;
+	}
+	
+	.showAllObjects .object.unclassified {
+		display: block !important;
+	}
+	
+	.showAllObjects.showAllObjectLabels .object.unclassified label {
+		display: block !important;
+	}
+	
+	.object.unclassified {
+		display: none;
+		width: 0.2em;
+		height: 0.2em;
+		border-radius: 0.1em;
+		background: #4B8BCC;
+	}
+
+	.object.unclassified label {
+		display: none;
+	}
+	
+	.showInfocardedObjectLabels .object.unclassified[data-ids-info] label {
+		display: block;
 	}
 	
 	.map div[data-ids-info],
@@ -3201,7 +3249,7 @@
 </head>
 <body>
 	<nav class="navContainer">
-		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (15.03)</span></a>
+		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (26.04)</span></a>
 		<span id="showUniverseMap" onClick="generateUniverseMap()"><i class="fa fa-times-circle-o"></i><span class="infoSpace"> </span><span class="infoText">Show all systems</span></span>
 		<span id="navSystemTitle"></span>
 		<i id="screenshotButton" class="fa fa-camera"></i>
@@ -3263,6 +3311,19 @@
 		<div class="configOption" id="zoneLabels">
 			<input type="checkbox" id="switch7" name="switch7" class="switch" />
 			<label for="switch7">unmineable zone labels</label>
+		</div>
+		<h2>Experimental/development options</h2>
+		<div class="configOption" id="showAllObjects">
+			<input type="checkbox" id="switch13" name="switch13" class="switch" />
+			<label for="switch13">show all objects</label>
+		</div>
+		<div class="configOption" id="showInfocardedObjectLabels">
+			<input type="checkbox" id="switch15" name="switch15" class="switch" />
+			<label for="switch15">show labels for infocarded objects</label>
+		</div>
+		<div class="configOption" id="showAllObjectLabels">
+			<input type="checkbox" id="switch14" name="switch14" class="switch" />
+			<label for="switch14">show all object labels</label>
 		</div>
 		<h2>Misc. options</h2>
 		<div class="configOption" id="responsive">
