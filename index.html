@@ -1479,12 +1479,14 @@
 							/* this is a trade lane or something else with a blank infocard. */
 							if ($(this).hasClass("tradelane")) {
 								tooltipString += "Trade Lane";
+							} else {
+								tooltipString += $(this).attr('data-internal-nickname');
 							}
 						} else {
 							tooltipString += parseInfocard(infocardArray[$(this).attr('data-ids-name')]);
 						}
 					} else if ($(this).hasClass("unclassified")) {
-						tooltipString += $(this).attr('data-internal-nickname')
+						tooltipString += $(this).attr('data-internal-nickname');
 					}
 					if ($(this).attr('data-z-pos') !== "undefined" && $(this).attr('data-z-pos') !== "0") {
 						if (tooltipString !== "") {
