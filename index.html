@@ -1536,12 +1536,16 @@
 	var currentMatch = "";
 	var rawFile = "";
 	var inputRegex = /\/map (.*)/g;
+	var positionRegex = /\] Position .*/g;
 	var openFile = function(event) {
 		var input = event.target;
 		var reader = new FileReader();
 		reader.onload = function(){
 			rawFile = reader.result;
 			currentMatch = rawFile.slice(rawFile.lastIndexOf("/map")).match(inputRegex)[0].slice(5);
+			console.log(rawFile.slice(rawFile.lastIndexOf("] Position ")));
+			position = rawFile.slice(rawFile.lastIndexOf("] Position ")).match(positionRegex)[0].split(" ");
+			console.log(position);
 			if (currentMatch != lastMatch && currentMatch !== null) {
 				$(".configMenu").addClass("closed");
 				lastMatch = currentMatch;
@@ -2219,6 +2223,21 @@
 	
 	.map div.object.planet label {
 		top: 110%;
+	}
+	
+	.map div.object.dockable.planet label::after {
+		display: inline-block;
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: inherit;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		content: "\f090";
+		margin-left: 0.25em;
+		font-size: 0.75em;
+		vertical-align: baseline;
+		position: relative;
+		bottom: 0.075em;
 	}
 	
 	.map div.object.star label {
