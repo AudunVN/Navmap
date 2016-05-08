@@ -1531,25 +1531,49 @@
 		});
 	}
 	
+	/* temp. object adding code begins */
+	
+	function mapObject(objectClasses, posX, posY, posZ, rotX, rotY, rotZ, label) {
+		var objectElement = document.createElement("div");
+		objectElement.style.top = parseFloat(posX)/2000*systemScaleFactor + "%";
+		objectElement.style.left = parseFloat(posZ)/2000*systemScaleFactor + "%";
+		objectElement.style.transform = "rotate("+parseFloat(rotY)+"deg)";
+		objectElement.style.webkitTransform = "rotate("+parseFloat(rotY)+"deg)";
+		objectElement.dataset.zPos = posY*systemScaleFactor;
+		objectElement.style.position = "absolute";
+		objectElement.className = "object "+objectClasses;
+		var objectLabel = document.createElement("label");
+		objectLabel.style.display = "inline-block";
+		objectLabel.style.transform = "rotate("+-parseFloat(rotY)+"deg)";
+		objectLabel.style.webkitTransform = "rotate("+-parseFloat(rotY)+"deg)";
+		objectLabel.style.transformOrigin = "right";
+		objectLabel.style.webkitTransformOrigin = "right";
+		objectLabel.innerHTML = label;
+		objectElement.appendChild(objectLabel);
+		document.querySelector(".map").appendChild(objectElement);
+	}
+	
+	/* temp. object adding code ends */
+	
 	/* fileReader code start */
-	var lastMatch = "";
-	var currentMatch = "";
+	var lastMapMatch = "";
+	var currentMapMatch = "";
+	var lastPosMatch = "";
+	var currentPosMatch = "";
 	var rawFile = "";
 	var inputRegex = /\/map (.*)/g;
-	var positionRegex = /\] Position .*/g;
+	var positionRegex = /\] \/pos in .*[\n\r]+\[[^\]]*\] Position.*/g;
 	var openFile = function(event) {
 		var input = event.target;
 		var reader = new FileReader();
 		reader.onload = function(){
 			rawFile = reader.result;
-			currentMatch = rawFile.slice(rawFile.lastIndexOf("/map")).match(inputRegex)[0].slice(5);
-			console.log(rawFile.slice(rawFile.lastIndexOf("] Position ")));
-			position = rawFile.slice(rawFile.lastIndexOf("] Position ")).match(positionRegex)[0].split(" ");
-			console.log(position);
-			if (currentMatch != lastMatch && currentMatch !== null) {
+			currentMapMatch = rawFile.slice(rawFile.lastIndexOf("/map")).match(inputRegex)[0].slice(5);
+			currentPosMatch = rawFile.slice(rawFile.lastIndexOf("] /pos in ")).match(positionRegex)[0];
+			if (currentMapMatch != lastMapMatch && currentMapMatch !== null) {
 				$(".configMenu").addClass("closed");
-				lastMatch = currentMatch;
-				var lowerCaseMatch = currentMatch.toLowerCase();
+				lastMapMatch = currentMapMatch;
+				var lowerCaseMatch = currentMapMatch.toLowerCase();
 				if (lowerCaseMatch == "universe" | lowerCaseMatch == "sirius" | lowerCaseMatch == "universemap") {
 					generateUniverseMap();
 				} else if (lowerCaseMatch == "removehighlights" | lowerCaseMatch == "remove highlights") {
@@ -1558,9 +1582,42 @@
 					$('html, body').animate({ scrollTop: 0}, 300);
 				} else if (lowerCaseMatch == "scroll down" | lowerCaseMatch == "down") {
 					$('html, body').animate({ scrollTop: $(document).height()}, 300);
+				} else if (lowerCaseMatch == "removeships") { 
+					$(".playerShip").remove();
 				} else {
-					document.querySelector("#searchField").value = currentMatch;
+					document.querySelector("#searchField").value = currentMapMatch;
 					$( "#searchField" ).keyup();
+				}
+			}
+			if (currentPosMatch != lastPosMatch && currentPosMatch !== null) {
+				$(".configMenu").addClass("closed");
+				lastPosMatch = currentPosMatch;
+				document.querySelector("#searchField").value = currentPosMatch;
+				$( "#searchField" ).keyup();
+				var posSystemRegex = /\/pos in (.*)/g;
+				var playerPosRegex = /\d\] Position ([^ ]*) ([^ ]*) ([^ ]*) Orient ([^ ]*) ([^ ]*) ([^ ]*)/g;
+				var currentTimeRegex = /[\r\n]\[\d+\.\d+\.\d+ (\d+:\d+:\d+)\]/g;
+				console.log(currentPosMatch);
+				console.log(lastPosMatch);
+				var posSystem = posSystemRegex.exec(currentPosMatch)[1].trim();
+				var playerPositionArray = playerPosRegex.exec(currentPosMatch);
+				var currentPositionTimestamp = currentTimeRegex.exec(currentPosMatch)[1];
+				console.log(posSystem);
+				console.log(playerPositionArray);
+				console.log(currentPositionTimestamp);
+				if (typeof searchArray[posSystem] !== "undefined" && searchArray[posSystem].toLowerCase() !== currentSystemNickname.toLowerCase()) {
+					document.querySelector("#searchField").value = "";
+					generateMap(searchArray[posSystem]);
+					$(".highlighter").remove();
+					$(".playerShip.latestPos").removeClass("latestPos");
+					new mapObject("playerShip latestPos",playerPositionArray[3],playerPositionArray[2],playerPositionArray[1],playerPositionArray[4],playerPositionArray[5],playerPositionArray[6],currentPositionTimestamp);
+					createHighlightAnimation($(".playerShip.latestPos"));
+				} else if (typeof searchArray[posSystem] !== "undefined" && searchArray[posSystem].toLowerCase() == currentSystemNickname.toLowerCase()) {
+					document.querySelector("#searchField").value = "";
+					$(".highlighter").remove();
+					$(".playerShip.latestPos").removeClass("latestPos");
+					new mapObject("playerShip latestPos",playerPositionArray[3],playerPositionArray[2],playerPositionArray[1],playerPositionArray[4],playerPositionArray[5],playerPositionArray[6],currentPositionTimestamp);
+					createHighlightAnimation($(".playerShip.latestPos"));
 				}
 			}
 		};
@@ -2237,7 +2294,7 @@
 		font-size: 0.75em;
 		vertical-align: baseline;
 		position: relative;
-		bottom: 0.075em;
+		bottom: 0.1em;
 	}
 	
 	.map div.object.star label {
@@ -2996,6 +3053,15 @@
 
 	input.switch:checked ~ label:after {
 		margin-left: 2.1em;
+	}
+	
+	.object.playerShip {
+		height: 1.2em;
+		width: 1.2em;
+		margin-left: -0.6em;
+		margin-top: -0.6em;
+		background: url("textures/csp2.png");
+		background-size: cover;
 	}
 	
 	.qtip-zMap {
