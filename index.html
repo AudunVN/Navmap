@@ -216,14 +216,20 @@
 		/* Runs when the map script determines that there has been a change in configuration -
 		   such as an option being changed in the config menu - which requires further action. */
 
-		if (document.querySelector(".configOption#wrecks  input").checked) {
+		if (document.querySelector(".configOption#wrecks input").checked) {
 			$(".object.wreck").removeClass("hidden");
 			$(".map .object.wreck label").hAlign();
 		} else {
 			$(".object.wreck").addClass("hidden");
 		}
 		
-		if (document.querySelector(".configOption#wreckLabels  input").checked) {
+		if (document.querySelector(".configOption#onlyShowLatestPosition input").checked) {
+			$(".map").removeClass("showOldPlayerShipPositions");
+		} else {
+			$(".map").addClass("showOldPlayerShipPositions");
+		}
+		
+		if (document.querySelector(".configOption#wreckLabels input").checked) {
 			$(".object.wreck label").removeClass("hidden");
 			$(".map .object.wreck label").hAlign();
 		} else {
@@ -267,34 +273,34 @@
 			prevLabelMoveState = "unchecked";
 		}
 		
-		if (document.querySelector(".configOption#zoneLabels  input").checked) {
+		if (document.querySelector(".configOption#zoneLabels input").checked) {
 			$(".zone label").not($(".mineable label")).removeClass("hidden");
 			$(".map .zone label").hAlign();
 		} else {
 			$(".zone label").not($(".mineable label")).addClass("hidden");
 		}
 		
-		if (document.querySelector(".configOption#zones  input").checked) {
+		if (document.querySelector(".configOption#zones input").checked) {
 			$(".zone").removeClass("hidden");
 			$(".map .zone label").hAlign();
 		} else {
 			$(".zone").addClass("hidden");
 		}
 		
-		if (document.querySelector(".configOption#connections  input").checked
+		if (document.querySelector(".configOption#connections input").checked
 			&& document.querySelector(".systemConnectionProp") == null) {
 				generateSystemConnections();
 			if (document.querySelector(".map .system") == null) {
 				$(".systemConnectionProp").hide();
 			}
-		} else if (!(document.querySelector(".configOption#connections  input").checked)) {
+		} else if (!(document.querySelector(".configOption#connections input").checked)) {
 			$(".systemConnectionProp").hide();
-		} else if (document.querySelector(".configOption#connections  input").checked
+		} else if (document.querySelector(".configOption#connections input").checked
 			&& document.querySelector(".map .system") !== null) {
 			$(".systemConnectionProp").show();
 		}
 		
-		if (document.querySelector(".configOption#oorp  input").checked) {
+		if (document.querySelector(".configOption#oorp input").checked) {
 			$(".oorp").removeClass("hidden");
 			$(".map .system.oorp label").hAlign();
 		} else {
@@ -307,7 +313,7 @@
 			$(".systemConnectionProp").hide();
 		}
 		
-		if (document.querySelector(".configOption#universeLabels  input").checked
+		if (document.querySelector(".configOption#universeLabels input").checked
 			&& document.querySelector(".map .system") !== null) {
 			$(".map div label").removeClass("labelDisabled");
 			$(".map .system label").hAlign();
@@ -315,7 +321,7 @@
 			$(".map div label").addClass("labelDisabled");
 		}
 		
-		if (document.querySelector(".configOption#systemLabels  input").checked
+		if (document.querySelector(".configOption#systemLabels input").checked
 			&& document.querySelector(".map .system") == null) {
 			$(".map div label").removeClass("labelDisabled");
 			$(".map div label").hAlign();
@@ -357,7 +363,7 @@
 	function generateSystemScale(system) {
 		if (document.querySelector(".mapScale") != null) {
 			currentSystem = system;
-			if (document.querySelector(".configOption#scale  input").checked) {
+			if (document.querySelector(".configOption#scale input").checked) {
 				$(".mapScale").addClass("arrows");
 				baseSize = 30;
 			} else {
@@ -1487,6 +1493,8 @@
 						}
 					} else if ($(this).hasClass("unclassified")) {
 						tooltipString += $(this).attr('data-internal-nickname');
+					} else if ($(this).hasClass("playerShip")) {
+						tooltipString += $(this).children("label").text();
 					}
 					if ($(this).attr('data-z-pos') !== "undefined" && $(this).attr('data-z-pos') !== "0") {
 						if (tooltipString !== "") {
@@ -1537,19 +1545,33 @@
 		var objectElement = document.createElement("div");
 		objectElement.style.top = parseFloat(posX)/2000*systemScaleFactor + "%";
 		objectElement.style.left = parseFloat(posZ)/2000*systemScaleFactor + "%";
-		objectElement.style.transform = "rotate("+parseFloat(rotY)+"deg)";
-		objectElement.style.webkitTransform = "rotate("+parseFloat(rotY)+"deg)";
+		var rotSign = -Math.sign(rotX)*Math.sign(rotY);
+		var rotCompensation = 0;
+		if (Math.sign(rotX)*Math.sign(rotY) > 0) {
+			rotCompensation = 0;
+		} else {
+			rotCompensation = 180;
+		}
+		objectElement.style.transform = "rotate("+((rotSign*parseFloat(rotY)+rotCompensation))+"deg)";
+		console.log(360-parseFloat(rotY));
+		objectElement.style.webkitTransform = "rotate("+((rotSign*parseFloat(rotY)+rotCompensation))+"deg)";
 		objectElement.dataset.zPos = posY*systemScaleFactor;
 		objectElement.style.position = "absolute";
 		objectElement.className = "object "+objectClasses;
 		var objectLabel = document.createElement("label");
 		objectLabel.style.display = "inline-block";
-		objectLabel.style.transform = "rotate("+-parseFloat(rotY)+"deg)";
-		objectLabel.style.webkitTransform = "rotate("+-parseFloat(rotY)+"deg)";
+		objectLabel.style.transform = "rotate("+360-parseFloat(rotY)+"deg)";
+		objectLabel.style.webkitTransform = "rotate("+360-parseFloat(rotY)+"deg)";
 		objectLabel.style.transformOrigin = "right";
 		objectLabel.style.webkitTransformOrigin = "right";
 		objectLabel.innerHTML = label;
 		objectElement.appendChild(objectLabel);
+		if (objectClasses.indexOf("playerShip") !== -1) {
+			objectElement.addEventListener("click", function(){
+				$(this).qtip('destroy');
+				$(this).remove();
+			}); 
+		}
 		document.querySelector(".map").appendChild(objectElement);
 	}
 	
@@ -1568,8 +1590,22 @@
 		var reader = new FileReader();
 		reader.onload = function(){
 			rawFile = reader.result;
-			currentMapMatch = rawFile.slice(rawFile.lastIndexOf("/map")).match(inputRegex)[0].slice(5);
-			currentPosMatch = rawFile.slice(rawFile.lastIndexOf("] /pos in ")).match(positionRegex)[0];
+			var playerPosRegex = /\d\] Position ([^ ]*) ([^ ]*) ([^ ]*) Orient ([^ ]*) ([^ ]*) ([^ ]*)/g;
+			try {
+				currentMapMatch = rawFile.slice(rawFile.lastIndexOf("/map")).match(inputRegex)[0].slice(5);
+			} catch(e){
+				
+			}
+			try {
+				currentPosMatch = rawFile.slice(rawFile.lastIndexOf("] /pos in ")).match(positionRegex)[0];
+			} catch(e){
+				
+			}
+			try {
+				var playerPositionArrayExists = playerPosRegex.test(currentPosMatch);
+			} catch(e){
+				
+			}
 			if (currentMapMatch != lastMapMatch && currentMapMatch !== null) {
 				$(".configMenu").addClass("closed");
 				lastMapMatch = currentMapMatch;
@@ -1589,7 +1625,7 @@
 					$( "#searchField" ).keyup();
 				}
 			}
-			if (currentPosMatch != lastPosMatch && currentPosMatch !== null) {
+			if (currentPosMatch != lastPosMatch && currentPosMatch !== null && playerPositionArrayExists) {
 				$(".configMenu").addClass("closed");
 				lastPosMatch = currentPosMatch;
 				document.querySelector("#searchField").value = currentPosMatch;
@@ -1619,6 +1655,7 @@
 					new mapObject("playerShip latestPos",playerPositionArray[3],playerPositionArray[2],playerPositionArray[1],playerPositionArray[4],playerPositionArray[5],playerPositionArray[6],currentPositionTimestamp);
 					createHighlightAnimation($(".playerShip.latestPos"));
 				}
+				generateTooltips();
 			}
 		};
 		reader.readAsText(input.files[0]);
@@ -2733,6 +2770,7 @@
 	}	
 
 	.loadingOverlay {
+		cursor: wait;
 		position: fixed;
 		z-index: 99;
 		width: 100%;
@@ -3060,8 +3098,29 @@
 		width: 1.2em;
 		margin-left: -0.6em;
 		margin-top: -0.6em;
-		background: url("textures/csp2.png");
+		background-image: url("textures/csp2.png");
 		background-size: cover;
+		display: none;
+		cursor: pointer;
+	}
+	
+	@keyframes blink {
+		  0% { background-image: url("textures/csp2.png"); }
+		  50% { background-image: none; }
+		  100% { background-image: url("textures/csp2.png"); }
+	}
+	
+	.object.playerShip label {
+		display: none !important;
+	}
+	
+	.map.showOldPlayerShipPositions .object.playerShip {
+		display: block;
+	}
+	
+	.object.playerShip.latestPos {
+		display: block;
+		animation: blink steps(1) 1000ms infinite alternate;
 	}
 	
 	.qtip-zMap {
@@ -3448,6 +3507,10 @@
 		<div class="configOption" id="showAllObjectLabels">
 			<input type="checkbox" id="switch14" name="switch14" class="switch" />
 			<label for="switch14">show all object labels</label>
+		</div>
+		<div class="configOption" id="onlyShowLatestPosition">
+			<input type="checkbox" checked="checked" id="switch16" name="switch16" class="switch" />
+			<label for="switch16">only show latest position</label>
 		</div>
 		<h2>Misc. options</h2>
 		<div class="configOption" id="responsive">
