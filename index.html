@@ -1542,18 +1542,40 @@
 	/* temp. object adding code begins */
 	
 	function mapObject(objectClasses, posX, posY, posZ, rotX, rotY, rotZ, label) {
+		console.log("rotX: "+rotX+"rotY: "+rotY+"rotZ: "+rotZ);
 		var objectElement = document.createElement("div");
 		objectElement.style.top = parseFloat(posX)/2000*systemScaleFactor + "%";
 		objectElement.style.left = parseFloat(posZ)/2000*systemScaleFactor + "%";
-		var rotSign = -Math.sign(rotX)*Math.sign(rotY);
+		/*var rotSign = -Math.sign(rotX)*Math.sign(rotY);*/
 		var rotCompensation = 0;
-		if (Math.sign(rotX)*Math.sign(rotY) > 0) {
+		var rotSign = 1;
+		/*if (rotX.indexOf("-") == -1) {
+			if (rotZ.indexOf("-") == -1) {
+				rotSign = 1;
+				rotCompensation = 180;
+			} else {
+				rotSign = 1;
+				rotCompensation = 180;
+			}
+		} else {
+			if (rotZ.indexOf("-") == -1) {
+				rotSign = -1;
+				rotCompensation = 0;
+			} else {
+				rotSign = 1;
+				rotCompensation = 180;
+			}
+		}*/
+		if (rotY.indexOf("-") == -1) {
 			rotCompensation = 0;
+			var rotSign = -1;
 		} else {
 			rotCompensation = 180;
+			var rotSign = 1;
 		}
+		console.log(rotCompensation);
+		console.log(rotZ.indexOf("-") == -1);
 		objectElement.style.transform = "rotate("+((rotSign*parseFloat(rotY)+rotCompensation))+"deg)";
-		console.log(360-parseFloat(rotY));
 		objectElement.style.webkitTransform = "rotate("+((rotSign*parseFloat(rotY)+rotCompensation))+"deg)";
 		objectElement.dataset.zPos = posY*systemScaleFactor;
 		objectElement.style.position = "absolute";
