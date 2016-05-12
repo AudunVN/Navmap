@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Infocards" targetNamespace="http://tempuri.org/Infocards.xsd" xmlns:mstns="http://tempuri.org/Infocards.xsd" xmlns="http://tempuri.org/Infocards.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="Infocards" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_DataSetName="Infocards" msprop:Generator_UserDSName="Infocards" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Infocards" msprop:Generator_UserTableName="Infocards" msprop:Generator_RowDeletedName="InfocardsRowDeleted" msprop:Generator_TableClassName="InfocardsDataTable" msprop:Generator_RowChangedName="InfocardsRowChanged" msprop:Generator_RowClassName="InfocardsRow" msprop:Generator_RowChangingName="InfocardsRowChanging" msprop:Generator_RowEvArgName="InfocardsRowChangeEvent" msprop:Generator_RowEvHandlerName="InfocardsRowChangeEventHandler" msprop:Generator_TablePropName="_Infocards" msprop:Generator_TableVarName="tableInfocards" msprop:Generator_RowDeletingName="InfocardsRowDeleting">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="desc" msprop:Generator_UserColumnName="desc" msprop:Generator_ColumnPropNameInRow="desc" msprop:Generator_ColumnVarNameInTable="columndesc" msprop:Generator_ColumnPropNameInTable="descColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="ids" msprop:Generator_UserColumnName="ids" msprop:Generator_ColumnPropNameInRow="ids" msprop:Generator_ColumnVarNameInTable="columnids" msprop:Generator_ColumnPropNameInTable="idsColumn" type="xs:int" />
+              <xs:element name="type" msprop:Generator_UserColumnName="type" msprop:Generator_ColumnPropNameInRow="type" msprop:Generator_ColumnVarNameInTable="columntype" msprop:Generator_ColumnPropNameInTable="typeColumn" type="xs:boolean" minOccurs="0" />
+              <xs:element name="text" msprop:Generator_UserColumnName="text" msprop:Generator_ColumnPropNameInRow="text" msprop:Generator_ColumnVarNameInTable="columntext" msprop:Generator_ColumnPropNameInTable="textColumn" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:Infocards" />
+      <xs:field xpath="mstns:ids" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
