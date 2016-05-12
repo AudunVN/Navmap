@@ -13,7 +13,7 @@
 	<script>
 	/* jquery cookie management methods */
 	!function(e){"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e(require("jquery")):e(jQuery)}(function(e){function n(e){return u.raw?e:encodeURIComponent(e)}function o(e){return u.raw?e:decodeURIComponent(e)}function i(e){return n(u.json?JSON.stringify(e):String(e))}function t(e){0===e.indexOf('"')&&(e=e.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\/g,"\\"));try{return e=decodeURIComponent(e.replace(c," ")),u.json?JSON.parse(e):e}catch(n){}}function r(n,o){var i=u.raw?n:t(n);return e.isFunction(o)?o(i):i}var c=/\+/g,u=e.cookie=function(t,c,s){if(arguments.length>1&&!e.isFunction(c)){if(s=e.extend({},u.defaults,s),"number"==typeof s.expires){var a=s.expires,d=s.expires=new Date;d.setMilliseconds(d.getMilliseconds()+864e5*a)}return document.cookie=[n(t),"=",i(c),s.expires?"; expires="+s.expires.toUTCString():"",s.path?"; path="+s.path:"",s.domain?"; domain="+s.domain:"",s.secure?"; secure":""].join("")}for(var f=t?void 0:{},p=document.cookie?document.cookie.split("; "):[],l=0,m=p.length;m>l;l++){var x=p[l].split("="),g=o(x.shift()),j=x.join("=");if(t===g){f=r(j,c);break}t||void 0===(j=r(j))||(f[g]=j)}return f};u.defaults={},e.removeCookie=function(n,o){return e.cookie(n,"",e.extend({},o,{expires:-1})),!e.cookie(n)}});
-	var dataRootPath = "v48842/";
+	var dataRootPath = "v48851/";
 	var currentSystem;
 	var nameRegex = /nickname = (.*)/g;
 	var idsNameRegex = /ids_name = (.*)/g;
@@ -69,7 +69,7 @@
 	var rotationRegex = /rotate = (.*)/g;
 	var textRegex = /(<(text|TEXT)>.+?<\/(text|TEXT)>|<(para|PARA)\/>)/g;
 	/* oorpArray contains systems which should be considered as OORP or inaccessible by the universe map. See also:  */
-	var oorpArray = ["hi22","rh11","rh12","iw07","rh10","li11","br17","br19","ew63","ga11","ga13","ga09","ga12","ga05","ga06","ga10","ga14","br10","iw09","li06","ca01","ev01","bw14", "bw13","st02c","st03b","hi19","hi08","hi08","ew37", "ku15", "li07"];
+	var oorpArray = ["ew05","hi03","ew45","ew18","ku17","ew85","hi22","ew12","rh11","rh12","iw07","rh10","li11","br17","br19","ew63","ga11","ga13","ga09","ga12","ga05","ga06","ga10","ga14","br10","iw09","li06","ca01","ev01","bw14", "bw13","st02c","st03b","hi19","hi08","hi08","ew37", "ku15", "li07"];
 	var systemScaleFactor = 1;
 	var searchTimedOut = "nope";
 	var universeFileGetResult;
@@ -216,14 +216,20 @@
 		/* Runs when the map script determines that there has been a change in configuration -
 		   such as an option being changed in the config menu - which requires further action. */
 
-		if (document.querySelector(".configOption#wrecks  input").checked) {
+		if (document.querySelector(".configOption#wrecks input").checked) {
 			$(".object.wreck").removeClass("hidden");
 			$(".map .object.wreck label").hAlign();
 		} else {
 			$(".object.wreck").addClass("hidden");
 		}
 		
-		if (document.querySelector(".configOption#wreckLabels  input").checked) {
+		if (document.querySelector(".configOption#onlyShowLatestPosition input").checked) {
+			$(".map").removeClass("showOldPlayerShipPositions");
+		} else {
+			$(".map").addClass("showOldPlayerShipPositions");
+		}
+		
+		if (document.querySelector(".configOption#wreckLabels input").checked) {
 			$(".object.wreck label").removeClass("hidden");
 			$(".map .object.wreck label").hAlign();
 		} else {
@@ -267,34 +273,34 @@
 			prevLabelMoveState = "unchecked";
 		}
 		
-		if (document.querySelector(".configOption#zoneLabels  input").checked) {
+		if (document.querySelector(".configOption#zoneLabels input").checked) {
 			$(".zone label").not($(".mineable label")).removeClass("hidden");
 			$(".map .zone label").hAlign();
 		} else {
 			$(".zone label").not($(".mineable label")).addClass("hidden");
 		}
 		
-		if (document.querySelector(".configOption#zones  input").checked) {
+		if (document.querySelector(".configOption#zones input").checked) {
 			$(".zone").removeClass("hidden");
 			$(".map .zone label").hAlign();
 		} else {
 			$(".zone").addClass("hidden");
 		}
 		
-		if (document.querySelector(".configOption#connections  input").checked
+		if (document.querySelector(".configOption#connections input").checked
 			&& document.querySelector(".systemConnectionProp") == null) {
 				generateSystemConnections();
 			if (document.querySelector(".map .system") == null) {
 				$(".systemConnectionProp").hide();
 			}
-		} else if (!(document.querySelector(".configOption#connections  input").checked)) {
+		} else if (!(document.querySelector(".configOption#connections input").checked)) {
 			$(".systemConnectionProp").hide();
-		} else if (document.querySelector(".configOption#connections  input").checked
+		} else if (document.querySelector(".configOption#connections input").checked
 			&& document.querySelector(".map .system") !== null) {
 			$(".systemConnectionProp").show();
 		}
 		
-		if (document.querySelector(".configOption#oorp  input").checked) {
+		if (document.querySelector(".configOption#oorp input").checked) {
 			$(".oorp").removeClass("hidden");
 			$(".map .system.oorp label").hAlign();
 		} else {
@@ -307,7 +313,7 @@
 			$(".systemConnectionProp").hide();
 		}
 		
-		if (document.querySelector(".configOption#universeLabels  input").checked
+		if (document.querySelector(".configOption#universeLabels input").checked
 			&& document.querySelector(".map .system") !== null) {
 			$(".map div label").removeClass("labelDisabled");
 			$(".map .system label").hAlign();
@@ -315,7 +321,7 @@
 			$(".map div label").addClass("labelDisabled");
 		}
 		
-		if (document.querySelector(".configOption#systemLabels  input").checked
+		if (document.querySelector(".configOption#systemLabels input").checked
 			&& document.querySelector(".map .system") == null) {
 			$(".map div label").removeClass("labelDisabled");
 			$(".map div label").hAlign();
@@ -357,7 +363,7 @@
 	function generateSystemScale(system) {
 		if (document.querySelector(".mapScale") != null) {
 			currentSystem = system;
-			if (document.querySelector(".configOption#scale  input").checked) {
+			if (document.querySelector(".configOption#scale input").checked) {
 				$(".mapScale").addClass("arrows");
 				baseSize = 30;
 			} else {
@@ -541,7 +547,12 @@
 					systemScaleFactorArray[nameString.toLowerCase()] = parseFloat(scaleFactor);
 				}
 			}
+			/* manually moved systems, usually oorp/removed ones */
 			systemPosArray["ev01"] = [-1,17];
+			systemPosArray["ew18"] = [16,12];
+			systemPosArray["ew12"] = [9,1];
+			systemPosArray["ew85"] = [16,10];
+			systemPosArray["st03b"] = [15,5];
 			systemIdsNameArrayState = "ready";
 			systemScaleFactorArrayState = "ready";
 			systemPosArrayState = "ready";
@@ -584,6 +595,8 @@
 					}
 				}
 			}
+			searchArray["Omicron Major"] = "st03";
+			searchArray["omicron major"] = "st03";
 			searchArrayState = "ready";
 			console.log("Base system lookup array generated");
 			baseSystemArrayState = "ready";
@@ -1487,6 +1500,8 @@
 						}
 					} else if ($(this).hasClass("unclassified")) {
 						tooltipString += $(this).attr('data-internal-nickname');
+					} else if ($(this).hasClass("playerShip")) {
+						tooltipString += $(this).children("label").text();
 					}
 					if ($(this).attr('data-z-pos') !== "undefined" && $(this).attr('data-z-pos') !== "0") {
 						if (tooltipString !== "") {
@@ -1531,21 +1546,100 @@
 		});
 	}
 	
+	/* temp. object adding code begins */
+	
+	function mapObject(objectClasses, posX, posY, posZ, rotX, rotY, rotZ, label) {
+		console.log("rotX: "+rotX+"rotY: "+rotY+"rotZ: "+rotZ);
+		var objectElement = document.createElement("div");
+		objectElement.style.top = parseFloat(posX)/2000*systemScaleFactor + "%";
+		objectElement.style.left = parseFloat(posZ)/2000*systemScaleFactor + "%";
+		/*var rotSign = -Math.sign(rotX)*Math.sign(rotY);*/
+		var rotCompensation = 0;
+		var rotSign = 1;
+		objectElement.style.transform = "rotate("+((rotSign*parseFloat(rotY)+rotCompensation))+"deg)";
+		objectElement.style.webkitTransform = "rotate("+((rotSign*parseFloat(rotY)+rotCompensation))+"deg)";
+		if(!!document.querySelector(".playerShip.previousLatestPos")) {
+			var lastPos = document.querySelector(".playerShip.previousLatestPos");
+			var xDiff = parseFloat(lastPos.style.top.slice(0,-1))*2000/systemScaleFactor - parseFloat(posX); console.log(xDiff);
+			var zDiff = parseFloat(lastPos.style.left.slice(0,-1))*2000/systemScaleFactor - parseFloat(posZ); console.log(zDiff);
+			var xAvg = (parseFloat(lastPos.style.top.slice(0,-1))*2000/systemScaleFactor + parseFloat(posX)) / 2.000;
+			var zAvg = (parseFloat(lastPos.style.left.slice(0,-1))*2000/systemScaleFactor + parseFloat(posZ)) / 2.000;
+			console.log(Math.atan2(zDiff, xDiff));
+			objectElement.style.transform = "rotate(" + (-Math.atan2(zDiff, xDiff)) + "rad)";
+			objectElement.style.webkitTransform = "rotate(" + (-Math.atan2(zDiff, xDiff)) + "rad)";
+			/*if (zDiff <= 0) {
+				rotSign = 1;
+				rotCompensation = 180;
+			} else {
+				rotCompensation = 0;
+				rotSign = -1;
+			}*/
+		}
+		objectElement.dataset.zPos = posY*systemScaleFactor;
+		objectElement.style.position = "absolute";
+		objectElement.className = "object "+objectClasses;
+		var objectLabel = document.createElement("label");
+		objectLabel.style.display = "inline-block";
+		objectLabel.style.transform = "rotate("+360-parseFloat(rotY)+"deg)";
+		objectLabel.style.webkitTransform = "rotate("+360-parseFloat(rotY)+"deg)";
+		objectLabel.style.transformOrigin = "right";
+		objectLabel.style.webkitTransformOrigin = "right";
+		objectLabel.innerHTML = label;
+		objectElement.appendChild(objectLabel);
+		if (objectClasses.indexOf("playerShip") !== -1) {
+			objectElement.addEventListener("click", function(){
+				$(this).qtip('destroy');
+				$(this).remove();
+			}); 
+		}
+		document.querySelector(".map").appendChild(objectElement);
+	}
+	
+	/* temp. object adding code ends */
+	
 	/* fileReader code start */
-	var lastMatch = "";
-	var currentMatch = "";
+	var lastMapMatch = "";
+	var currentMapMatch = "";
+	var lastPosMatch = "";
+	var currentPosMatch = "";
 	var rawFile = "";
+	var isFirstRead = true;
 	var inputRegex = /\/map (.*)/g;
+	var positionRegex = /\] \/pos in .*[\n\r]+\[[^\]]*\] Position.*/g;
 	var openFile = function(event) {
 		var input = event.target;
 		var reader = new FileReader();
 		reader.onload = function(){
 			rawFile = reader.result;
-			currentMatch = rawFile.slice(rawFile.lastIndexOf("/map")).match(inputRegex)[0].slice(5);
-			if (currentMatch != lastMatch && currentMatch !== null) {
+			var playerPosRegex = /\d\] Position ([^ ]*) ([^ ]*) ([^ ]*) Orient ([^ ]*) ([^ ]*) ([^ ]*)/g;
+			try {
+				currentMapMatch = rawFile.slice(rawFile.lastIndexOf("/map")).match(inputRegex)[0].slice(5);
+			} catch(e){
+				
+			}
+			try {
+				currentPosMatch = rawFile.slice(rawFile.lastIndexOf("] /pos in ")).match(positionRegex)[0];
+			} catch(e){
+				
+			}
+			try {
+				var playerPositionArrayExists = playerPosRegex.test(currentPosMatch);
+			} catch(e){
+				
+			}
+			if (isFirstRead) {
+				if (currentMapMatch !== null) {
+					lastMapMatch = currentMapMatch;
+				}
+				if (currentPosMatch !== null) {
+					lastPosMatch = currentPosMatch;
+				}
+				isFirstRead = false;
+			}
+			if (currentMapMatch != lastMapMatch && currentMapMatch !== null) {
 				$(".configMenu").addClass("closed");
-				lastMatch = currentMatch;
-				var lowerCaseMatch = currentMatch.toLowerCase();
+				lastMapMatch = currentMapMatch;
+				var lowerCaseMatch = currentMapMatch.toLowerCase();
 				if (lowerCaseMatch == "universe" | lowerCaseMatch == "sirius" | lowerCaseMatch == "universemap") {
 					generateUniverseMap();
 				} else if (lowerCaseMatch == "removehighlights" | lowerCaseMatch == "remove highlights") {
@@ -1554,10 +1648,43 @@
 					$('html, body').animate({ scrollTop: 0}, 300);
 				} else if (lowerCaseMatch == "scroll down" | lowerCaseMatch == "down") {
 					$('html, body').animate({ scrollTop: $(document).height()}, 300);
+				} else if (lowerCaseMatch == "removeships") { 
+					$(".playerShip").remove();
 				} else {
-					document.querySelector("#searchField").value = currentMatch;
+					document.querySelector("#searchField").value = currentMapMatch;
 					$( "#searchField" ).keyup();
 				}
+			}
+			if (currentPosMatch != lastPosMatch && currentPosMatch !== null && playerPositionArrayExists) {
+				$(".configMenu").addClass("closed");
+				lastPosMatch = currentPosMatch;
+				document.querySelector("#searchField").value = currentPosMatch;
+				$( "#searchField" ).keyup();
+				var posSystemRegex = /\/pos in (.*)/g;
+				var playerPosRegex = /\d\] Position ([^ ]*) ([^ ]*) ([^ ]*) Orient ([^ ]*) ([^ ]*) ([^ ]*)/g;
+				var currentTimeRegex = /[\r\n]\[\d+\.\d+\.\d+ (\d+:\d+:\d+)\]/g;
+				var posSystem = posSystemRegex.exec(currentPosMatch)[1].trim();
+				var playerPositionArray = playerPosRegex.exec(currentPosMatch);
+				var currentPositionTimestamp = currentTimeRegex.exec(currentPosMatch)[1];
+				if (typeof searchArray[posSystem] !== "undefined" && searchArray[posSystem].toLowerCase() !== currentSystemNickname.toLowerCase()) {
+					document.querySelector("#searchField").value = "";
+					generateMap(searchArray[posSystem]);
+					$(".highlighter").remove();
+					$(".playerShip.previousLatestPos").removeClass("previousLatestPos");
+					$(".playerShip.latestPos").addClass("previousLatestPos");
+					$(".playerShip.latestPos").removeClass("latestPos");
+					new mapObject("playerShip latestPos",playerPositionArray[3],playerPositionArray[2],playerPositionArray[1],playerPositionArray[4],playerPositionArray[5],playerPositionArray[6],currentPositionTimestamp);
+					createHighlightAnimation($(".playerShip.latestPos"));
+				} else if (typeof searchArray[posSystem] !== "undefined" && searchArray[posSystem].toLowerCase() == currentSystemNickname.toLowerCase()) {
+					document.querySelector("#searchField").value = "";
+					$(".highlighter").remove();
+					$(".playerShip.previousLatestPos").removeClass("previousLatestPos");
+					$(".playerShip.latestPos").addClass("previousLatestPos");
+					$(".playerShip.latestPos").removeClass("latestPos");
+					new mapObject("playerShip latestPos",playerPositionArray[3],playerPositionArray[2],playerPositionArray[1],playerPositionArray[4],playerPositionArray[5],playerPositionArray[6],currentPositionTimestamp);
+					createHighlightAnimation($(".playerShip.latestPos"));
+				}
+				generateTooltips();
 			}
 		};
 		reader.readAsText(input.files[0]);
@@ -2221,6 +2348,21 @@
 		top: 110%;
 	}
 	
+	.map div.object.dockable.planet label::after {
+		display: inline-block;
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: inherit;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		content: "\f090";
+		margin-left: 0.25em;
+		font-size: 0.75em;
+		vertical-align: baseline;
+		position: relative;
+		bottom: 0.1em;
+	}
+	
 	.map div.object.star label {
 		top: 65%;
 	}
@@ -2256,6 +2398,10 @@
 	.object.noName label,
 	.object:not([data-ids-info]) label{
 		display: none;
+	}
+	
+	.object.jump:not([data-ids-info]) label {
+		display: block;
 	}
 	
 	.showInfocardedObjectLabels .object.unclassified[data-ids-info] label {
@@ -2411,7 +2557,9 @@
 	.systemConnection.jgConnection[data-connected-points~="st05"][data-connected-points~="st06"] div,
 	.systemConnection.jgConnection[data-connected-points~="st01"][data-connected-points~="st03"] div,
 	.systemConnection.jgConnection[data-connected-points~="bw17"][data-connected-points~="iw11"] div,
-	.systemConnection.jgConnection[data-connected-points~="li17"][data-connected-points~="no01"] div {
+	.systemConnection.jgConnection[data-connected-points~="li17"][data-connected-points~="no01"] div,
+	.systemConnection.jgConnection[data-connected-points~="st06"][data-connected-points~="st03"] div,
+	.systemConnection.jgConnection[data-connected-points~="st03"][data-connected-points~="st05"] div {
 		background-color: rgba(152, 69, 255, 0.9);
 		box-shadow: 0px 0px 0.3em 0.1em rgba(152, 69, 255, 0.5);
 	}
@@ -2657,6 +2805,7 @@
 	}	
 
 	.loadingOverlay {
+		cursor: wait;
 		position: fixed;
 		z-index: 99;
 		width: 100%;
@@ -2979,6 +3128,36 @@
 		margin-left: 2.1em;
 	}
 	
+	.object.playerShip {
+		height: 1.2em;
+		width: 1.2em;
+		margin-left: -0.6em;
+		margin-top: -0.6em;
+		background-image: url("textures/csp2.png");
+		background-size: cover;
+		display: none;
+		cursor: pointer;
+	}
+	
+	@keyframes blink {
+		  0% { background-image: url("textures/csp2.png"); }
+		  50% { background-image: none; }
+		  100% { background-image: url("textures/csp2.png"); }
+	}
+	
+	.object.playerShip label {
+		display: none !important;
+	}
+	
+	.map.showOldPlayerShipPositions .object.playerShip {
+		display: block;
+	}
+	
+	.object.playerShip.latestPos {
+		display: block;
+		animation: blink steps(1) 1000ms infinite alternate;
+	}
+	
 	.qtip-zMap {
 		font-family: "Agency FB", "Oswald", sans-serif;
 		font-size: 14px !important;
@@ -3288,7 +3467,7 @@
 </head>
 <body>
 	<nav class="navContainer">
-		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (26.04)</span></a>
+		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (12.05)</span></a>
 		<span id="showUniverseMap" onClick="generateUniverseMap()"><i class="fa fa-times-circle-o"></i><span class="infoSpace"> </span><span class="infoText">Show all systems</span></span>
 		<span id="navSystemTitle"></span>
 		<i id="screenshotButton" class="fa fa-camera"></i>
@@ -3363,6 +3542,10 @@
 		<div class="configOption" id="showAllObjectLabels">
 			<input type="checkbox" id="switch14" name="switch14" class="switch" />
 			<label for="switch14">show all object labels</label>
+		</div>
+		<div class="configOption" id="onlyShowLatestPosition">
+			<input type="checkbox" checked="checked" id="switch16" name="switch16" class="switch" />
+			<label for="switch16">only show latest position</label>
 		</div>
 		<h2>Misc. options</h2>
 		<div class="configOption" id="responsive">

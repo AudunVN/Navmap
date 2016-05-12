@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="GameDataSet" targetNamespace="http://tempuri.org/GameDataSet.xsd" xmlns:mstns="http://tempuri.org/GameDataSet.xsd" xmlns="http://tempuri.org/GameDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="GameDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="GameDataSet" msprop:Generator_DataSetName="GameDataSet" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="HashList" msprop:Generator_UserTableName="HashList" msprop:Generator_RowDeletedName="HashListRowDeleted" msprop:Generator_RowChangedName="HashListRowChanged" msprop:Generator_RowClassName="HashListRow" msprop:Generator_RowChangingName="HashListRowChanging" msprop:Generator_RowEvArgName="HashListRowChangeEvent" msprop:Generator_RowEvHandlerName="HashListRowChangeEventHandler" msprop:Generator_TableClassName="HashListDataTable" msprop:Generator_TableVarName="tableHashList" msprop:Generator_RowDeletingName="HashListRowDeleting" msprop:Generator_TablePropName="HashList">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ItemHash" msprop:Generator_UserColumnName="ItemHash" msprop:Generator_ColumnVarNameInTable="columnItemHash" msprop:Generator_ColumnPropNameInRow="ItemHash" msprop:Generator_ColumnPropNameInTable="ItemHashColumn" type="xs:long" />
+              <xs:element name="ItemNickName" msprop:Generator_UserColumnName="ItemNickName" msprop:Generator_ColumnVarNameInTable="columnItemNickName" msprop:Generator_ColumnPropNameInRow="ItemNickName" msprop:Generator_ColumnPropNameInTable="ItemNickNameColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="ItemType" msprop:Generator_UserColumnName="ItemType" msprop:Generator_ColumnVarNameInTable="columnItemType" msprop:Generator_ColumnPropNameInRow="ItemType" msprop:Generator_ColumnPropNameInTable="ItemTypeColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="IDSName" msprop:Generator_UserColumnName="IDSName" msprop:Generator_ColumnVarNameInTable="columnIDSName" msprop:Generator_ColumnPropNameInRow="IDSName" msprop:Generator_ColumnPropNameInTable="IDSNameColumn" type="xs:unsignedInt" minOccurs="0" />
+              <xs:element name="IDSInfo" msprop:Generator_UserColumnName="IDSInfo" msprop:Generator_ColumnVarNameInTable="columnIDSInfo" msprop:Generator_ColumnPropNameInRow="IDSInfo" msprop:Generator_ColumnPropNameInTable="IDSInfoColumn" type="xs:unsignedInt" minOccurs="0" />
+              <xs:element name="IDSInfo1" msprop:Generator_UserColumnName="IDSInfo1" msprop:Generator_ColumnVarNameInTable="columnIDSInfo1" msprop:Generator_ColumnPropNameInRow="IDSInfo1" msprop:Generator_ColumnPropNameInTable="IDSInfo1Column" type="xs:unsignedInt" minOccurs="0" />
+              <xs:element name="IDSInfo2" msprop:Generator_UserColumnName="IDSInfo2" msprop:Generator_ColumnVarNameInTable="columnIDSInfo2" msprop:Generator_ColumnPropNameInRow="IDSInfo2" msprop:Generator_ColumnPropNameInTable="IDSInfo2Column" type="xs:unsignedInt" minOccurs="0" />
+              <xs:element name="IDSInfo3" msprop:Generator_UserColumnName="IDSInfo3" msprop:Generator_ColumnVarNameInTable="columnIDSInfo3" msprop:Generator_ColumnPropNameInRow="IDSInfo3" msprop:Generator_ColumnPropNameInTable="IDSInfo3Column" type="xs:unsignedInt" minOccurs="0" />
+              <xs:element name="Keys" msprop:Generator_UserColumnName="Keys" msprop:Generator_ColumnVarNameInTable="columnKeys" msprop:Generator_ColumnPropNameInRow="Keys" msprop:Generator_ColumnPropNameInTable="KeysColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="IDSNameTxt" msprop:Generator_UserColumnName="IDSNameTxt" msprop:Generator_ColumnPropNameInRow="IDSNameTxt" msprop:Generator_ColumnVarNameInTable="columnIDSNameTxt" msprop:Generator_ColumnPropNameInTable="IDSNameTxtColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="IDSInfoTxt" msprop:Generator_UserColumnName="IDSInfoTxt" msprop:Generator_ColumnPropNameInRow="IDSInfoTxt" msprop:Generator_ColumnVarNameInTable="columnIDSInfoTxt" msprop:Generator_ColumnPropNameInTable="IDSInfoTxtColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="IDSInfo1Txt" msprop:Generator_UserColumnName="IDSInfo1Txt" msprop:Generator_ColumnPropNameInRow="IDSInfo1Txt" msprop:Generator_ColumnVarNameInTable="columnIDSInfo1Txt" msprop:Generator_ColumnPropNameInTable="IDSInfo1TxtColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="IDSInfo2Txt" msprop:Generator_UserColumnName="IDSInfo2Txt" msprop:Generator_ColumnPropNameInRow="IDSInfo2Txt" msprop:Generator_ColumnVarNameInTable="columnIDSInfo2Txt" msprop:Generator_ColumnPropNameInTable="IDSInfo2TxtColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="IDSInfo3Txt" msprop:Generator_UserColumnName="IDSInfo3Txt" msprop:Generator_ColumnPropNameInRow="IDSInfo3Txt" msprop:Generator_ColumnVarNameInTable="columnIDSInfo3Txt" msprop:Generator_ColumnPropNameInTable="IDSInfo3TxtColumn" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ShipInfoList" msprop:Generator_UserTableName="ShipInfoList" msprop:Generator_RowDeletedName="ShipInfoListRowDeleted" msprop:Generator_RowChangedName="ShipInfoListRowChanged" msprop:Generator_RowClassName="ShipInfoListRow" msprop:Generator_RowChangingName="ShipInfoListRowChanging" msprop:Generator_RowEvArgName="ShipInfoListRowChangeEvent" msprop:Generator_RowEvHandlerName="ShipInfoListRowChangeEventHandler" msprop:Generator_TableClassName="ShipInfoListDataTable" msprop:Generator_TableVarName="tableShipInfoList" msprop:Generator_RowDeletingName="ShipInfoListRowDeleting" msprop:Generator_TablePropName="ShipInfoList">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ShipHash" msprop:Generator_UserColumnName="ShipHash" msprop:Generator_ColumnVarNameInTable="columnShipHash" msprop:Generator_ColumnPropNameInRow="ShipHash" msprop:Generator_ColumnPropNameInTable="ShipHashColumn" type="xs:long" />
+              <xs:element name="DefaultEngine" msprop:Generator_UserColumnName="DefaultEngine" msprop:Generator_ColumnVarNameInTable="columnDefaultEngine" msprop:Generator_ColumnPropNameInRow="DefaultEngine" msprop:Generator_ColumnPropNameInTable="DefaultEngineColumn" type="xs:long" minOccurs="0" />
+              <xs:element name="DefaultSound" msprop:Generator_UserColumnName="DefaultSound" msprop:Generator_ColumnVarNameInTable="columnDefaultSound" msprop:Generator_ColumnPropNameInRow="DefaultSound" msprop:Generator_ColumnPropNameInTable="DefaultSoundColumn" type="xs:long" minOccurs="0" />
+              <xs:element name="DefaultPowerPlant" msprop:Generator_UserColumnName="DefaultPowerPlant" msprop:Generator_ColumnVarNameInTable="columnDefaultPowerPlant" msprop:Generator_ColumnPropNameInRow="DefaultPowerPlant" msprop:Generator_ColumnPropNameInTable="DefaultPowerPlantColumn" type="xs:long" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="EquipInfoList" msprop:Generator_UserTableName="EquipInfoList" msprop:Generator_RowDeletedName="EquipInfoListRowDeleted" msprop:Generator_RowChangedName="EquipInfoListRowChanged" msprop:Generator_RowClassName="EquipInfoListRow" msprop:Generator_RowChangingName="EquipInfoListRowChanging" msprop:Generator_RowEvArgName="EquipInfoListRowChangeEvent" msprop:Generator_RowEvHandlerName="EquipInfoListRowChangeEventHandler" msprop:Generator_TableClassName="EquipInfoListDataTable" msprop:Generator_TableVarName="tableEquipInfoList" msprop:Generator_RowDeletingName="EquipInfoListRowDeleting" msprop:Generator_TablePropName="EquipInfoList">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="EquipHash" msprop:Generator_UserColumnName="EquipHash" msprop:Generator_ColumnVarNameInTable="columnEquipHash" msprop:Generator_ColumnPropNameInRow="EquipHash" msprop:Generator_ColumnPropNameInTable="EquipHashColumn" type="xs:long" />
+              <xs:element name="ItemType" msprop:Generator_UserColumnName="ItemType" msprop:Generator_ColumnVarNameInTable="columnItemType" msprop:Generator_ColumnPropNameInRow="ItemType" msprop:Generator_ColumnPropNameInTable="ItemTypeColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="HpType" msprop:Generator_UserColumnName="HpType" msprop:Generator_ColumnVarNameInTable="columnHpType" msprop:Generator_ColumnPropNameInRow="HpType" msprop:Generator_ColumnPropNameInTable="HpTypeColumn" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="HardPointList" msprop:Generator_UserTableName="HardPointList" msprop:Generator_RowDeletedName="HardPointListRowDeleted" msprop:Generator_RowChangedName="HardPointListRowChanged" msprop:Generator_RowClassName="HardPointListRow" msprop:Generator_RowChangingName="HardPointListRowChanging" msprop:Generator_RowEvArgName="HardPointListRowChangeEvent" msprop:Generator_RowEvHandlerName="HardPointListRowChangeEventHandler" msprop:Generator_TableClassName="HardPointListDataTable" msprop:Generator_TableVarName="tableHardPointList" msprop:Generator_RowDeletingName="HardPointListRowDeleting" msprop:Generator_TablePropName="HardPointList">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ShipHash" msprop:Generator_UserColumnName="ShipHash" msprop:Generator_ColumnVarNameInTable="columnShipHash" msprop:Generator_ColumnPropNameInRow="ShipHash" msprop:Generator_ColumnPropNameInTable="ShipHashColumn" type="xs:long" minOccurs="0" />
+              <xs:element name="HPName" msprop:Generator_UserColumnName="HPName" msprop:Generator_ColumnVarNameInTable="columnHPName" msprop:Generator_ColumnPropNameInRow="HPName" msprop:Generator_ColumnPropNameInTable="HPNameColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="ItemType" msprop:Generator_UserColumnName="ItemType" msprop:Generator_ColumnVarNameInTable="columnItemType" msprop:Generator_ColumnPropNameInRow="ItemType" msprop:Generator_ColumnPropNameInTable="ItemTypeColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="MountableTypes" msprop:Generator_UserColumnName="MountableTypes" msprop:Generator_ColumnVarNameInTable="columnMountableTypes" msprop:Generator_ColumnPropNameInRow="MountableTypes" msprop:Generator_ColumnPropNameInTable="MountableTypesColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="ItemHash" msprop:Generator_UserColumnName="ItemHash" msprop:Generator_ColumnVarNameInTable="columnItemHash" msprop:Generator_ColumnPropNameInRow="ItemHash" msprop:Generator_ColumnPropNameInTable="ItemHashColumn" type="xs:long" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="HashListKey1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:HashList" />
+      <xs:field xpath="mstns:ItemHash" />
+    </xs:unique>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:ShipInfoList" />
+      <xs:field xpath="mstns:ShipHash" />
+    </xs:unique>
+    <xs:unique name="EquipInfoList_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:EquipInfoList" />
+      <xs:field xpath="mstns:EquipHash" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FLInfocardIE.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="setFlDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Discovery\FreelancerSDK</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

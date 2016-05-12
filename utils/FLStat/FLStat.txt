@@ -1,0 +1,163 @@
+FLStat is a program by Dan Tascau to display some information contained in the
+Freelancer ini files.  This version has been patched by Jason Hood to provide
+additional information and features.
+
+Bumped version to 1.20.
+
+By default, don't show blank items.  In addition, extend what is meant by blank
+(generally anything that isn't available to the player):
+
+* Bases with an "Info ID" of 0 (and vanilla "Name ID"; most story bases);
+* Factions with an "Info ID" of 1 (most story factions);
+* Commodities that are neither bought nor sold;
+* equipment that cannot be looted or bought;
+* Ships that have no package or cannot be bought.
+
+Tweaked the sizes of columns; some have moved and some have been renamed.
+Ignore case when sorting name columns.
+
+"Price" is actually an integer, so handle accordingly.
+
+Fixed the Guns/Missiles "Shield Dmg" value (although it still doesn't recognise
+the HULL_DAMAGE_FACTOR constant, using a fixed 0.5).
+
+Improved the speed of reading the ini files.
+Recognise exponents and negative integers when reading the ini files.
+Recognise the bool type when converting BINI files.
+Recognise tabs when reading resource DLL names.
+
+Fixed parsing of center-justified infocard text.
+
+Right-click "Copy" will copy the entire list as CSV.
+
+Goods list (when you select a base):
+* "Type" uses "turret/missile/torpedo/CD" instead of "gun";
+* replaced the "Params" column with just the "Price Modifier".
+
+Factions:
+* use four decimals for the "Rep. Chg." columns;
+* fix sorting by destruction.
+
+Rep Hacks:
+* include "misn" and "know" in determining probability.
+
+Commodities:
+* don't consider blank bases when determining the best prices;
+* added "Price".
+
+Guns:
+* added "Hull Dmg/s", "Shield Dmg/s", "Power/s", "Efficiency", "Value",
+  "Rating" and "Range";
+* Efficiency: damage / power, using whichever damage is greater;
+* Value: damage/s / price * 1000, using whichever damage is greater;
+* Rating: Efficiency * Value.
+
+Missiles:
+* added "Ammo Price", "Efficiency", "Value", "Radius", and "Motor Lifetime";
+* remove "Class" for torpedos & disruptors;
+* Efficiency: damage / power, using whichever damage is greater;
+* Value: damage / ammo price, using whichever damage is greater;
+* use "dumb" if "Seeker" is not "lock";
+* increase "Lifetime" and "Motor Acceleration" to four decimals;
+* fixed the "Max Range" value;
+* added ranges & speeds when travelling at 80 & 200 m/s (range sorts at 200).
+
+Mines:
+* added "Price", "Ammo Price", "Value" and "Radius";
+* Value: damage / ammo price.
+
+Shields:
+* added "Type" (old "Type" becomes "Technology"), "Price" and "Value";
+* Value: shield_value / price * 1000, where shield_value is capacity,
+	 regeneration_rate or constant_power_draw, whichever is not 0.
+
+Thrusters:
+* added "Price", "Efficiency", "Value" and "Rating";
+* Efficiency: max_force / power;
+	      power if max_force is 0;
+* Value: max_force / price;
+	 power * 1000 / price if max_force is 0;
+* Rating: max_force / (power - 100) * Value / 1000 (where 100 is the standard
+  thrust recharge rate).
+
+Ships:
+* exclude ships where nickname comes before ids_name (rtc props and random
+  mission objects that have been included in shiparch.ini);
+* converted radians ("rad") to degrees ("deg"), using two decimals;
+* consider linear_drag when determining "Impulse Speed";
+* use blank (instead of "0") when there is no engine or powerplant.
+
+Ship Details:
+* allow (Shift+)Ctrl+Tab to select it;
+* condense gun, turret & shield columns into a single column of class numbers;
+* sort hardpoints the same as the mounts;
+* recognise the additional EngClass hp_types.
+
+Commodities Export:
+* use "Base" in the header (instead of "Locations");
+* use blank (instead of "None") if no ships are sold;
+* fix "Sells" value;
+* commodities will be the same as the Commodities tab.
+
+SQL Export:
+* modified to work with SQLite;
+* changed file name to just "FLStat.sql";
+* added batch file to run "sqlite3", providing queries to emulate FLStat;
+* rearranged and formatted columns (tab size 8) to work as a straight text dump;
+* added tables to convert categories/types to names;
+* equipment: added "buyable" flag;
+* gun_type: explicitly added 0 as a blank name;
+* explosion: renamed "energy_dmg" to "shield_dmg";
+	     removed "strength" (Freelancer doesn't even read it);
+* motor: fixed reading "nickname" from the configuration;
+* munition: renamed "life_time" to "lifetime";
+* gun: renamed "refire_delay" to "refire_rate";
+* minedropper: added "dmg_per_fire", "power_usage", "refire_rate", "velocity"
+	       and "toughness";
+* shield: added "category" (the new "Type" in FLStat);
+* ship: renamed "shield_batts" to "batteries";
+	removed "engine_speed" (calculable from engine);
+	added "linear_drag" (for proper speed calculation);
+* _power: exclude plants with capacity = 1 (assumed prop);
+* ship_package: fixed relationship to ship (removed ship_hull table);
+		renamed "ship_hull_id" to "ship_id";
+* faction: use "[nickname]" for non-existent long or short name;
+* system: use "[nickname]" for non-existent name;
+* base: use "[nickname]" for non-existent name;
+* base_equip: renamed "param1" to "level_reqd";
+	      renamed "param2" to "rep_reqd";
+	      renamed "param3" to "min_inv";
+	      renamed "param4" to "stock";
+	      renamed "param5" to "full_resale";
+	      renamed "param6" to "price_modifier";
+* rep_hack: renamed "occurence" to "occurrence".
+
+
+Known Problems:
+
+* if category does not follow nickname in [Good], the good is ignored;
+* if a ship has multiple packages, only the last is tested - if it is not sold,
+  the ship is considered blank (does not affect SQL).
+
+
+Changes from v1.10:
+
+* fixed tabs in freelancer.ini preventing resource DLLs from loading;
+* fixed & improved Commodities Export;
+* exclude [Power] when capacity = 1 (props);
+* exclude [Ship] when nickname comes before ids_name (props & mission objects);
+* fixed "Impulse Speed" value (add ship's linear drag to engine's);
+* recognise power/thruster boosters, shield capacitors/generators;
+* recognise the additional hardpoints used by EngClass;
+* custom bases with no infocard are no longer blank;
+* blank equipment is determined by its lootable and buyable status;
+* blank ships are determined by no package or not buyable;
+* SQL: added "buyable" to equipment table;
+* SQL: added "linear_drag" to ship table;
+* SQL: renamed "restock" to "min_inv" & "buy_only" to "full_resale";
+* SQL: explicitly write "[nickname]" in faction, system & base tables;
+* SQL: added "Engines" and "Powerplants" queries.
+
+
+Jason Hood <jadoxa@yahoo.com.au>
+http://freelancer.adoxa.vze.com/
