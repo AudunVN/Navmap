@@ -10,5 +10,6 @@ Updating for a new version:
 4. copy /IONCROSS contents
 5. copy /SOLAR/ASTEROIDS
 7. copy /DATA/INTERFACE/infocardmap.ini
+7. copy (and update) systems_special.txt from previous version
 8. copy solararch.ini
 6. lowercase absolutely everything
