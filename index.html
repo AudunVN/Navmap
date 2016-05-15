@@ -1367,7 +1367,7 @@
 			} else {
 				classArray.push("gate");
 			}
-			if (!objectString.match(gotoRegex)) {
+			if (!objectString.match(gotoRegex) | objectString.indexOf("505262") != -1) {
 				classArray.push("unusableJump");
 			}
 		}
