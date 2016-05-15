@@ -1181,13 +1181,13 @@
 						var idsInfoNumber = sysObjectArray[i].match(idsInfoRegex).join().substring(11);
 						object.dataset.idsInfo = idsInfoNumber;
 						object.addEventListener("click", function() {
-							if (this.className.indexOf("jump") != -1  && typeof this.dataset.jumpDest !== "undefined") {
+							if (this.className.indexOf("jump") != -1 && typeof this.dataset.jumpDest !== "undefined" && this.className.indexOf("unusableJump") == -1) {
 								generateMap(this.dataset.jumpDest);
 							} else {
 								showObjectInfo(this.dataset.idsName, this.dataset.idsInfo, this.className, this.dataset.zPos, this.dataset.reputation, document.querySelector(".map").dataset.systemNickname, undefined, undefined, undefined, this.dataset.internalNickname);
 							}
 						});
-					} else if (sysObjectArray[i].match(gotoRegex)) {
+					} else if (sysObjectArray[i].match(gotoRegex) && objectClasses.indexOf("unusableJump") == -1) {
 						object.addEventListener("click", function() {
 								generateMap(this.dataset.jumpDest);
 						});
@@ -1367,7 +1367,7 @@
 			} else {
 				classArray.push("gate");
 			}
-			if (!objectString.match(gotoRegex) | objectString.indexOf("505262") != -1) {
+			if (!objectString.match(gotoRegex) | nameString.indexOf("st03_to_fp7_jumphole_recv") != -1) {
 				classArray.push("unusableJump");
 			}
 		}
