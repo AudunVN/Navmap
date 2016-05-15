@@ -1367,7 +1367,7 @@
 		}
 		if (nameString.toLowerCase().indexOf("_to_") != -1 | nameString.toLowerCase().indexOf("nomad_gate") != -1) {
 			classArray.push("jump");
-			if (nameString.toLowerCase().indexOf("_hole") != -1) {
+			if (nameString.toLowerCase().indexOf("_hole") != -1 | nameString.toLowerCase().indexOf("_jumphole") != -1 | objectString.toLowerCase().indexOf("archetype = jumphole") != -1) {
 				classArray.push("hole");
 			} else {
 				classArray.push("gate");
