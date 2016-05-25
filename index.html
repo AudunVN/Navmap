@@ -1645,6 +1645,16 @@
 			} catch(e){
 				
 			}
+			try {
+				var isProbablyDSAceLog = (rawFile.indexOf("] Freelancer Started") !== -1);
+			} catch(e){
+				
+			}
+			if (isProbablyDSAceLog) {
+				$("body").addClass("fileReaderLoaded");
+			} else {
+				$("body").removeClass("fileReaderLoaded");
+			}
 			if (isFirstRead) {
 				if (currentMapMatch !== null) {
 					lastMapMatch = currentMapMatch;
@@ -3075,6 +3085,30 @@
 		padding: 0.5em;
 	}
 	
+	#dsaceConnectionContainer input {
+	    border: 0.1em solid white;
+		box-sizing: border-box;
+		vertical-align: 0.2em;
+		margin-right: 0.2em;
+		background: rgba(0,0,0,0.3);
+	}
+	
+	#dsaceConnectionContainer .fa.fa-check-square-o {
+		display: none;
+	}
+	
+	#dsaceConnectionContainer .fa.fa-square-o {
+		display: inline-block;
+	}
+	
+	.fileReaderLoaded #dsaceConnectionContainer .fa.fa-check-square-o {
+		display: inline-block;
+	}
+	
+	.fileReaderLoaded #dsaceConnectionContainer .fa.fa-square-o {
+		display: none;
+	}
+	
 	.mineableIcon {
 		height: 1em;
 		width: 1em;
@@ -3484,7 +3518,7 @@
 </head>
 <body>
 	<nav class="navContainer">
-		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (15.05)</span></a>
+		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (25.05)</span></a>
 		<span id="showUniverseMap" onClick="generateUniverseMap()"><i class="fa fa-times-circle-o"></i><span class="infoSpace"> </span><span class="infoText">Show all systems</span></span>
 		<span id="navSystemTitle"></span>
 		<i id="screenshotButton" class="fa fa-camera"></i>
@@ -3573,7 +3607,7 @@
 			<input type="checkbox" checked="checked" id="switch12" name="switch12" class="switch" />
 			<label for="switch12">scale by height/width</label>
 		</div>
-		<div id="dsaceConnectionContainer"><span>To enable usage of the "/map system/base" command in-game, choose your DSAce.log file here: </span><input type='file' id="dsaceInput" accept='.log' onchange="openFile(event)"></div>
+		<div id="dsaceConnectionContainer"><span>To enable usage of the "/map system/base" and "/pos in system" commands in-game, choose your DSAce.log file here: </span><input type='file' id="dsaceInput" accept='.log' onchange="openFile(event)"><i class="fa fa-square-o" aria-hidden="true"></i><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
 	</div>
 	<div class="mapContainer">
 		<div class="map">
