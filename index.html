@@ -237,13 +237,13 @@
 		}
 		
 		if (document.querySelector(".configOption#responsive input").checked) {
-			if (document.querySelector(".configOption#responsiveMode input").checked && (prevResponsiveModeState == "unchecked" | prevResponsiveModeState == "init")) {
+			if (document.querySelector(".configOption#responsiveMode input").checked && (prevResponsiveModeState == "unchecked" || prevResponsiveModeState == "init")) {
 				$(".systemConnection").remove();
 				$("body").addClass("scaleWidth");
 				$("body").removeClass("scaleHeight");
 				prevResponsiveModeState = "checked";
 				generateSystemConnections();
-			} else if (!document.querySelector(".configOption#responsiveMode input").checked && (prevResponsiveModeState == "checked" | prevResponsiveModeState == "init")) {
+			} else if (!document.querySelector(".configOption#responsiveMode input").checked && (prevResponsiveModeState == "checked" || prevResponsiveModeState == "init")) {
 				$(".systemConnection").remove();
 				$("body").addClass("scaleHeight");
 				$("body").removeClass("scaleWidth");
@@ -252,24 +252,24 @@
 			}
 		}
 		
-		if (document.querySelector(".configOption#responsive input").checked && (prevResponsiveState == "unchecked" | prevResponsiveState == "init")) {
+		if (document.querySelector(".configOption#responsive input").checked && (prevResponsiveState == "unchecked" || prevResponsiveState == "init")) {
 			$(".systemConnection").remove();
 			$("body").addClass("responsive");
 			prevResponsiveState = "checked";
 			generateSystemConnections();
-		} else if (!document.querySelector(".configOption#responsive input").checked && (prevResponsiveState == "checked" | prevResponsiveState == "init")) {
+		} else if (!document.querySelector(".configOption#responsive input").checked && (prevResponsiveState == "checked" || prevResponsiveState == "init")) {
 			$(".systemConnection").remove();
 			$("body").removeClass("responsive");
 			prevResponsiveState = "unchecked";
 			generateSystemConnections();
 		}
 		
-		if (document.querySelector(".configOption#labelMove input").checked && (prevLabelMoveState == "unchecked" | prevLabelMoveState == "init")) {
+		if (document.querySelector(".configOption#labelMove input").checked && (prevLabelMoveState == "unchecked" || prevLabelMoveState == "init")) {
 			prevLabelMoveState = "checked";
 			if (document.querySelector(".map .system") == null && currentSystemNickname != "Sirius") {
 				objectTerritorialConflictResolver($(".map label:visible"));
 			}
-		} else if (!document.querySelector(".configOption#labelMove input").checked && (prevLabelMoveState == "checked" | prevLabelMoveState == "init")) {
+		} else if (!document.querySelector(".configOption#labelMove input").checked && (prevLabelMoveState == "checked" || prevLabelMoveState == "init")) {
 			prevLabelMoveState = "unchecked";
 		}
 		
@@ -570,7 +570,7 @@
 	
 	function generateSearchArray() {
 		/* generates the search lookup array used for the search box and map links. */
-		if (infocardArrayState != "ready" | systemIdsNameArrayState != "ready") {
+		if (infocardArrayState != "ready" || systemIdsNameArrayState != "ready") {
 			setTimeout(function(){generateSearchArray()},10);
 		} else {
 			/* add system names to search array */
@@ -793,7 +793,7 @@
 			var systemConnectionsEvaluated = true;
 		}
 			
-		if (infocardArrayState != "ready" | systemScaleFactorArrayState != "ready" | searchArrayState != "ready" | systemConnectionsEvaluated != true | systemNameArrayState != "ready") {
+		if (infocardArrayState != "ready" || systemScaleFactorArrayState != "ready" || searchArrayState != "ready" || systemConnectionsEvaluated != true || systemNameArrayState != "ready") {
 			setTimeout(function(){generateUniverseMap()},10);
 		} else {
 			if (document.querySelector(".configOption#connections  input").checked) {
@@ -862,7 +862,7 @@
 	
 	function generateSystemConnections() {
 		if (document.querySelector(".systemConnectionProp") == null && document.querySelector(".configOption#connections  input").checked) {
-			if (systemPosArrayState != "ready" | connectionArrayState != "ready" | jgConnectionArrayState != "ready") {
+			if (systemPosArrayState != "ready" || connectionArrayState != "ready" || jgConnectionArrayState != "ready") {
 				setTimeout(function(){generateSystemConnections()},10);
 			} else {
 				for (var system in connectionArray) {
@@ -876,7 +876,7 @@
 									y1 = parseFloat(systemPosArray[system][0])*6.6-50;
 									y2 = parseFloat(systemPosArray[connectionArray[system][i]][0])*6.6-50;
 									var propClass = "systemConnectionProp";
-									if (oorpArray.indexOf(system) != -1 | oorpArray.indexOf(connectionArray[system][i]) != -1) {
+									if (oorpArray.indexOf(system) != -1 || oorpArray.indexOf(connectionArray[system][i]) != -1) {
 										propClass += " oorp";
 									}
 									var connection = new Line(x1, x2, y1, y2, "systemConnection oneWayConnection", propClass, ".map", system, connectionArray[system][i]);
@@ -900,7 +900,7 @@
 									y1 = parseFloat(systemPosArray[system][0])*6.6-50;
 									y2 = parseFloat(systemPosArray[jgConnectionArray[system][i]][0])*6.6-50;
 									var propClass = "systemConnectionProp jgConnection";
-									if (oorpArray.indexOf(system) != -1 | oorpArray.indexOf(jgConnectionArray[system][i]) != -1) {
+									if (oorpArray.indexOf(system) != -1 || oorpArray.indexOf(jgConnectionArray[system][i]) != -1) {
 										propClass += " oorp";
 									}
 									var connection = new Line(x1, x2, y1, y2, "systemConnection", propClass, ".map", system, connectionArray[system][i]);
@@ -918,7 +918,7 @@
 	}
 
 	function generateMap(system) {
-		if (infocardArrayState != "ready" | systemScaleFactorArrayState != "ready" | searchArrayState != "ready" | document.querySelector(".loadingOverlay") !== null) {
+		if (infocardArrayState != "ready" || systemScaleFactorArrayState != "ready" || searchArrayState != "ready" || document.querySelector(".loadingOverlay") !== null) {
 			setTimeout(function(){generateMap(system)},10);
 		} else {
 			createLoadAnimation();
@@ -1019,7 +1019,7 @@
 								for (zoneNumber in lootableZones) {
 									var data = lootableZones[zoneNumber];
 									if (data.indexOf("[LootableZone]") != -1 
-									&& ((data.indexOf("dynamic_loot_commodity = ") != -1 | data.indexOf("asteroid_loot_commodity = ") != -1)) && data.match(lootableZoneRegex)) {
+									&& ((data.indexOf("dynamic_loot_commodity = ") != -1 || data.indexOf("asteroid_loot_commodity = ") != -1)) && data.match(lootableZoneRegex)) {
 										// you've got loot and I want it now.
 										console.log("you've got loot and I want it now.");
 										var lootableZoneNickname = "";
@@ -1063,7 +1063,7 @@
 				if (sysZoneArray !== null) {
 					for (i = 0; i < sysZoneArray.length; i++) {
 						var nameString = sysZoneArray[i].match(nameRegex).join().substring(11);
-						if (asteroidsURIArray[nameString.toLowerCase()]  != null | sysZoneArray[i].indexOf("66170") == -1) {
+						if (asteroidsURIArray[nameString.toLowerCase()]  != null || sysZoneArray[i].indexOf("66170") == -1) {
 							var zoneName;
 							var zone = document.createElement("div");
 							zone.className += "zone";
@@ -1097,10 +1097,10 @@
 								var rotateString = sysZoneArray[i].match(rotationRegex).join().substring(10).replace(/ /g,"");
 								var zoneRotateArray = rotateString.split(",");
 								var rotationSign = 1;
-								if(parseInt(zoneRotateArray[0]) == -180 | parseInt(zoneRotateArray[0]) == 180) {
+								if(parseInt(zoneRotateArray[0]) == -180 || parseInt(zoneRotateArray[0]) == 180) {
 									rotationSign = -1*rotationSign;
 								}
-								/*if(parseFloat(zoneRotateArray[2]) == -180 | parseFloat(zoneRotateArray[2]) == 180) {
+								/*if(parseFloat(zoneRotateArray[2]) == -180 || parseFloat(zoneRotateArray[2]) == 180) {
 									rotationSign = -1*rotationSign;
 								}*/
 								zone.style.transform = "rotate("+-rotationSign*parseFloat(zoneRotateArray[1])+"deg)";
@@ -1344,19 +1344,19 @@
 		classArray.push("object");
 		if (objectString.toLowerCase().indexOf("atmosphere_range =") != -1 && objectString.toLowerCase().indexOf("star =") == -1) {
 			classArray.push("planet");
-		} else if (objectString.toLowerCase().indexOf("base = ") != -1 | objectString.toLowerCase().indexOf("dock_with =") != -1) {
+		} else if (objectString.toLowerCase().indexOf("base = ") != -1 || objectString.toLowerCase().indexOf("dock_with =") != -1) {
 			classArray.push("base");
 		}
 		if (objectString.indexOf("base =") != -1) {
 			classArray.push("dockable");
 		}
 		if (nameString.toLowerCase().indexOf("trade_lane") != -1 
-			| objectString.toLowerCase().indexOf("dsy_ga_lane") != -1 
-			| objectString.toLowerCase().indexOf("trade_lane_ring") != -1 
-			| objectString.toLowerCase().indexOf("next_ring =") != -1)  {
+			|| objectString.toLowerCase().indexOf("dsy_ga_lane") != -1 
+			|| objectString.toLowerCase().indexOf("trade_lane_ring") != -1 
+			|| objectString.toLowerCase().indexOf("next_ring =") != -1)  {
 			classArray.push("tradelane");
 		}
-		if (objectString.indexOf("loadout =") != -1 && (nameString.toLowerCase().indexOf("wplatform") != -1 | objectString.toLowerCase().indexOf("261164") != -1)) {
+		if (objectString.indexOf("loadout =") != -1 && (nameString.toLowerCase().indexOf("wplatform") != -1 || objectString.toLowerCase().indexOf("261164") != -1)) {
 			classArray.push("wPlatform");
 		}
 		if (objectString.indexOf("loadout =") != -1 && objectString.indexOf("reputation =") == -1) {
@@ -1365,14 +1365,14 @@
 		if (nameString.toLowerCase().indexOf("proxy_base") != -1) {
 			classArray.push("proxyBase");
 		}
-		if (nameString.toLowerCase().indexOf("_to_") != -1 | nameString.toLowerCase().indexOf("nomad_gate") != -1) {
+		if (nameString.toLowerCase().indexOf("_to_") != -1 || nameString.toLowerCase().indexOf("nomad_gate") != -1) {
 			classArray.push("jump");
-			if (nameString.toLowerCase().indexOf("_hole") != -1 | nameString.toLowerCase().indexOf("_jumphole") != -1 | objectString.toLowerCase().indexOf("archetype = jumphole") != -1) {
+			if (nameString.toLowerCase().indexOf("_hole") != -1 || nameString.toLowerCase().indexOf("_jumphole") != -1 || objectString.toLowerCase().indexOf("archetype = jumphole") != -1) {
 				classArray.push("hole");
 			} else {
 				classArray.push("gate");
 			}
-			if (!objectString.match(gotoRegex) | objectString.indexOf("505262") != -1 | nameString.indexOf("st03_to_fp7_jumphole_recv") != -1) {
+			if (!objectString.match(gotoRegex) || objectString.indexOf("505262") != -1 || nameString.indexOf("st03_to_fp7_jumphole_recv") != -1) {
 				classArray.push("unusableJump");
 			}
 		}
@@ -1389,7 +1389,7 @@
 	}
 	
 	function checkURL() {
-		if (searchArrayState != "ready" | universeMapState != "ready" | document.querySelector(".loadingOverlay") !== null) {
+		if (searchArrayState != "ready" || universeMapState != "ready" || document.querySelector(".loadingOverlay") !== null) {
 			setTimeout(function(){checkURL()},10);
 		} else {
 			if(window.location.hash) {
@@ -1429,7 +1429,7 @@
 			$("#searchField").keyup(function(event) {
 				if (event.keyCode != 38 && event.keyCode != 40) {
 					var search = $.trim(this.value).toLowerCase();
-					if ((search == "omega-5" | search == "freeport 1") && searchTimedOut == "nope") {
+					if ((search == "omega-5" || search == "freeport 1") && searchTimedOut == "nope") {
 						setTimeout(function() {if (searchTimedOut == "yup") {$("#searchField").keyup();}}, 550);
 						searchTimedOut = "yup";
 					} else if (document.querySelector(".loadingOverlay") == null) {
@@ -1668,13 +1668,13 @@
 				$(".configMenu").addClass("closed");
 				lastMapMatch = currentMapMatch;
 				var lowerCaseMatch = currentMapMatch.toLowerCase();
-				if (lowerCaseMatch == "universe" | lowerCaseMatch == "sirius" | lowerCaseMatch == "universemap") {
+				if (lowerCaseMatch == "universe" || lowerCaseMatch == "sirius" || lowerCaseMatch == "universemap") {
 					generateUniverseMap();
-				} else if (lowerCaseMatch == "removehighlights" | lowerCaseMatch == "remove highlights") {
+				} else if (lowerCaseMatch == "removehighlights" || lowerCaseMatch == "remove highlights") {
 					$(".highlighter").remove();
-				} else if (lowerCaseMatch == "scroll up" | lowerCaseMatch == "up") {
+				} else if (lowerCaseMatch == "scroll up" || lowerCaseMatch == "up") {
 					$('html, body').animate({ scrollTop: 0}, 300);
-				} else if (lowerCaseMatch == "scroll down" | lowerCaseMatch == "down") {
+				} else if (lowerCaseMatch == "scroll down" || lowerCaseMatch == "down") {
 					$('html, body').animate({ scrollTop: $(document).height()}, 300);
 				} else if (lowerCaseMatch == "removeships") { 
 					$(".playerShip").remove();
