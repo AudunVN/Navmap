@@ -1,0 +1,5 @@
+2736134149 = ge_s_cm_01, Countermeasure Dropper
+2199282693 = ge_s_cm_02, Imp. Countermeasure Dropper
+2736156677 = ge_s_cm_03, Adv. Countermeasure Dropper
+2199297029 = ge_s_cm_04, Enh. Countermeasure Dropper (Discovery)
+2736162821 = ge_s_cm_05, Heavy Countermeasure Dropper (Discovery)
