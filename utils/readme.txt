@@ -6,10 +6,11 @@ Updating for a new version:
    - remove \r\n from start of file
 2.1 run path gen
 2. copy /UNIVERSE
-3. copy mbases.ini
+3. copy /MISSIONS/mbases.ini
 4. copy /IONCROSS contents
 5. copy /SOLAR/ASTEROIDS
 7. copy /DATA/INTERFACE/infocardmap.ini
 7. copy (and update) systems_special.txt from previous version
 8. copy solararch.ini
-6. lowercase absolutely everything
+6. lowercase absolutely everything (Métamorphose 2 recommended)
+7. verify whether oorpArray in index.html requires updating (check for new dead-end systems)
