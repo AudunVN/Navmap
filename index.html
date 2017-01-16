@@ -114,6 +114,94 @@
 	var sysLootableZoneArray = {};
 	var asteroidsURIArray = {};
 	
+	/**
+	 * Copyright 2009 by David Kerkeslager
+	 * Released under the BSD License (http://davidkerkeslager.com/license.txt).
+	 *
+	 * This library defines an object-literal which allows one to store key/value pairs after the hash (#) in the URI.
+	 * The syntax of the storage is modeled after the way that GET variables are stored after the question mark (?) in
+	 * the URI.
+	 *
+	 * Example URI: "http://www.foo.com/index.html#foo=bar&baz=quux"
+	 *
+	 * Note: it should be obvious that this should not be used for storing private data of any kind.
+	 */
+
+	var URIHash =
+	{
+		/**
+		 * Dump the contents of the URI hash into an associative array. If the hash is invalid, the method returns
+		 * undefined.
+		 */
+		dump : function()
+		{
+			var hash = document.location.hash;
+			var dump = new Array();
+
+			if(hash.length == 0) return dump;
+
+			hash = hash.substring(1).split('&');
+
+			for(var key in hash)
+			{
+				var pair = hash[key].split('=');
+
+				if(pair.length != 2 || pair[0] in dump)
+					return undefined;
+
+				// escape for storage
+				dump[unescape(pair[0])] = unescape(pair[1]);
+			}
+
+			return dump;
+		},
+
+		/**
+		 * Takes an associative array and stores it in the URI as a hash after the # prefix, replacing any pre-
+		 * existing hash.
+		 */
+		load : function(array)
+		{
+			var first = true;
+			var hash = '';
+
+			for(var key in array)
+			{
+				if(!first) hash += '&';
+				hash += escape(key) + '=' + escape(array[key]);
+			}
+
+			document.location.hash = hash;
+		},
+
+		/**
+		 * Get the value of a key from the hash.  If the hash does not contain the key or the hash is invalid,
+		 * the function returns undefined.
+		 */
+		get : function(key)
+		{
+			return this.dump()[key];
+		},
+
+		/**
+		 * Set the value of a key in the hash.  If the key does not exist, the key/value pair is added.
+		 */
+		set : function(key,value)
+		{
+			var dump = this.dump();
+			dump[key] = value;
+
+			var hash = new Array();
+
+			for(var key in dump)
+				hash.push(escape(key) + '=' + escape(dump[key]));
+
+			document.location.hash = hash.join('&');
+		}
+	}
+	
+	var clickHandlersEnabled = true;
+	
 	/* zoneFlagArray is a special lookup array that sets zone classes depending on their zoneFlag attribute. */
 	var zoneFlagArray = {
 		0: "zoneHidden",
@@ -638,7 +726,8 @@
 	
 	function scrollUp() {
 		/* Used on the up/close button for the infocard container. */
-		history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(longSystemName));
+		updateFragment("q",longSystemName);
+		/*history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(longSystemName));*/
 		$('html, body').animate({ scrollTop: 0}, 300, function(){
 			while (document.querySelector(".infocardContainer").firstChild) {
 				document.querySelector(".infocardContainer").removeChild(document.querySelector(".infocardContainer").firstChild);
@@ -650,67 +739,71 @@
 	function showObjectInfo(idsNameNumber, idsInfoNumber, classString, zPosition, factionNickname, systemNickname, dynamicCommodity, dynamicDifficulty, dynamicCount, nickname) {
 		/* Used to generate content for the infocard container when an object or zone is clicked. */
 		$(".highlighter").remove();
-		document.querySelector(".infocardContainer").style.display = "block";
-		var scaleFactor = 1;
-		if (typeof systemScaleFactorArray[systemNickname] !== "undefined") {
-			scaleFactor = parseFloat(systemScaleFactorArray[systemNickname]);
-		}
-		var planePosition;
-		if (zPosition == 0) {
-			planePosition = "on";
-		} else if (zPosition > 0) {
-			planePosition = (Math.round(parseFloat(zPosition)/(scaleFactor*1000)*10) / 10)+"K above";
-		} else if (zPosition < 0) {
-			planePosition = (Math.round(parseFloat(zPosition)/(scaleFactor*1000)*-10) / 10)+"K below";
-		} else { 
-			// :)))
-			planePosition = "non-standard in relation to";
-		}
-		if (typeof factionNickname !== "undefined") {
-			var ownerString = " It belongs to "+factionNameArray[factionNickname]+".";
-		} else {
-			var ownerString = "";
-		}
 		if (typeof searchArray[infocardArray[idsNameNumber]] !== "undefined" 
 			&& searchArray[infocardArray[idsNameNumber]].toLowerCase() == currentSystemNickname.toLowerCase()) {
-			history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(infocardArray[idsNameNumber]));
+			updateFragment("q",infocardArray[idsNameNumber]);
+			/*history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(infocardArray[idsNameNumber]));*/
 		} else {
-			history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(longSystemName));
+			updateFragment("q",longSystemName);
+			/*history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(longSystemName));*/
 		}
-		var infoString = "";
-		var miningString = "";
-		var scrollUpString = "<div class='scrollUpButton' onclick='scrollUp()'><i class='fa fa-arrow-circle-o-up'></i><p>Scroll up / Close</p></div>";
-		if (typeof dynamicCommodity !== "undefined") {
-			if (dynamicCount.indexOf("1, 1") == -1) {
-				amountString = dynamicCount.replace(/\s/g, '').split(",").join(" to ")+" units";
+		if (clickHandlersEnabled) {
+			document.querySelector(".infocardContainer").style.display = "block";
+			var scaleFactor = 1;
+			if (typeof systemScaleFactorArray[systemNickname] !== "undefined") {
+				scaleFactor = parseFloat(systemScaleFactorArray[systemNickname]);
+			}
+			var planePosition;
+			if (zPosition == 0) {
+				planePosition = "on";
+			} else if (zPosition > 0) {
+				planePosition = (Math.round(parseFloat(zPosition)/(scaleFactor*1000)*10) / 10)+"K above";
+			} else if (zPosition < 0) {
+				planePosition = (Math.round(parseFloat(zPosition)/(scaleFactor*1000)*-10) / 10)+"K below";
+			} else { 
+				// :)))
+				planePosition = "non-standard in relation to";
+			}
+			if (typeof factionNickname !== "undefined") {
+				var ownerString = " It belongs to "+factionNameArray[factionNickname]+".";
 			} else {
-				amountString = "one unit";
+				var ownerString = "";
 			}
-			var commodityName = dynamicCommodity;
-			var commodityArrayName = commodityNameArray[dynamicCommodity.toLowerCase()];
-			if (typeof commodityArrayName !== "undefined") {
-				commodityName = commodityArrayName;
+			var infoString = "";
+			var miningString = "";
+			var scrollUpString = "<div class='scrollUpButton' onclick='scrollUp()'><i class='fa fa-arrow-circle-o-up'></i><p>Scroll up / Close</p></div>";
+			if (typeof dynamicCommodity !== "undefined") {
+				if (dynamicCount.indexOf("1, 1") == -1) {
+					amountString = dynamicCount.replace(/\s/g, '').split(",").join(" to ")+" units";
+				} else {
+					amountString = "one unit";
+				}
+				var commodityName = dynamicCommodity;
+				var commodityArrayName = commodityNameArray[dynamicCommodity.toLowerCase()];
+				if (typeof commodityArrayName !== "undefined") {
+					commodityName = commodityArrayName;
+				}
+				miningString = "<p>This zone drops "+amountString+" of the commodity "+commodityName+" when mined using <a id='miningLink' href='http://discoverygc.com/forums/showthread.php?tid=132063' target='_BLANK'>appropriate equipment</a>.</p>";
 			}
-			miningString = "<p>This zone drops "+amountString+" of the commodity "+commodityName+" when mined using <a id='miningLink' href='http://discoverygc.com/forums/showthread.php?tid=132063' target='_BLANK'>appropriate equipment</a>.</p>";
-		}
-		if (typeof idsInfoNumber !== "undefined") {
-			if (typeof infocardMapArray[(parseInt(idsInfoNumber)).toString()] !== "undefined" && typeof infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]] !== "undefined") { 
-				var infocardURI = encodeURI(infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]]);
-				document.querySelector(".infocardContainer").innerHTML = "<h2>"+infocardArray[idsNameNumber]+"</h2>"+parseInfocard(infocardArray[idsInfoNumber])+parseInfocard(infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]])+"<h3>Technical info</h3>"+miningString+"<p class='technicalInfo'>This object with internal nickname "+nickname+" is located "+planePosition+" the plane, and has infocard number "+idsInfoNumber+", base description infocard number "+(parseInt(idsInfoNumber)+1).toString()+" and name infocard number "+idsNameNumber+"."+ownerString+" "+"<a class='editLink' target='_blank'><i class='fa fa-pencil-square-o'></i></a></p>"+scrollUpString;
-				document.querySelector(".editLink").href = "https://docs.google.com/forms/d/1bIYtQCx0lLgguEF6xWDm0RRFr0IIz-tM1Toh6SyB9wA/viewform?entry.515729986="+(parseInt(idsInfoNumber)+1).toString()+"&entry.628548621="+infocardURI+"&entry.899322418="+infocardURI;
+			if (typeof idsInfoNumber !== "undefined") {
+				if (typeof infocardMapArray[(parseInt(idsInfoNumber)).toString()] !== "undefined" && typeof infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]] !== "undefined") { 
+					var infocardURI = encodeURI(infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]]);
+					document.querySelector(".infocardContainer").innerHTML = "<h2>"+infocardArray[idsNameNumber]+"</h2>"+parseInfocard(infocardArray[idsInfoNumber])+parseInfocard(infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]])+"<h3>Technical info</h3>"+miningString+"<p class='technicalInfo'>This object with internal nickname "+nickname+" is located "+planePosition+" the plane, and has infocard number "+idsInfoNumber+", base description infocard number "+(parseInt(idsInfoNumber)+1).toString()+" and name infocard number "+idsNameNumber+"."+ownerString+" "+"<a class='editLink' target='_blank'><i class='fa fa-pencil-square-o'></i></a></p>"+scrollUpString;
+					document.querySelector(".editLink").href = "https://docs.google.com/forms/d/1bIYtQCx0lLgguEF6xWDm0RRFr0IIz-tM1Toh6SyB9wA/viewform?entry.515729986="+(parseInt(idsInfoNumber)+1).toString()+"&entry.628548621="+infocardURI+"&entry.899322418="+infocardURI;
+				} else {
+					var infocardURI = encodeURI(infocardArray[idsInfoNumber]);
+					document.querySelector(".infocardContainer").innerHTML = "<h2>"+infocardArray[idsNameNumber]+"</h2>"+parseInfocard(infocardArray[idsInfoNumber])+"<h3>Technical info</h3>"+miningString+"<p  class='technicalInfo'>This object with internal nickname "+nickname+" is located "+planePosition+" the plane, and has infocard number "+idsInfoNumber+" and name infocard number "+idsNameNumber+"."+ownerString+" "+"<a class='editLink' target='_blank'><i class='fa fa-pencil-square-o'></i></a></p>"+scrollUpString;
+					document.querySelector(".editLink").href = "https://docs.google.com/forms/d/1bIYtQCx0lLgguEF6xWDm0RRFr0IIz-tM1Toh6SyB9wA/viewform?entry.515729986="+idsInfoNumber+"&entry.628548621="+infocardURI+"&entry.899322418="+infocardURI;
+				}
+			} else if (typeof dynamicCommodity !== "undefined") {
+				document.querySelector(".infocardContainer").innerHTML = miningString+scrollUpString;
+			}
+			console.log("Infocard "+idsInfoNumber+" for "+infocardArray[idsNameNumber]+" fetched");
+			if ($(".navContainer").css("position") == "fixed") {
+				$('html, body').animate({ scrollTop: $("body").scrollTop()+document.querySelector(".infocardContainer *:first-child").getBoundingClientRect().top-document.querySelector(".navContainer").scrollHeight}, 300);
 			} else {
-				var infocardURI = encodeURI(infocardArray[idsInfoNumber]);
-				document.querySelector(".infocardContainer").innerHTML = "<h2>"+infocardArray[idsNameNumber]+"</h2>"+parseInfocard(infocardArray[idsInfoNumber])+"<h3>Technical info</h3>"+miningString+"<p  class='technicalInfo'>This object with internal nickname "+nickname+" is located "+planePosition+" the plane, and has infocard number "+idsInfoNumber+" and name infocard number "+idsNameNumber+"."+ownerString+" "+"<a class='editLink' target='_blank'><i class='fa fa-pencil-square-o'></i></a></p>"+scrollUpString;
-				document.querySelector(".editLink").href = "https://docs.google.com/forms/d/1bIYtQCx0lLgguEF6xWDm0RRFr0IIz-tM1Toh6SyB9wA/viewform?entry.515729986="+idsInfoNumber+"&entry.628548621="+infocardURI+"&entry.899322418="+infocardURI;
+				$('html, body').animate({ scrollTop: $("body").scrollTop()+document.querySelector(".infocardContainer *:first-child").getBoundingClientRect().top}, 300);
 			}
-		} else if (typeof dynamicCommodity !== "undefined") {
-			document.querySelector(".infocardContainer").innerHTML = miningString+scrollUpString;
-		}
-		console.log("Infocard "+idsInfoNumber+" for "+infocardArray[idsNameNumber]+" fetched");
-		if ($(".navContainer").css("position") == "fixed") {
-			$('html, body').animate({ scrollTop: $("body").scrollTop()+document.querySelector(".infocardContainer *:first-child").getBoundingClientRect().top-document.querySelector(".navContainer").scrollHeight}, 300);
-		} else {
-			$('html, body').animate({ scrollTop: $("body").scrollTop()+document.querySelector(".infocardContainer *:first-child").getBoundingClientRect().top}, 300);
 		}
 	}
 	
@@ -747,7 +840,6 @@
 		}
 	}
 	
-	
 	$.extend($.expr[":"], {
 		/* case-insensitive contains filter */
 		"containsNC": function(elem, i, match, array) {
@@ -782,7 +874,8 @@
 		document.querySelector(".navContainer #helpLink").style.display = "block";
 		document.querySelector("#navSystemTitle").style.display = "none";
 		if (currentSystemNickname != "Sirius") {
-			history.replaceState("Sirius", "Discovery Navmap", ".");
+			updateFragment("q"," ");
+			/*history.replaceState("Sirius", "Discovery Navmap", ".");*/
 		}
 		/* checks to see if the map needs generate system connections or not. */
 		if (document.querySelector(".configOption#connections  input").checked) {
@@ -1276,14 +1369,15 @@
 				$("#searchField").keyup();
 				updateConfigClasses();
 				if (lastSearch !== undefined && lastSearch !== "already used") {
-					history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(lastSearch));
+					updateFragment("q",lastSearch);
+					/*history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(lastSearch));*/
 					createHighlightAnimation($(".mapContainer").find(".object label").filter(function() {
 						return $(this).text().toLowerCase() === lastSearch.toLowerCase();
 					}).parent());
 					lastSearch = "already used";
 				} else {
-					encodedSystemName = encodeURI(longSystemName);
-					history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodedSystemName);
+					updateFragment("q",longSystemName);
+					/*history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodedSystemName);*/
 				}
 			});
 		}
@@ -1389,19 +1483,25 @@
 		}
 		return classArray.join(" ");
 	}
+
+	function updateFragment(param,data) {
+		URIHash.set(param,data);
+	}
 	
 	function checkURL() {
 		if (searchArrayState != "ready" || universeMapState != "ready" || document.querySelector(".loadingOverlay") !== null) {
 			setTimeout(function(){checkURL()},10);
 		} else {
-			if(window.location.hash) {
-				var input = decodeURI(window.location.hash.substring(1));
-				if (typeof searchArray[input] !== "undefined" && searchArray[input].toLowerCase() !== currentSystemNickname.toLowerCase()) {
-					lastSearch = input;
-					generateMap(searchArray[input]);
+			if (window.location.hash) {
+				var query = URIHash.get("q");
+				if (typeof searchArray[query] !== "undefined" && searchArray[query].toLowerCase() !== currentSystemNickname.toLowerCase()) {
+					lastSearch = query;
+					generateMap(searchArray[query]);
 				}
-			} else {
-				// no URI hash input
+				var noClick = (URIHash.get("noclick") === 'true');
+				if (noClick) {
+					clickHandlersEnabled = false;
+				}
 			}
 		}
 	}
