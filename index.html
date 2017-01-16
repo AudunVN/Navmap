@@ -874,7 +874,7 @@
 		document.querySelector(".navContainer #helpLink").style.display = "block";
 		document.querySelector("#navSystemTitle").style.display = "none";
 		if (currentSystemNickname != "Sirius") {
-			updateFragment("q"," ");
+			updateFragment("q","");
 			/*history.replaceState("Sirius", "Discovery Navmap", ".");*/
 		}
 		/* checks to see if the map needs generate system connections or not. */
@@ -1116,7 +1116,7 @@
 									if (data.indexOf("[LootableZone]") != -1 
 									&& ((data.indexOf("dynamic_loot_commodity = ") != -1 || data.indexOf("asteroid_loot_commodity = ") != -1)) && data.match(lootableZoneRegex)) {
 										// you've got loot and I want it now.
-										console.log("you've got loot and I want it now.");
+										console.log("You've got loot and I want it now.");
 										var lootableZoneNickname = "";
 										lootableZoneRegex.lastIndex = 0;
 										var lootableZoneArray = data.match(lootableZoneRegex).join();
@@ -1153,7 +1153,7 @@
 						})(asteroidsNickname);
 					}
 				}
-				//generate zones
+				// generate zones
 				var sysZoneArray = data.match(zoneRegex);
 				if (sysZoneArray !== null) {
 					for (i = 0; i < sysZoneArray.length; i++) {
@@ -1485,6 +1485,9 @@
 	}
 
 	function updateFragment(param,data) {
+		if (window.location.hash.indexOf("=") == -1) {
+			window.location.hash = "";
+		}
 		URIHash.set(param,data);
 	}
 	
@@ -1493,16 +1496,33 @@
 			setTimeout(function(){checkURL()},10);
 		} else {
 			if (window.location.hash) {
-				var query = URIHash.get("q");
-				if (typeof searchArray[query] !== "undefined" && searchArray[query].toLowerCase() !== currentSystemNickname.toLowerCase()) {
-					lastSearch = query;
-					generateMap(searchArray[query]);
+				try {				
+					var noClick = (URIHash.get("noclick") === 'true');
+					if (noClick) {
+						clickHandlersEnabled = false;
+					}
 				}
-				var noClick = (URIHash.get("noclick") === 'true');
-				if (noClick) {
-					clickHandlersEnabled = false;
+				catch (e) {
+					/* do nothing */
+				}
+				
+				try {				
+					var query = URIHash.get("q");
+					lookupInputAndGenerateIfValid(query);				
+				}
+				catch (e) {
+					/* for backwards compatibility with system/base-only URI fragment */
+					var query = decodeURI(window.location.hash.substring(1));
+					lookupInputAndGenerateIfValid(query);
 				}
 			}
+		}
+	}
+	
+	function lookupInputAndGenerateIfValid(query) {
+		if (typeof searchArray[query] !== "undefined" && searchArray[query].toLowerCase() !== currentSystemNickname.toLowerCase()) {
+			lastSearch = query;
+			generateMap(searchArray[query]);
 		}
 	}
 	
@@ -3620,7 +3640,7 @@
 </head>
 <body>
 	<nav class="navContainer">
-		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (01.11)</span></a>
+		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (16.01)</span></a>
 		<span id="showUniverseMap" onClick="generateUniverseMap()"><i class="fa fa-times-circle-o"></i><span class="infoSpace"> </span><span class="infoText">Show all systems</span></span>
 		<span id="navSystemTitle"></span>
 		<i id="screenshotButton" class="fa fa-camera"></i>
