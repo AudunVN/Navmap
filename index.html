@@ -724,16 +724,11 @@
 		}
 	}
 	
-	function scrollUp() {
+	function closeModal() {
 		/* Used on the up/close button for the infocard container. */
 		updateFragment("q",longSystemName);
 		/*history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(longSystemName));*/
-		$('html, body').animate({ scrollTop: 0}, 300, function(){
-			while (document.querySelector(".infocardContainer").firstChild) {
-				document.querySelector(".infocardContainer").removeChild(document.querySelector(".infocardContainer").firstChild);
-			}
-			document.querySelector(".infocardContainer").style.display = "none";
-		});
+		$(".infocardContainer").remodal().close();
 	}
 	
 	function showObjectInfo(idsNameNumber, idsInfoNumber, classString, zPosition, factionNickname, systemNickname, dynamicCommodity, dynamicDifficulty, dynamicCount, nickname) {
@@ -748,7 +743,6 @@
 			/*history.replaceState(longSystemName, "Discovery Navmap for "+longSystemName, "#"+encodeURI(longSystemName));*/
 		}
 		if (clickHandlersEnabled) {
-			document.querySelector(".infocardContainer").style.display = "block";
 			var scaleFactor = 1;
 			if (typeof systemScaleFactorArray[systemNickname] !== "undefined") {
 				scaleFactor = parseFloat(systemScaleFactorArray[systemNickname]);
@@ -771,7 +765,7 @@
 			}
 			var infoString = "";
 			var miningString = "";
-			var scrollUpString = "<div class='scrollUpButton' onclick='scrollUp()'><i class='fa fa-arrow-circle-o-up'></i><p>Scroll up / Close</p></div>";
+			var scrollUpString = "<div class='scrollUpButton' onclick='closeModal()'><i class='fa fa-times'></i><p>Close</p></div>";
 			if (typeof dynamicCommodity !== "undefined") {
 				if (dynamicCount.indexOf("1, 1") == -1) {
 					amountString = dynamicCount.replace(/\s/g, '').split(",").join(" to ")+" units";
@@ -799,11 +793,7 @@
 				document.querySelector(".infocardContainer").innerHTML = miningString+scrollUpString;
 			}
 			console.log("Infocard "+idsInfoNumber+" for "+infocardArray[idsNameNumber]+" fetched");
-			if ($(".navContainer").css("position") == "fixed") {
-				$('html, body').animate({ scrollTop: $("body").scrollTop()+document.querySelector(".infocardContainer *:first-child").getBoundingClientRect().top-document.querySelector(".navContainer").scrollHeight}, 300);
-			} else {
-				$('html, body').animate({ scrollTop: $("body").scrollTop()+document.querySelector(".infocardContainer *:first-child").getBoundingClientRect().top}, 300);
-			}
+			$(".remodal.infocardContainer").remodal().open();
 		}
 	}
 	
@@ -904,7 +894,7 @@
 			while (document.querySelector(".infocardContainer").firstChild) {
 				document.querySelector(".infocardContainer").removeChild(document.querySelector(".infocardContainer").firstChild);
 			}
-			document.querySelector(".infocardContainer").style.display = "none";
+			$(".remodal.infocardContainer").remodal().close();
 			if (document.querySelector(".systemTitle") == null) {
 				var systemTitle = document.createElement("h2");
 				document.querySelector(".grid").appendChild(systemTitle);
@@ -1062,7 +1052,7 @@
 				document.querySelector(".grid").appendChild(mapScale);
 			}
 			generateSystemScale(system);
-			document.querySelector(".infocardContainer").style.display = "none";
+			$(".remodal.infocardContainer").remodal().close();
 			if (document.querySelector(".systemTitle") == null) {
 				var systemTitle = document.createElement("h2");
 			} else {
@@ -1955,6 +1945,17 @@
 		generateSystemConnections();
 	});
 	
+	/*
+	 *  Remodal - v1.1.1
+	 *  Responsive, lightweight, fast, synchronized with CSS animations, fully customizable modal window plugin with declarative configuration and hash tracking.
+	 *  http://vodkabears.github.io/remodal/
+	 *
+	 *  Made by Ilya Makarov
+	 *  Under MIT License
+	 */
+
+	!function(a,b){"function"==typeof define&&define.amd?define(["jquery"],function(c){return b(a,c)}):"object"==typeof exports?b(a,require("jquery")):b(a,a.jQuery||a.Zepto)}(this,function(a,b){"use strict";function c(a){if(w&&"none"===a.css("animation-name")&&"none"===a.css("-webkit-animation-name")&&"none"===a.css("-moz-animation-name")&&"none"===a.css("-o-animation-name")&&"none"===a.css("-ms-animation-name"))return 0;var b,c,d,e,f=a.css("animation-duration")||a.css("-webkit-animation-duration")||a.css("-moz-animation-duration")||a.css("-o-animation-duration")||a.css("-ms-animation-duration")||"0s",g=a.css("animation-delay")||a.css("-webkit-animation-delay")||a.css("-moz-animation-delay")||a.css("-o-animation-delay")||a.css("-ms-animation-delay")||"0s",h=a.css("animation-iteration-count")||a.css("-webkit-animation-iteration-count")||a.css("-moz-animation-iteration-count")||a.css("-o-animation-iteration-count")||a.css("-ms-animation-iteration-count")||"1";for(f=f.split(", "),g=g.split(", "),h=h.split(", "),e=0,c=f.length,b=Number.NEGATIVE_INFINITY;e<c;e++)d=parseFloat(f[e])*parseInt(h[e],10)+parseFloat(g[e]),d>b&&(b=d);return b}function d(){if(b(document).height()<=b(window).height())return 0;var a,c,d=document.createElement("div"),e=document.createElement("div");return d.style.visibility="hidden",d.style.width="100px",document.body.appendChild(d),a=d.offsetWidth,d.style.overflow="scroll",e.style.width="100%",d.appendChild(e),c=e.offsetWidth,d.parentNode.removeChild(d),a-c}function e(){if(!x){var a,c,e=b("html"),f=k("is-locked");e.hasClass(f)||(c=b(document.body),a=parseInt(c.css("padding-right"),10)+d(),c.css("padding-right",a+"px"),e.addClass(f))}}function f(){if(!x){var a,c,e=b("html"),f=k("is-locked");e.hasClass(f)&&(c=b(document.body),a=parseInt(c.css("padding-right"),10)-d(),c.css("padding-right",a+"px"),e.removeClass(f))}}function g(a,b,c,d){var e=k("is",b),f=[k("is",u.CLOSING),k("is",u.OPENING),k("is",u.CLOSED),k("is",u.OPENED)].join(" ");a.$bg.removeClass(f).addClass(e),a.$overlay.removeClass(f).addClass(e),a.$wrapper.removeClass(f).addClass(e),a.$modal.removeClass(f).addClass(e),a.state=b,!c&&a.$modal.trigger({type:b,reason:d},[{reason:d}])}function h(a,d,e){var f=0,g=function(a){a.target===this&&f++},h=function(a){a.target===this&&0===--f&&(b.each(["$bg","$overlay","$wrapper","$modal"],function(a,b){e[b].off(r+" "+s)}),d())};b.each(["$bg","$overlay","$wrapper","$modal"],function(a,b){e[b].on(r,g).on(s,h)}),a(),0===c(e.$bg)&&0===c(e.$overlay)&&0===c(e.$wrapper)&&0===c(e.$modal)&&(b.each(["$bg","$overlay","$wrapper","$modal"],function(a,b){e[b].off(r+" "+s)}),d())}function i(a){a.state!==u.CLOSED&&(b.each(["$bg","$overlay","$wrapper","$modal"],function(b,c){a[c].off(r+" "+s)}),a.$bg.removeClass(a.settings.modifier),a.$overlay.removeClass(a.settings.modifier).hide(),a.$wrapper.hide(),f(),g(a,u.CLOSED,!0))}function j(a){var b,c,d,e,f={};for(a=a.replace(/\s*:\s*/g,":").replace(/\s*,\s*/g,","),b=a.split(","),e=0,c=b.length;e<c;e++)b[e]=b[e].split(":"),d=b[e][1],("string"==typeof d||d instanceof String)&&(d="true"===d||"false"!==d&&d),("string"==typeof d||d instanceof String)&&(d=isNaN(d)?d:+d),f[b[e][0]]=d;return f}function k(){for(var a=q,b=0;b<arguments.length;++b)a+="-"+arguments[b];return a}function l(){var a,c,d=location.hash.replace("#","");if(d){try{c=b('[data-remodal-id="'+d+'"]')}catch(e){}c&&c.length&&(a=b[p].lookup[c.data(p)],a&&a.settings.hashTracking&&a.open())}else n&&n.state===u.OPENED&&n.settings.hashTracking&&n.close()}function m(a,c){var d=b(document.body),e=d,f=this;f.settings=b.extend({},t,c),f.index=b[p].lookup.push(f)-1,f.state=u.CLOSED,f.$overlay=b("."+k("overlay")),null!==f.settings.appendTo&&f.settings.appendTo.length&&(e=b(f.settings.appendTo)),f.$overlay.length||(f.$overlay=b("<div>").addClass(k("overlay")+" "+k("is",u.CLOSED)).hide(),e.append(f.$overlay)),f.$bg=b("."+k("bg")).addClass(k("is",u.CLOSED)),f.$modal=a.addClass(q+" "+k("is-initialized")+" "+f.settings.modifier+" "+k("is",u.CLOSED)).attr("tabindex","-1"),f.$wrapper=b("<div>").addClass(k("wrapper")+" "+f.settings.modifier+" "+k("is",u.CLOSED)).hide().append(f.$modal),e.append(f.$wrapper),f.$wrapper.on("click."+q,'[data-remodal-action="close"]',function(a){a.preventDefault(),f.close()}),f.$wrapper.on("click."+q,'[data-remodal-action="cancel"]',function(a){a.preventDefault(),f.$modal.trigger(v.CANCELLATION),f.settings.closeOnCancel&&f.close(v.CANCELLATION)}),f.$wrapper.on("click."+q,'[data-remodal-action="confirm"]',function(a){a.preventDefault(),f.$modal.trigger(v.CONFIRMATION),f.settings.closeOnConfirm&&f.close(v.CONFIRMATION)}),f.$wrapper.on("click."+q,function(a){var c=b(a.target);c.hasClass(k("wrapper"))&&f.settings.closeOnOutsideClick&&f.close()})}var n,o,p="remodal",q=a.REMODAL_GLOBALS&&a.REMODAL_GLOBALS.NAMESPACE||p,r=b.map(["animationstart","webkitAnimationStart","MSAnimationStart","oAnimationStart"],function(a){return a+"."+q}).join(" "),s=b.map(["animationend","webkitAnimationEnd","MSAnimationEnd","oAnimationEnd"],function(a){return a+"."+q}).join(" "),t=b.extend({hashTracking:!0,closeOnConfirm:!0,closeOnCancel:!0,closeOnEscape:!0,closeOnOutsideClick:!0,modifier:"",appendTo:null},a.REMODAL_GLOBALS&&a.REMODAL_GLOBALS.DEFAULTS),u={CLOSING:"closing",CLOSED:"closed",OPENING:"opening",OPENED:"opened"},v={CONFIRMATION:"confirmation",CANCELLATION:"cancellation"},w=function(){var a=document.createElement("div").style;return void 0!==a.animationName||void 0!==a.WebkitAnimationName||void 0!==a.MozAnimationName||void 0!==a.msAnimationName||void 0!==a.OAnimationName}(),x=/iPad|iPhone|iPod/.test(navigator.platform);m.prototype.open=function(){var a,c=this;c.state!==u.OPENING&&c.state!==u.CLOSING&&(a=c.$modal.attr("data-remodal-id"),a&&c.settings.hashTracking&&(o=b(window).scrollTop(),location.hash=a),n&&n!==c&&i(n),n=c,e(),c.$bg.addClass(c.settings.modifier),c.$overlay.addClass(c.settings.modifier).show(),c.$wrapper.show().scrollTop(0),c.$modal.focus(),h(function(){g(c,u.OPENING)},function(){g(c,u.OPENED)},c))},m.prototype.close=function(a){var c=this;c.state!==u.OPENING&&c.state!==u.CLOSING&&c.state!==u.CLOSED&&(c.settings.hashTracking&&c.$modal.attr("data-remodal-id")===location.hash.substr(1)&&(location.hash="",b(window).scrollTop(o)),h(function(){g(c,u.CLOSING,!1,a)},function(){c.$bg.removeClass(c.settings.modifier),c.$overlay.removeClass(c.settings.modifier).hide(),c.$wrapper.hide(),f(),g(c,u.CLOSED,!1,a)},c))},m.prototype.getState=function(){return this.state},m.prototype.destroy=function(){var a,c=b[p].lookup;i(this),this.$wrapper.remove(),delete c[this.index],a=b.grep(c,function(a){return!!a}).length,0===a&&(this.$overlay.remove(),this.$bg.removeClass(k("is",u.CLOSING)+" "+k("is",u.OPENING)+" "+k("is",u.CLOSED)+" "+k("is",u.OPENED)))},b[p]={lookup:[]},b.fn[p]=function(a){var c,d;return this.each(function(e,f){d=b(f),null==d.data(p)?(c=new m(d,a),d.data(p,c.index),c.settings.hashTracking&&d.attr("data-remodal-id")===location.hash.substr(1)&&c.open()):c=b[p].lookup[d.data(p)]}),c},b(document).ready(function(){b(document).on("click","[data-remodal-target]",function(a){a.preventDefault();var c=a.currentTarget,d=c.getAttribute("data-remodal-target"),e=b('[data-remodal-id="'+d+'"]');b[p].lookup[e.data(p)].open()}),b(document).find("."+q).each(function(a,c){var d=b(c),e=d.data("remodal-options");e?("string"==typeof e||e instanceof String)&&(e=j(e)):e={},d[p](e)}),b(document).on("keydown."+q,function(a){n&&n.settings.closeOnEscape&&n.state===u.OPENED&&27===a.keyCode&&n.close()}),b(window).on("hashchange."+q,l)})});
+	
 	// jQuery autoComplete v1.0.6
 	// https://github.com/Pixabay/jQuery-autoComplete
 	!function(e){e.fn.autoComplete=function(t){var o=e.extend({},e.fn.autoComplete.defaults,t);return"string"==typeof t?(this.each(function(){var o=e(this);"destroy"==t&&(e(window).off("resize.autocomplete",o.updateSC),o.off("blur.autocomplete focus.autocomplete keydown.autocomplete keyup.autocomplete"),o.data("autocomplete")?o.attr("autocomplete",o.data("autocomplete")):o.removeAttr("autocomplete"),e(o.data("sc")).remove(),o.removeData("sc").removeData("autocomplete"))}),this):this.each(function(){function t(e){var t=s.val();if(s.cache[t]=e,e.length&&t.length>=o.minChars){for(var a="",c=0;c<e.length;c++)a+=o.renderItem(e[c],t);s.sc.html(a),s.updateSC(0)}else s.sc.hide()}var s=e(this);s.sc=e('<div class="autocomplete-suggestions '+o.menuClass+'"></div>'),s.data("sc",s.sc).data("autocomplete",s.attr("autocomplete")),s.attr("autocomplete","off"),s.cache={},s.last_val="",s.updateSC=function(t,o){if(s.sc.css({top:s.offset().top+s.outerHeight(),left:s.offset().left,width:s.outerWidth()}),!t&&(s.sc.show(),s.sc.maxHeight||(s.sc.maxHeight=parseInt(s.sc.css("max-height"))),s.sc.suggestionHeight||(s.sc.suggestionHeight=e(".autocomplete-suggestion",s.sc).first().outerHeight()),s.sc.suggestionHeight))if(o){var a=s.sc.scrollTop(),c=o.offset().top-s.sc.offset().top;c+s.sc.suggestionHeight-s.sc.maxHeight>0?s.sc.scrollTop(c+s.sc.suggestionHeight+a-s.sc.maxHeight):0>c&&s.sc.scrollTop(c+a)}else s.sc.scrollTop(0)},e(window).on("resize.autocomplete",s.updateSC),s.sc.appendTo("body"),s.sc.on("mouseleave",".autocomplete-suggestion",function(){e(".autocomplete-suggestion.selected").removeClass("selected")}),s.sc.on("mouseenter",".autocomplete-suggestion",function(){e(".autocomplete-suggestion.selected").removeClass("selected"),e(this).addClass("selected")}),s.sc.on("mouseup",".autocomplete-suggestion",function(t){var a=e(this),c=a.data("val");(c||a.hasClass("autocomplete-suggestion"))&&(s.val(c),o.onSelect(t,c,a),s.sc.hide())}),s.on("blur.autocomplete",function(){try{over_sb=e(".autocomplete-suggestions:hover").length}catch(t){over_sb=0}over_sb?s.is(":focus")||s.focus():(s.last_val=s.val(),s.sc.hide())}),o.minChars||s.on("focus.autocomplete",function(){s.last_val="\n",s.trigger("keyup.autocomplete")}),s.on("keydown.autocomplete",function(t){if((40==t.which||38==t.which)&&s.sc.html()){var a,c=e(".autocomplete-suggestion.selected",s.sc);return c.length?(a=40==t.which?c.next(".autocomplete-suggestion"):c.prev(".autocomplete-suggestion"),a.length?(c.removeClass("selected"),s.val(a.addClass("selected").data("val"))):(c.removeClass("selected"),s.val(s.last_val),a=0)):(a=40==t.which?e(".autocomplete-suggestion",s.sc).first():e(".autocomplete-suggestion",s.sc).last(),s.val(a.addClass("selected").data("val"))),s.updateSC(0,a),!1}if(27==t.which)s.val(s.last_val).sc.hide();else if(13==t.which){var c=e(".autocomplete-suggestion.selected",s.sc);c.length&&(o.onSelect(t,c.data("val"),c),setTimeout(function(){s.sc.hide()},10))}}),s.on("keyup.autocomplete",function(a){if(!~e.inArray(a.which,[13,27,35,36,37,38,39,40])){var c=s.val();if(c.length>=o.minChars){if(c!=s.last_val){if(s.last_val=c,clearTimeout(s.timer),o.cache){if(c in s.cache)return void t(s.cache[c]);for(var l=1;l<c.length-o.minChars;l++){var i=c.slice(0,c.length-l);if(i in s.cache&&!s.cache[i].length)return void t([])}}s.timer=setTimeout(function(){o.source(c,t)},o.delay)}}else s.last_val=c,s.sc.hide()}})})},e.fn.autoComplete.defaults={source:0,minChars:3,delay:150,cache:1,menuClass:"",renderItem:function(e,t){var o=new RegExp("("+t.split(" ").join("|")+")","gi");return'<div class="autocomplete-suggestion" data-val="'+e+'">'+e.replace(o,"<b>$1</b>")+"</div>"},onSelect:function(e,t,o){}}}(jQuery);
@@ -2185,21 +2186,14 @@
 	}
 	
 	.infocardContainer {
-		max-width: 58.5em;
-		width: 92vw;
-		padding-left: 0.25em;
-		padding-right: 0.25em;
-		position: relative;
-		top: 0em;
 		text-align: center;
 		color: white;
 		font-family: "Agency FB", "Oswald", sans-serif;
-		margin: 0 auto;
 		border: 0.2em solid rgb(30, 166, 197);
-		border-top: none;
 		box-shadow: 0em 0em 0.5em 0em rgb(30, 166, 197);
 		z-index: 0;
 		background: url("nnwall.jpg") black;
+		border-radius: 0.5em;
 	}
 	
 	.infocardContainer * {
@@ -3369,10 +3363,6 @@
 			top: 0.7em !important;
 		}
 		
-		.infocardContainer {
-			top: 0.7em !important;
-		}
-		
 		.infocardContainer span.infocardText {
 			padding-left: 0;
 			padding-right: 0;
@@ -3431,10 +3421,6 @@
 		}
 		
 		body.responsive.scaleWidth .mapContainer {
-		}
-		
-		body.responsive.scaleWidth .infocardContainer {
-			width: 86vw;
 		}
 		
 		body.responsive.scaleWidth #configButton, body.responsive.scaleWidth #screenshotButton, body.responsive.scaleWidth #helpLink, body.responsive.scaleWidth #showUniverseMap, body.responsive.scaleWidth #navSystemTitle {
@@ -3554,11 +3540,6 @@
 			top: 2.2em !important;
 		}
 		
-		body.responsive.scaleHeight .infocardContainer {
-			top: 2.2em !important;
-			width: 84vh;
-		}
-		
 		body.responsive.scaleHeight #configButton, body.responsive.scaleHeight #screenshotButton, body.responsive #helpLink, body.responsive.scaleHeight #showUniverseMap, body.responsive.scaleHeight #navSystemTitle {
 			float: left;
 			left: auto;
@@ -3636,6 +3617,421 @@
 	
 	/* qTip2 v2.2.1 | Plugins: tips viewport modal | Styles: core basic css3 | qtip2.com | Licensed MIT | Sun Aug 09 2015 06:46:08 */
 	.qtip{position:absolute;left:-28000px;top:-28000px;display:none;max-width:280px;min-width:50px;font-size:10.5px;line-height:12px;direction:ltr;box-shadow:none;padding:0}.qtip-content{position:relative;padding:5px 9px;overflow:hidden;text-align:left;word-wrap:break-word}.qtip-titlebar{position:relative;padding:5px 35px 5px 10px;overflow:hidden;border-width:0 0 1px;font-weight:700}.qtip-titlebar+.qtip-content{border-top-width:0!important}.qtip-close{position:absolute;right:-9px;top:-9px;z-index:11;cursor:pointer;outline:0;border:1px solid transparent}.qtip-titlebar .qtip-close{right:4px;top:50%;margin-top:-9px}* html .qtip-titlebar .qtip-close{top:16px}.qtip-icon .ui-icon,.qtip-titlebar .ui-icon{display:block;text-indent:-1000em;direction:ltr}.qtip-icon,.qtip-icon .ui-icon{-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;text-decoration:none}.qtip-icon .ui-icon{width:18px;height:14px;line-height:14px;text-align:center;text-indent:0;font:400 bold 10px/13px Tahoma,sans-serif;color:inherit;background:-100em -100em no-repeat}.qtip-default{border:1px solid #F1D031;background-color:#FFFFA3;color:#555}.qtip-default .qtip-titlebar{background-color:#FFEF93}.qtip-default .qtip-icon{border-color:#CCC;background:#F1F1F1;color:#777}.qtip-default .qtip-titlebar .qtip-close{border-color:#AAA;color:#111}.qtip-light{background-color:#fff;border-color:#E2E2E2;color:#454545}.qtip-light .qtip-titlebar{background-color:#f1f1f1}.qtip-dark{background-color:#505050;border-color:#303030;color:#f3f3f3}.qtip-dark .qtip-titlebar{background-color:#404040}.qtip-dark .qtip-icon{border-color:#444}.qtip-dark .qtip-titlebar .ui-state-hover{border-color:#303030}.qtip-cream{background-color:#FBF7AA;border-color:#F9E98E;color:#A27D35}.qtip-cream .qtip-titlebar{background-color:#F0DE7D}.qtip-cream .qtip-close .qtip-icon{background-position:-82px 0}.qtip-red{background-color:#F78B83;border-color:#D95252;color:#912323}.qtip-red .qtip-titlebar{background-color:#F06D65}.qtip-red .qtip-close .qtip-icon{background-position:-102px 0}.qtip-red .qtip-icon,.qtip-red .qtip-titlebar .ui-state-hover{border-color:#D95252}.qtip-green{background-color:#CAED9E;border-color:#90D93F;color:#3F6219}.qtip-green .qtip-titlebar{background-color:#B0DE78}.qtip-green .qtip-close .qtip-icon{background-position:-42px 0}.qtip-blue{background-color:#E5F6FE;border-color:#ADD9ED;color:#5E99BD}.qtip-blue .qtip-titlebar{background-color:#D0E9F5}.qtip-blue .qtip-close .qtip-icon{background-position:-2px 0}.qtip-shadow{-webkit-box-shadow:1px 1px 3px 1px rgba(0,0,0,.15);-moz-box-shadow:1px 1px 3px 1px rgba(0,0,0,.15);box-shadow:1px 1px 3px 1px rgba(0,0,0,.15)}.qtip-bootstrap,.qtip-rounded,.qtip-tipsy{-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}.qtip-rounded .qtip-titlebar{-moz-border-radius:4px 4px 0 0;-webkit-border-radius:4px 4px 0 0;border-radius:4px 4px 0 0}.qtip-youtube{-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;-webkit-box-shadow:0 0 3px #333;-moz-box-shadow:0 0 3px #333;box-shadow:0 0 3px #333;color:#fff;border:0 solid transparent;background:#4A4A4A;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#4A4A4A),color-stop(100%,#000));background-image:-webkit-linear-gradient(top,#4A4A4A 0,#000 100%);background-image:-moz-linear-gradient(top,#4A4A4A 0,#000 100%);background-image:-ms-linear-gradient(top,#4A4A4A 0,#000 100%);background-image:-o-linear-gradient(top,#4A4A4A 0,#000 100%)}.qtip-youtube .qtip-titlebar{background-color:transparent}.qtip-youtube .qtip-content{padding:.75em;font:12px arial,sans-serif;filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#4a4a4a, EndColorStr=#000000);-ms-filter:"progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#4a4a4a,EndColorStr=#000000);"}.qtip-youtube .qtip-icon{border-color:#222}.qtip-youtube .qtip-titlebar .ui-state-hover{border-color:#303030}.qtip-jtools{background:#232323;background:rgba(0,0,0,.7);background-image:-webkit-gradient(linear,left top,left bottom,from(#717171),to(#232323));background-image:-moz-linear-gradient(top,#717171,#232323);background-image:-webkit-linear-gradient(top,#717171,#232323);background-image:-ms-linear-gradient(top,#717171,#232323);background-image:-o-linear-gradient(top,#717171,#232323);border:2px solid #ddd;border:2px solid rgba(241,241,241,1);-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;-webkit-box-shadow:0 0 12px #333;-moz-box-shadow:0 0 12px #333;box-shadow:0 0 12px #333}.qtip-jtools .qtip-titlebar{filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171, endColorstr=#4A4A4A);-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A)"}.qtip-jtools .qtip-content{filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A, endColorstr=#232323);-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323)"}.qtip-jtools .qtip-content,.qtip-jtools .qtip-titlebar{background:0 0;color:#fff;border:0 dashed transparent}.qtip-jtools .qtip-icon{border-color:#555}.qtip-jtools .qtip-titlebar .ui-state-hover{border-color:#333}.qtip-cluetip{-webkit-box-shadow:4px 4px 5px rgba(0,0,0,.4);-moz-box-shadow:4px 4px 5px rgba(0,0,0,.4);box-shadow:4px 4px 5px rgba(0,0,0,.4);background-color:#D9D9C2;color:#111;border:0 dashed transparent}.qtip-cluetip .qtip-titlebar{background-color:#87876A;color:#fff;border:0 dashed transparent}.qtip-cluetip .qtip-icon{border-color:#808064}.qtip-cluetip .qtip-titlebar .ui-state-hover{border-color:#696952;color:#696952}.qtip-tipsy{background:#000;background:rgba(0,0,0,.87);color:#fff;border:0 solid transparent;font-size:11px;font-family:'Lucida Grande',sans-serif;font-weight:700;line-height:16px;text-shadow:0 1px #000}.qtip-tipsy .qtip-titlebar{padding:6px 35px 0 10px;background-color:transparent}.qtip-tipsy .qtip-content{padding:6px 10px}.qtip-tipsy .qtip-icon{border-color:#222;text-shadow:none}.qtip-tipsy .qtip-titlebar .ui-state-hover{border-color:#303030}.qtip-tipped{border:3px solid #959FA9;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;background-color:#F9F9F9;color:#454545;font-weight:400;font-family:serif}.qtip-tipped .qtip-titlebar{border-bottom-width:0;color:#fff;background:#3A79B8;background-image:-webkit-gradient(linear,left top,left bottom,from(#3A79B8),to(#2E629D));background-image:-webkit-linear-gradient(top,#3A79B8,#2E629D);background-image:-moz-linear-gradient(top,#3A79B8,#2E629D);background-image:-ms-linear-gradient(top,#3A79B8,#2E629D);background-image:-o-linear-gradient(top,#3A79B8,#2E629D);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#3A79B8, endColorstr=#2E629D);-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#3A79B8,endColorstr=#2E629D)"}.qtip-tipped .qtip-icon{border:2px solid #285589;background:#285589}.qtip-tipped .qtip-icon .ui-icon{background-color:#FBFBFB;color:#555}.qtip-bootstrap{font-size:14px;line-height:20px;color:#333;padding:1px;background-color:#fff;border:1px solid #ccc;border:1px solid rgba(0,0,0,.2);-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-box-shadow:0 5px 10px rgba(0,0,0,.2);-moz-box-shadow:0 5px 10px rgba(0,0,0,.2);box-shadow:0 5px 10px rgba(0,0,0,.2);-webkit-background-clip:padding-box;-moz-background-clip:padding;background-clip:padding-box}.qtip-bootstrap .qtip-titlebar{padding:8px 14px;margin:0;font-size:14px;font-weight:400;line-height:18px;background-color:#f7f7f7;border-bottom:1px solid #ebebeb;-webkit-border-radius:5px 5px 0 0;-moz-border-radius:5px 5px 0 0;border-radius:5px 5px 0 0}.qtip-bootstrap .qtip-titlebar .qtip-close{right:11px;top:45%;border-style:none}.qtip-bootstrap .qtip-content{padding:9px 14px}.qtip-bootstrap .qtip-icon{background:0 0}.qtip-bootstrap .qtip-icon .ui-icon{width:auto;height:auto;float:right;font-size:20px;font-weight:700;line-height:18px;color:#000;text-shadow:0 1px 0 #fff;opacity:.2;filter:alpha(opacity=20)}.qtip-bootstrap .qtip-icon .ui-icon:hover{color:#000;text-decoration:none;cursor:pointer;opacity:.4;filter:alpha(opacity=40)}.qtip:not(.ie9haxors) div.qtip-content,.qtip:not(.ie9haxors) div.qtip-titlebar{filter:none;-ms-filter:none}.qtip .qtip-tip{margin:0 auto;overflow:hidden;z-index:10}.qtip .qtip-tip,x:-o-prefocus{visibility:hidden}.qtip .qtip-tip,.qtip .qtip-tip .qtip-vml,.qtip .qtip-tip canvas{position:absolute;color:#123456;background:0 0;border:0 dashed transparent}.qtip .qtip-tip canvas{top:0;left:0}.qtip .qtip-tip .qtip-vml{behavior:url(#default#VML);display:inline-block;visibility:visible}#qtip-overlay{position:fixed;left:0;top:0;width:100%;height:100%}#qtip-overlay.blurs{cursor:pointer}#qtip-overlay div{position:absolute;left:0;top:0;width:100%;height:100%;background-color:#000;opacity:.7;filter:alpha(opacity=70);-ms-filter:"alpha(Opacity=70)"}
+	
+	/*
+	 *  Remodal - v1.1.1
+	 *  Responsive, lightweight, fast, synchronized with CSS animations, fully customizable modal window plugin with declarative configuration and hash tracking.
+	 *  http://vodkabears.github.io/remodal/
+	 *
+	 *  Made by Ilya Makarov
+	 *  Under MIT License
+	 */
+
+	/* ==========================================================================
+	   Remodal's necessary styles
+	   ========================================================================== */
+
+	/* Hide scroll bar */
+
+	html.remodal-is-locked {
+	  overflow: hidden;
+
+	  -ms-touch-action: none;
+	  touch-action: none;
+	}
+
+	/* Anti FOUC */
+
+	.remodal,
+	[data-remodal-id] {
+	  display: none;
+	}
+
+	/* Necessary styles of the overlay */
+
+	.remodal-overlay {
+	  position: fixed;
+	  z-index: 9999;
+	  top: -5000px;
+	  right: -5000px;
+	  bottom: -5000px;
+	  left: -5000px;
+
+	  display: none;
+	}
+
+	/* Necessary styles of the wrapper */
+
+	.remodal-wrapper {
+	  position: fixed;
+	  z-index: 10000;
+	  top: 0;
+	  right: 0;
+	  bottom: 0;
+	  left: 0;
+
+	  display: none;
+	  overflow: auto;
+
+	  text-align: center;
+
+	  -webkit-overflow-scrolling: touch;
+	}
+
+	.remodal-wrapper:after {
+	  display: inline-block;
+
+	  height: 100%;
+	  margin-left: -0.05em;
+
+	  content: "";
+	}
+
+	/* Fix iPad, iPhone glitches */
+
+	.remodal-overlay,
+	.remodal-wrapper {
+	  -webkit-backface-visibility: hidden;
+	  backface-visibility: hidden;
+	}
+
+	/* Necessary styles of the modal dialog */
+
+	.remodal {
+	  position: relative;
+
+	  outline: none;
+
+	  -webkit-text-size-adjust: 100%;
+	  -ms-text-size-adjust: 100%;
+	  text-size-adjust: 100%;
+	}
+
+	.remodal-is-initialized {
+	  /* Disable Anti-FOUC */
+	  display: inline-block;
+	}
+	
+	/*
+	 *  Remodal - v1.1.1
+	 *  Responsive, lightweight, fast, synchronized with CSS animations, fully customizable modal window plugin with declarative configuration and hash tracking.
+	 *  http://vodkabears.github.io/remodal/
+	 *
+	 *  Made by Ilya Makarov
+	 *  Under MIT License
+	 */
+
+	/* ==========================================================================
+	   Remodal's default mobile first theme
+	   ========================================================================== */
+
+	/* Default theme styles for the background */
+
+	.remodal-bg.remodal-is-opening,
+	.remodal-bg.remodal-is-opened {
+	  -webkit-filter: blur(3px);
+	  filter: blur(3px);
+	}
+
+	/* Default theme styles of the overlay */
+
+	.remodal-overlay {
+	  background: rgba(43, 46, 56, 0.9);
+	}
+
+	.remodal-overlay.remodal-is-opening,
+	.remodal-overlay.remodal-is-closing {
+	  -webkit-animation-duration: 0.3s;
+	  animation-duration: 0.3s;
+	  -webkit-animation-fill-mode: forwards;
+	  animation-fill-mode: forwards;
+	}
+
+	.remodal-overlay.remodal-is-opening {
+	  -webkit-animation-name: remodal-overlay-opening-keyframes;
+	  animation-name: remodal-overlay-opening-keyframes;
+	}
+
+	.remodal-overlay.remodal-is-closing {
+	  -webkit-animation-name: remodal-overlay-closing-keyframes;
+	  animation-name: remodal-overlay-closing-keyframes;
+	}
+
+	/* Default theme styles of the wrapper */
+
+	.remodal-wrapper {
+	  padding: 10px 10px 0;
+	}
+
+	/* Default theme styles of the modal dialog */
+
+	.remodal {
+	  box-sizing: border-box;
+	  width: 100%;
+	  margin-bottom: 10px;
+	  padding: 0.75em;
+
+	  -webkit-transform: translate3d(0, 0, 0);
+	  transform: translate3d(0, 0, 0);
+	}
+
+	.remodal.remodal-is-opening,
+	.remodal.remodal-is-closing {
+	  -webkit-animation-duration: 0.3s;
+	  animation-duration: 0.3s;
+	  -webkit-animation-fill-mode: forwards;
+	  animation-fill-mode: forwards;
+	}
+
+	.remodal.remodal-is-opening {
+	  -webkit-animation-name: remodal-opening-keyframes;
+	  animation-name: remodal-opening-keyframes;
+	}
+
+	.remodal.remodal-is-closing {
+	  -webkit-animation-name: remodal-closing-keyframes;
+	  animation-name: remodal-closing-keyframes;
+	}
+
+	/* Vertical align of the modal dialog */
+
+	.remodal,
+	.remodal-wrapper:after {
+	  vertical-align: middle;
+	}
+
+	/* Close button */
+
+	/*.remodal-close {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+
+	  display: block;
+	  overflow: visible;
+
+	  width: 35px;
+	  height: 35px;
+	  margin: 0;
+	  padding: 0;
+
+	  cursor: pointer;
+	  -webkit-transition: color 0.2s;
+	  transition: color 0.2s;
+	  text-decoration: none;
+
+	  color: #95979c;
+	  border: 0;
+	  outline: 0;
+	  background: transparent;
+	}
+
+	.remodal-close:hover,
+	.remodal-close:focus {
+	  color: #2b2e38;
+	}
+
+	.remodal-close:before {
+	  font-family: Arial, "Helvetica CY", "Nimbus Sans L", sans-serif !important;
+	  font-size: 25px;
+	  line-height: 35px;
+
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+
+	  display: block;
+
+	  width: 35px;
+
+	  content: "\00d7";
+	  text-align: center;
+	}*/
+
+	/* Dialog buttons */
+
+	/*.remodal-confirm,
+	.remodal-cancel {
+	  font: inherit;
+
+	  display: inline-block;
+	  overflow: visible;
+
+	  min-width: 110px;
+	  margin: 0;
+	  padding: 12px 0;
+
+	  cursor: pointer;
+	  -webkit-transition: background 0.2s;
+	  transition: background 0.2s;
+	  text-align: center;
+	  vertical-align: middle;
+	  text-decoration: none;
+
+	  border: 0;
+	  outline: 0;
+	}
+
+	.remodal-confirm {
+	  color: #fff;
+	  background: #81c784;
+	}
+
+	.remodal-confirm:hover,
+	.remodal-confirm:focus {
+	  background: #66bb6a;
+	}
+
+	.remodal-cancel {
+	  color: #fff;
+	  background: #e57373;
+	}
+
+	.remodal-cancel:hover,
+	.remodal-cancel:focus {
+	  background: #ef5350;
+	}*/
+
+	/* Remove inner padding and border in Firefox 4+ for the button tag. */
+
+	.remodal-confirm::-moz-focus-inner,
+	.remodal-cancel::-moz-focus-inner,
+	.remodal-close::-moz-focus-inner {
+	  padding: 0;
+
+	  border: 0;
+	}
+
+	/* Keyframes
+	   ========================================================================== */
+
+	@-webkit-keyframes remodal-opening-keyframes {
+	  from {
+		-webkit-transform: scale(1.05);
+		transform: scale(1.05);
+
+		opacity: 0;
+	  }
+	  to {
+		-webkit-transform: none;
+		transform: none;
+
+		opacity: 1;
+
+		-webkit-filter: blur(0);
+		filter: blur(0);
+	  }
+	}
+
+	@keyframes remodal-opening-keyframes {
+	  from {
+		-webkit-transform: scale(1.05);
+		transform: scale(1.05);
+
+		opacity: 0;
+	  }
+	  to {
+		-webkit-transform: none;
+		transform: none;
+
+		opacity: 1;
+
+		-webkit-filter: blur(0);
+		filter: blur(0);
+	  }
+	}
+
+	@-webkit-keyframes remodal-closing-keyframes {
+	  from {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+
+		opacity: 1;
+	  }
+	  to {
+		-webkit-transform: scale(0.95);
+		transform: scale(0.95);
+
+		opacity: 0;
+
+		-webkit-filter: blur(0);
+		filter: blur(0);
+	  }
+	}
+
+	@keyframes remodal-closing-keyframes {
+	  from {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+
+		opacity: 1;
+	  }
+	  to {
+		-webkit-transform: scale(0.95);
+		transform: scale(0.95);
+
+		opacity: 0;
+
+		-webkit-filter: blur(0);
+		filter: blur(0);
+	  }
+	}
+
+	@-webkit-keyframes remodal-overlay-opening-keyframes {
+	  from {
+		opacity: 0;
+	  }
+	  to {
+		opacity: 1;
+	  }
+	}
+
+	@keyframes remodal-overlay-opening-keyframes {
+	  from {
+		opacity: 0;
+	  }
+	  to {
+		opacity: 1;
+	  }
+	}
+
+	@-webkit-keyframes remodal-overlay-closing-keyframes {
+	  from {
+		opacity: 1;
+	  }
+	  to {
+		opacity: 0;
+	  }
+	}
+
+	@keyframes remodal-overlay-closing-keyframes {
+	  from {
+		opacity: 1;
+	  }
+	  to {
+		opacity: 0;
+	  }
+	}
+
+	/* Media queries
+	   ========================================================================== */
+
+	@media only screen and (min-width: 641px) {
+	  .remodal {
+		max-width: 700px;
+	  }
+	}
+
+	/* IE8
+	   ========================================================================== */
+
+	/*.lt-ie9 .remodal-overlay {
+	  background: #2b2e38;
+	}*/
+
+	.lt-ie9 .remodal {
+	  width: 700px;
+	}
 	</style>
 </head>
 <body>
@@ -3752,9 +4148,15 @@
 			<h3 id="nullGridCell">A1</h3>
 		</div>
 	</div>
-	<!--<div class="stickyContainer">-->
+	<!--<div class="stickyContainer">
 		<div class="infocardContainer"></div>
 	<!--</div>-->
+	<div class="remodal-bg">
+		<div class="remodal infocardContainer" data-remodal-id="modal" data-remodal-options="hashTracking: false">
+			<button data-remodal-action="close" class="remodal-close"></button>
+			<h1>Loading...</h1>
+		</div>
+	</div>
 	<script>
 		generateLookupArrays();
 		generateUniverseMap();
