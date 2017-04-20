@@ -1,0 +1,54 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "mapObject",
+    "description": "Defines a physical, in-game object or objective for rendering on the navmap.",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "Unique identifier for the object.",
+            "type": "string"
+        },
+        "class": {
+            "type": "array",
+            "description": "Used for adding default styles to the object (e.g. planet, ship)",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+        },
+        "css": {
+            "description": "Used for adding custom styles to an object, if required.",
+            "type": "string"
+        },
+        "name": {
+            "description": "Object name; used for the label, depending on the class.",
+            "type": "string"
+        },
+        "nameInfocardNumber": {
+            "description": "References a pre-defined infocard to use for the name.",
+            "type": "integer"
+        },
+        "infocard": {
+            "description": "Object name; used for the label, depending on the class.",
+            "type": "string"
+        },
+        "infocardNumber": {
+            "description": "References a pre-defined infocard to use for the description.",
+            "type": "integer"
+        },
+        "physicalProperties": {
+            "type": "object",
+            "properties": {
+                "xPos": {"type": "number"},
+                "yPos": {"type": "number"},
+                "zPos": {"type": "number"},
+                "xRot": {"type": "number"},
+                "yRot": {"type": "number"},
+                "zRot": {"type": "number"}
+            },
+            "required": ["xPos", "yPos", "zPos"]
+        }
+    },
+    "required": ["id", "class", "physicalProperties"]
+}
