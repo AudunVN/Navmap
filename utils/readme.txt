@@ -14,3 +14,7 @@ Updating for a new version:
 8. copy solararch.ini
 6. lowercase absolutely everything (Métamorphose 2 recommended)
 7. verify whether oorpArray in index.html requires updating (check for new dead-end systems)
+9. get planet textures using UTF Image Exporter
+10. batch convert from txm to jpg using IrFanView recursively 
+11. rename files to ##.jpg where the number ## is a file counter for each sub-directory using metamph. 2
+12. lowercase everything
