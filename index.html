@@ -802,16 +802,16 @@
 				if (typeof commodityArrayName !== "undefined") {
 					commodityName = commodityArrayName;
 				}
-				miningString = "<p>This zone drops "+amountString+" of the commodity "+commodityName+" when mined using <a id='miningLink' href='http://discoverygc.com/forums/showthread.php?tid=132063' target='_BLANK'>appropriate equipment</a>.</p>";
+				miningString = "<p>This zone drops "+amountString+" of the commodity "+commodityName+" when mined using <a id='miningLink' href='https://discoverygc.com/forums/showthread.php?tid=155629' target='_BLANK'>appropriate equipment</a>.</p>";
 			}
 			if (typeof idsInfoNumber !== "undefined") {
 				if (typeof infocardMapArray[(parseInt(idsInfoNumber)).toString()] !== "undefined" && typeof infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]] !== "undefined") { 
 					var infocardURI = encodeURI(infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]]);
-					document.querySelector(".infocardContainer").innerHTML = "<h2>"+infocardArray[idsNameNumber]+"</h2>"+parseInfocard(infocardArray[idsInfoNumber])+parseInfocard(infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]])+"<h3>Technical info</h3>"+miningString+"<p class='technicalInfo'>This object with internal nickname "+nickname+" is located "+planePosition+" the plane, and has infocard number "+idsInfoNumber+", base description infocard number "+(parseInt(idsInfoNumber)+1).toString()+" and name infocard number "+idsNameNumber+"."+ownerString+" "+"<a class='editLink' target='_blank'><i class='fa fa-pencil-square-o'></i></a></p>"+scrollUpString;
+					document.querySelector(".infocardContainer").innerHTML = "<h2>"+infocardArray[idsNameNumber]+"</h2>"+parseInfocard(infocardArray[idsInfoNumber])+parseInfocard(infocardArray[infocardMapArray[(parseInt(idsInfoNumber)).toString()]])+"<h3>Technical info</h3>"+miningString+"<p class='technicalInfo'>This object with internal nickname "+nickname+" is located "+planePosition+" the plane, and has name infocard number "+idsNameNumber+", infocard number "+idsInfoNumber+" and base description infocard number "+(parseInt(idsInfoNumber)+1).toString()+"."+ownerString+" "+"<a class='editLink' target='_blank'><i class='fa fa-pencil-square-o'></i></a></p>"+scrollUpString;
 					document.querySelector(".editLink").href = "https://docs.google.com/forms/d/1bIYtQCx0lLgguEF6xWDm0RRFr0IIz-tM1Toh6SyB9wA/viewform?entry.515729986="+(parseInt(idsInfoNumber)+1).toString()+"&entry.628548621="+infocardURI+"&entry.899322418="+infocardURI;
 				} else {
 					var infocardURI = encodeURI(infocardArray[idsInfoNumber]);
-					document.querySelector(".infocardContainer").innerHTML = "<h2>"+infocardArray[idsNameNumber]+"</h2>"+parseInfocard(infocardArray[idsInfoNumber])+"<h3>Technical info</h3>"+miningString+"<p  class='technicalInfo'>This object with internal nickname "+nickname+" is located "+planePosition+" the plane, and has infocard number "+idsInfoNumber+" and name infocard number "+idsNameNumber+"."+ownerString+" "+"<a class='editLink' target='_blank'><i class='fa fa-pencil-square-o'></i></a></p>"+scrollUpString;
+					document.querySelector(".infocardContainer").innerHTML = "<h2>"+infocardArray[idsNameNumber]+"</h2>"+parseInfocard(infocardArray[idsInfoNumber])+"<h3>Technical info</h3>"+miningString+"<p  class='technicalInfo'>This object with internal nickname "+nickname+" is located "+planePosition+" the plane, and has name infocard number "+idsNameNumber+" and infocard number "+idsInfoNumber+"."+ownerString+" "+"<a class='editLink' target='_blank'><i class='fa fa-pencil-square-o'></i></a></p>"+scrollUpString;
 					document.querySelector(".editLink").href = "https://docs.google.com/forms/d/1bIYtQCx0lLgguEF6xWDm0RRFr0IIz-tM1Toh6SyB9wA/viewform?entry.515729986="+idsInfoNumber+"&entry.628548621="+infocardURI+"&entry.899322418="+infocardURI;
 				}
 			} else if (typeof dynamicCommodity !== "undefined") {
@@ -4050,7 +4050,7 @@
 </head>
 <body>
 	<nav class="navContainer">
-		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (18.10)</span></a>
+		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (15.01)</span></a>
 		<span id="showUniverseMap" onClick="generateUniverseMap()"><i class="fa fa-times-circle-o"></i><span class="infoSpace"> </span><span class="infoText">Show all systems</span></span>
 		<span id="navSystemTitle"></span>
 		<i id="screenshotButton" class="fa fa-camera"></i>
