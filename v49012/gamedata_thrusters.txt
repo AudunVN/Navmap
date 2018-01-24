@@ -1,0 +1,11 @@
+2775046401 = dsy_capital_thruster, Capital Ship Thruster
+2418698114 = dsy_no_thruster, Nomad Thruster II
+2314753344 = ge_s_thruster_01, Standard Thruster
+2851612992 = ge_s_thruster_02, Deluxe Thruster
+2314747200 = ge_s_thruster_03, Heavy Thruster  
+2851656000 = ge_s_thruster_04, Advanced Thruster
+2314782016 = ge_s_thruster_05, Enhanced Thruster
+2851649856 = ge_s_thruster_06, Cheetah Thruster
+2585100745 = mars_flier_thruster, Marsflyer Thruster
+2347615178 = no_thruster, Nomad Thruster
+2328926920 = order_thruster, Order Thruster
