@@ -31,3 +31,5 @@ A complete change and issue log from before this project was moved to a GitHub r
  - Check if the OORP systems array in index.html needs updating
      - This thing really needs a per-version config file.
  - Update the data folder path at the top of index.html to point the map script at your new data folder
+ 
+ Regarding texture data: These have been made by bulk extraction using [UTF Editor](https://the-starport.net/freelancer/download/singlefile.php?cid=2&lid=23), and then bulk converted and renamed using IrFanView in a numerical pattern to ensure that there's at least one texture available from each .txm file named 01.jpg (since they may use more than one, and the navmap has no idea what they might be named in advance).
