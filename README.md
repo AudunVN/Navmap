@@ -3,7 +3,7 @@ A browser-based map viewer for the Freelancer mod Discovery. This also works for
 
 A complete change and issue log from before this project was moved to a GitHub repo may be found in  [this DiscoveryGC forum thread](http://discoverygc.com/forums/showthread.php?tid=132266&pid=1700007#pid1700007).
 
-##Updating instructions
+## Updating instructions
  - Create new data folder in the root directory of this repo (or somewhere else accessible, these are the v4XXXX folders)
  - Generate infocards.txt using FLInfocardIE, located in the /utils folder.
      - Open the program, point it at your FL directory, click "Load", then "Export" and select the folder from step 1 as your destination directory
