@@ -9,7 +9,7 @@ A complete change and issue log from before this project was moved to a GitHub r
      - Open the program, point it at your FL directory, click "Load", then "Export" and select the folder from step 1 as your destination directory
      - replace "\r\n\r\n" with "\r\n"
      - replace "\r\nNAME\r\n" with "\r\n"
-     - replace "\r\n\INFOCARD\r\n" with "\r\n"
+     - replace "\r\nINFOCARD\r\n" with "\r\n"
      - remove "\r\n" from start of file
  - Copy special_systems.txt into the folder from step 1 from the previous version
      - This file defines the house of each system using the prefix (IW, BW, etc.) in front of their full name. This is the closest Discovery has to a house definition file, unfortunately, and it's not kept up-to-date either - it frequently requires manual modification. 
