@@ -13,7 +13,7 @@
 	<script>
 	/* jquery cookie management methods */
 	!function(e){"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e(require("jquery")):e(jQuery)}(function(e){function n(e){return u.raw?e:encodeURIComponent(e)}function o(e){return u.raw?e:decodeURIComponent(e)}function i(e){return n(u.json?JSON.stringify(e):String(e))}function t(e){0===e.indexOf('"')&&(e=e.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\/g,"\\"));try{return e=decodeURIComponent(e.replace(c," ")),u.json?JSON.parse(e):e}catch(n){}}function r(n,o){var i=u.raw?n:t(n);return e.isFunction(o)?o(i):i}var c=/\+/g,u=e.cookie=function(t,c,s){if(arguments.length>1&&!e.isFunction(c)){if(s=e.extend({},u.defaults,s),"number"==typeof s.expires){var a=s.expires,d=s.expires=new Date;d.setMilliseconds(d.getMilliseconds()+864e5*a)}return document.cookie=[n(t),"=",i(c),s.expires?"; expires="+s.expires.toUTCString():"",s.path?"; path="+s.path:"",s.domain?"; domain="+s.domain:"",s.secure?"; secure":""].join("")}for(var f=t?void 0:{},p=document.cookie?document.cookie.split("; "):[],l=0,m=p.length;m>l;l++){var x=p[l].split("="),g=o(x.shift()),j=x.join("=");if(t===g){f=r(j,c);break}t||void 0===(j=r(j))||(f[g]=j)}return f};u.defaults={},e.removeCookie=function(n,o){return e.cookie(n,"",e.extend({},o,{expires:-1})),!e.cookie(n)}});
-	var dataRootPath = "v49021/";
+	var dataRootPath = "v49015/";
 	var currentSystem;
 	var nameRegex = /nickname = (.*)/g;
 	var idsNameRegex = /ids_name = (.*)/g;
@@ -2300,66 +2300,6 @@
 		border-color: rgb(89, 97, 255);
 	}
 	
-	.system[data-system-nickname="st03"] label {
-		transform: translateX(-0.35em);
-		-webkit-transform: translateX(-0.35em);
-	}
-	
-	.system[data-system-nickname="li07"] label {
-		transform: translateX(-0.35em);
-		-webkit-transform: translateX(-0.35em);
-	}
-	
-	.system[data-system-nickname="st05"] label {
-		transform: translateX(0.4em);
-		-webkit-transform: translateX(0.4em);
-	}
-	
-	.system[data-system-nickname="ew18"] label {
-		transform: translateX(0.25em);
-		-webkit-transform: translateX(0.25em);
-	}
-	
-	.system[data-system-nickname="ew85"] label {
-		transform: translateX(0.25em);
-		-webkit-transform: translateX(0.25em);
-	}
-	
-	.system[data-system-nickname="rh12"] label {
-		transform: translateX(1.25em);
-		-webkit-transform: translateX(1.25em);
-	}
-	
-	.system[data-system-nickname="ew06"] label {
-		transform: translateX(0.4em);
-		-webkit-transform: translateX(0.4em);
-	}
-	
-	.system[data-system-nickname="st04"] label {
-		transform: translateX(0.3em);
-		-webkit-transform: translateX(0.3em);
-	}
-	
-	.system[data-system-nickname="st03b"] label {
-		transform: translateX(0.45em);
-		-webkit-transform: translateX(0.45em);
-	}
-	
-	.system[data-system-nickname="st39"] label {
-		transform: translateX(-0.3em);
-		-webkit-transform: translateX(-0.3em);
-	}
-	
-	.system[data-system-nickname="st02c"] label {
-		transform: translateX(0.25em);
-		-webkit-transform: translateX(0.25em);
-	}
-	
-	.system[data-system-nickname="bw71"] label {
-		transform: translateX(-0.3em);
-		-webkit-transform: translateX(-0.3em);
-	}
-	
 	.zone {
 		background-color: rgba(255,255,255,0.1);
 		box-shadow: 0 0 0.1em 0.1em rgba(255,255,255,0.15);
@@ -3628,6 +3568,106 @@
 	
 	/* no temporary fixes! : ) wait no : ( */
 	
+	.system[data-system-nickname="st03"] label {
+		transform: translateX(-0.35em);
+		-webkit-transform: translateX(-0.35em);
+	}
+	
+	.system[data-system-nickname="li07"] label {
+		transform: translateX(-0.35em);
+		-webkit-transform: translateX(-0.35em);
+	}
+	
+	.system[data-system-nickname="li02"] label {
+		transform: translateX(-0.35em);
+		-webkit-transform: translateX(-0.35em);
+	}
+	
+	.system[data-system-nickname="li15"] label {
+		transform: translateX(-0.35em);
+		-webkit-transform: translateX(-0.35em);
+	}
+	
+	.system[data-system-nickname="st05"] label {
+		transform: translateX(0.4em);
+		-webkit-transform: translateX(0.4em);
+	}
+	
+	.system[data-system-nickname="ew18"] label {
+		transform: translateX(0.25em);
+		-webkit-transform: translateX(0.25em);
+	}
+	
+	.system[data-system-nickname="ew85"] label {
+		transform: translateX(0.25em);
+		-webkit-transform: translateX(0.25em);
+	}
+	
+	.system[data-system-nickname="rh12"] label {
+		transform: translateX(1.25em);
+		-webkit-transform: translateX(1.25em);
+	}
+	
+	.system[data-system-nickname="ew06"] label {
+		transform: translateX(0.4em);
+		-webkit-transform: translateX(0.4em);
+	}
+	
+	.system[data-system-nickname="st04"] label {
+		transform: translateX(0.3em);
+		-webkit-transform: translateX(0.3em);
+	}
+	
+	.system[data-system-nickname="st03b"] label {
+		transform: translateX(0.45em);
+		-webkit-transform: translateX(0.45em);
+	}
+	
+	.system[data-system-nickname="st39"] label {
+		transform: translateX(-0.3em);
+		-webkit-transform: translateX(-0.3em);
+	}
+	
+	.system[data-system-nickname="st02c"] label {
+		transform: translateX(0.25em);
+		-webkit-transform: translateX(0.25em);
+	}
+	
+	.system[data-system-nickname="bw71"] label {
+		transform: translateX(-0.3em);
+		-webkit-transform: translateX(-0.3em);
+	}
+	
+	.system[data-system-nickname="hi20"] label {
+		transform: translateX(-0.3em);
+		-webkit-transform: translateX(-0.3em);
+	}
+	
+	.system[data-system-nickname="st02"] label {
+		transform: translateX(0.3em);
+		-webkit-transform: translateX(0.3em);
+	}
+	
+	.system[data-system-nickname="ga02"] label {
+		transform: translateX(-0.5em);
+		-webkit-transform: translateX(-0.5em);
+	}
+	
+	.system[data-system-nickname="ga01"] label {
+		transform: translateX(-0.2em);
+		-webkit-transform: translateX(-0.2em);
+	}
+	
+	.system[data-system-nickname="ew15"] label {
+		transform: translateX(0.2em);
+		-webkit-transform: translateX(0.2em);
+	}
+
+	.system[data-system-nickname="st08"] label {
+		transform: translateX(-0.4em);
+		-webkit-transform: translateX(-0.4em);
+	}
+	
 	/* end temporary fixes */
 	
 	/* qTip2 v2.2.1 | Plugins: tips viewport modal | Styles: core basic css3 | qtip2.com | Licensed MIT | Sun Aug 09 2015 06:46:08 */
@@ -4051,7 +4091,7 @@
 </head>
 <body>
 	<nav class="navContainer">
-		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (10.05)</span></a>
+		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (13.05)</span></a>
 		<span id="showUniverseMap" onClick="generateUniverseMap()"><i class="fa fa-times-circle-o"></i><span class="infoSpace"> </span><span class="infoText">Show all systems</span></span>
 		<span id="navSystemTitle"></span>
 		<i id="screenshotButton" class="fa fa-camera"></i>
