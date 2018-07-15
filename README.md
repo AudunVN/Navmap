@@ -18,16 +18,18 @@ A complete change and issue log from before this project was moved to a GitHub r
  - Copy DATA/SOLAR/solararch.ini into the folder from step 1
  - Copy the contents of the IONCROSS folder from the Freelancer root directory into the folder from step 1
  - Create a folder named "solar" in the folder from step 1
+ - Create a folder named "asteroids" in the folder from the previous step (so you should have the version directory, solar underneath that, and asteroids underneath that)
      - Copy the DATA/SOLAR/ASTEROIDS folder (minus MODELS, if you wish - the map doesn't use it) into this folder
  - Create a folder named "universe" in the folder from step 1
+ - Create a folder named "systems" in the folder from the previous step (so you should have the version directory, universe underneath that, and systems underneath that)
      - Copy the DATA/UNIVERSE/SYSTEMS folder (minus BASE_INTERIORS, if you wish - the map doesn't use it) into this folder
-	 - Copy DATA/UNIVERSE/universe.ini into this folder
-	 - Copy DATA/UNIVERSE/multiverse.ini into this folder
-	 - Run FL_Path_Generator.jar on your Freelancer installation, for good measure
-	 - Copy DATA/UNIVERSE/shortest_illegal_path.ini into this folder
-	 - Copy DATA/UNIVERSE/shortest_legal_path.ini into this folder
-	 - Copy DATA/UNIVERSE/systems_shortest_path.ini into this folder
- - Depending on your web server and/or file system, you may need to lowercase absolutely everything; this can be done using the Metamorphose2 tool in the /utils folder on Windows, or your favorite command line tool or whatnot.
+ - Copy DATA/UNIVERSE/universe.ini into the universe folder
+ - Copy DATA/UNIVERSE/multiuniverse.ini into the universe folder
+ - Run FL_Path_Generator.jar on your Freelancer installation, for good measure
+ - Copy DATA/UNIVERSE/shortest_illegal_path.ini into the universe folder
+ - Copy DATA/UNIVERSE/shortest_legal_path.ini into the universe folder
+ - Copy DATA/UNIVERSE/systems_shortest_path.ini into the universe folder
+ - Depending on your web server and/or file system, you may need to lowercase absolutely everything; this can be done using the Metamorphose2 tool in the /utils folder on Windows (pick all files in the directory created in step 1 recursively, and in the renamer add a modifications operation with Change case: lowercase, then Go - do this again non-recursively on the contents of the universe/systems directory), or your favorite command line tool or whatnot.
  - Check if the OORP systems array in index.html needs updating
      - This thing really needs a per-version config file.
  - Update the data folder path at the top of index.html to point the map script at your new data folder
