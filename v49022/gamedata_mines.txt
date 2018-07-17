@@ -1,0 +1,12 @@
+2300089610 = mine01_mark01, Drone Mine Dropper
+2836982026 = mine01_mark02, Wardog Mine Dropper
+2300116234 = mine01_mark03, Tadpole Mine Dropper
+2836926730 = mine01_mark04, Swatter Mine Dropper
+2300052746 = mine01_mark05, Screamer Mine Dropper
+2836977929 = mine02_mark01, Seeker Mine Dropper
+2300093705 = mine02_mark02, Razor Mine Dropper
+2836967689 = mine02_mark03, Driller Mine Dropper
+2300075273 = mine02_mark04, Cutter Mine Dropper
+2836941065 = mine02_mark05, Ripper Mine Dropper
+2300065033 = mine02_mark06, Nuclear Mine Dropper
+2858128009 = dsy_nomad_mine01, Nomad Mine Dropper

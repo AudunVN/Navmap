@@ -1,0 +1,10 @@
+2723858309 = ge_s_scanner_01, Scanner
+2186984325 = ge_s_scanner_02, Deep Scanner
+2723852165 = ge_s_scanner_03, Advanced Scanner
+2186953605 = ge_s_scanner_04, Discovery Scanner
+2723829637 = ge_s_scanner_05, Spyglass Scanner
+2186947461 = ge_s_scanner_06, Cargo Scanner
+2723823493 = ge_s_scanner_07, Improved Cargo Scanner
+2187064197 = ge_s_scanner_08, Advanced Cargo Scanner
+2723932037 = ge_s_scanner_09, Endeavour Scanner
+2187252623 = ge_s_scanner_10, Battleship Scanner
