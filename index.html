@@ -30,6 +30,7 @@
 	var commodityNameFile = dataRootPath+"gamedata_cargo.txt";
 	var systemPathFile = dataRootPath+"universe/systems_shortest_path.ini";
 	var systemLegalPathFile = dataRootPath+"universe/shortest_legal_path.ini";
+	var noNavmapFile = dataRootPath+"universe/nonavmap.ini";
 	var infocardFile = dataRootPath+"infocards.txt";
 	var universeFile = dataRootPath+"universe/universe.ini";
 	var infocardMapFile = dataRootPath+"infocardmap.ini";
@@ -105,6 +106,8 @@
 	var commodityNameArrayState = "nope";
 	var connectionArray = {};
 	var connectionArrayState = "nope";
+	var noNavmapArray = {};
+	var noNavmapArrayState = "nope";
 	var solarArchArray = {};
 	var solarArchArrayState = "nope";
 	var jgConnectionArray = {};
@@ -543,6 +546,16 @@
 			}
 			infocardArrayState = "ready";
 			console.log("Infocard lookup array generated");
+		});
+
+		/* infocardMapArray references infocard IDS numbers to infocards. */		
+		$.get(noNavmapFile, function(data) {
+			var rawInfocardArray = data.replace(/\r/g,"").split("\n");
+			for (i = 0; i < rawInfocardArray.length-1; i += 2) { 
+				infocardArray[rawInfocardArray[i].toString()] = rawInfocardArray[i+1].toString();
+			}
+			noNavmapArrayState = "ready";
+			console.log("Navmapless system lookup array generated");
 		});
 		
 		/* systemPathArray lists systems connected to the input system (by jump gate or jump hole). */
