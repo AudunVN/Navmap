@@ -1472,7 +1472,10 @@
 			classArray.push("wPlatform");
 		}
 		if (objectString.indexOf("loadout =") != -1 && objectString.indexOf("reputation =") == -1) {
-			classArray.push("wreck");
+			/* hides unnamed wrecks */
+			if (objectString.indexOf("ids_name") != -1) {
+				classArray.push("wreck");
+			}
 		}
 		if (nameString.toLowerCase().indexOf("proxy_base") != -1) {
 			classArray.push("proxyBase");
