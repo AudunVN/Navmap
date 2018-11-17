@@ -36,6 +36,7 @@
 	var solarArchFile = dataRootPath+"solararch.ini";
 	var planetTextureRootPath = "textures/planets/";
 	var objectRegex = /(\n[^\r\n;]*\[[Oo]bject\])([^;\[]*(?=\n\w*|$))/g;
+	var ignoreObjectRegex = /archetype\s*=\s*(dsy_suprise_secret|suprise_ku_dragon_secret|suprise_dsy_gmg_vhf_secret|suprise_dsy_or_hf_secret|suprise_bw_elite2_secret|suprise_dsy_bayonet_secret|suprise_b_battleship_secret)/g;
 	var zoneRegex = /(\n[^\r\n;]*\[[Zz]one\])([^;\[]*(?=\n\w*|$))/g;
 	var zoneNicknameRegex = /zone = ([^\r\n;]*)/g;
 	var asteroidsRegex = /(\[[Aa]steroids\])(\r\n.+)*/g;
@@ -1271,7 +1272,10 @@
 				// generate objects
 				var sysObjectArray = data.match(objectRegex);
 				if (sysObjectArray !== null) {
-					for (i = 0; i < sysObjectArray.length; i++) { 
+					for (i = 0; i < sysObjectArray.length; i++) {
+						if (sysObjectArray[i].match(ignoreObjectRegex)) {
+							continue;
+						}
 						var objectName;
 						var object = document.createElement("div");
 						var posString = sysObjectArray[i].match(posRegex).join().substring(6).replace(/ /g,"");
