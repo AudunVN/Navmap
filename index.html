@@ -43,7 +43,8 @@
 		"suprise_dsy_or_hf_secret",
 		"suprise_bw_elite2_secret",
 		"suprise_dsy_bayonet_secret",
-		"suprise_b_battleship_secret"
+		"suprise_b_battleship_secret",
+		"invisible_base"
 	];
 	var baseIgnoreArray = [
 		"ga07_04",
@@ -55,6 +56,14 @@
 		"base\\s*=\\s*(" + baseIgnoreArray.join("_base|") + ")" +
 		"|" + 
 		"archetype\\s*=\\s*(" + archetypeIgnoreArray.join("|") + ")", 'g'
+	);
+	var archetypeShowArray = [
+		"ithaca_station",
+		"junction_wreck",
+		"space_beamx_messina"
+	];
+	var showObjectRegex = new RegExp(
+		"archetype\\s*=\\s*(" + archetypeShowArray.join("|") + ")", 'g'
 	);
 	var zoneRegex = /(\n[^\r\n;]*\[[Zz]one\])([^;\[]*(?=\n\w*|$))/g;
 	var zoneNicknameRegex = /zone = ([^\r\n;]*)/g;
