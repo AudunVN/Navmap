@@ -43,10 +43,19 @@
 		"suprise_dsy_or_hf_secret",
 		"suprise_bw_elite2_secret",
 		"suprise_dsy_bayonet_secret",
-		"suprise_b_battleship_secret",
-		"invisible_base"
+		"suprise_b_battleship_secret"
 	];
-	var ignoreObjectRegex = new RegExp("archetype\\s*=\\s*(" + archetypeIgnoreArray.join("|") + ")", 'g');
+	var baseIgnoreArray = [
+		"ga07_04",
+		"ga07_07"
+	];
+	var ignoreObjectRegex = new RegExp(
+		"nickname\\s*=\\s*(" + baseIgnoreArray.join("|") + ")" +
+		"|" + 
+		"base\\s*=\\s*(" + baseIgnoreArray.join("_base|") + ")" +
+		"|" + 
+		"archetype\\s*=\\s*(" + archetypeIgnoreArray.join("|") + ")", 'g'
+	);
 	var zoneRegex = /(\n[^\r\n;]*\[[Zz]one\])([^;\[]*(?=\n\w*|$))/g;
 	var zoneNicknameRegex = /zone = ([^\r\n;]*)/g;
 	var asteroidsRegex = /(\[[Aa]steroids\])(\r\n.+)*/g;
@@ -710,11 +719,13 @@
 			}
 			/* add base names to search array */
 			var universeBaseArray = universeFileGetResult.match(baseRegex);
+			console.log(universeBaseArray);
 			for (i = 0; i < universeBaseArray.length; i++) {
 				if (universeBaseArray[i].toLowerCase().indexOf("proxy_base") == -1 
 					&& universeBaseArray[i].toLowerCase().indexOf("miners") == -1
 					&& universeBaseArray[i].toLowerCase().indexOf("system =") != -1
-					&& universeBaseArray[i].toLowerCase().indexOf("strid_name") != -1) {
+					&& universeBaseArray[i].toLowerCase().indexOf("strid_name") != -1
+					&& !universeBaseArray[i].toLowerCase().match(ignoreObjectRegex)) {
 					var baseName = infocardArray[universeBaseArray[i].toLowerCase().match(idsSysNameRegex).join().substring(13)];
 					var systemNickname = universeBaseArray[i].toLowerCase().match(sysNameRegex).join().substring(9);
 					if (typeof baseName !== "undefined" && typeof systemNickname !== "undefined") {
@@ -1283,7 +1294,7 @@
 				var sysObjectArray = data.match(objectRegex);
 				if (sysObjectArray !== null) {
 					for (i = 0; i < sysObjectArray.length; i++) {
-						if (sysObjectArray[i].match(ignoreObjectRegex)) {
+						if (sysObjectArray[i].toLowerCase().match(ignoreObjectRegex)) {
 							continue;
 						}
 						var objectName;
