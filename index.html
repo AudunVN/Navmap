@@ -2502,7 +2502,8 @@
 		top: 65%;
 	}
 	
-	.showAllObjects .object.unclassified {
+	.showAllObjects .object.unclassified,
+	.showAllObjects .object.jump.unusableJump {
 		display: block !important;
 	}
 	
@@ -2673,6 +2674,10 @@
 	
 	.jump.gate {
 		background: gray;
+	}
+
+	.jump.unusableJump:not([data-ids-name]) {
+		display: none;
 	}
 	
 	.jump.gate.unusableJump {
