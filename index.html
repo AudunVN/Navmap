@@ -92,6 +92,9 @@
 	var infocardMapRegex = /[^;][Mm]ap *= *([^;\n\r]+)/g;
 	var zoneTypeRegex = /property_flags = (.*)/g;
 	var nameRegex = /nickname = ([^\r\n;]*)/g;
+	var solarRadiusRegex = /solar_radius = ([^\r\n;]*)/;
+	var solarTypeRegex = /type = ([^\r\n;]*)/;
+	var solarShapeRegex = /solar_shape = ([^\r\n;]*)/;
 	var textureRegex = /material_library = ([^\r\n;]*)/;
 	var textureFluffStringRegex = /material_library *= *solar\\planets\\/g;
 	var textureFileRegex = /(\\)([^;\\\r\n\.]*)(?=[\.\r\n])/;
@@ -628,15 +631,32 @@
 		$.get(solarArchFile, function(data) {
 			var solarArray = data.replace(commentRegex,"").match(solarRegex);
 			for (i = 0; i < solarArray.length; i++) {
-				if (solarArray[i].toLowerCase().match(nameRegex) && solarArray[i].toLowerCase().match(textureRegex) && solarArray[i].toLowerCase().match(nameRegex).join().indexOf("planet_") != -1) {
+				if (solarArray[i].toLowerCase().match(nameRegex)) {
 					var nicknameString = solarArray[i].toLowerCase().match(nameRegex).join().substring(11);
-					var textureFileString = solarArray[i].toLowerCase().match(textureRegex)[0].replace(textureFluffStringRegex,"");
-					var textureString = planetTextureRootPath+textureFileString;
-					solarArchArray[nicknameString.toLowerCase()] = textureString+"/01.jpg";
+					var solarArchObject = {};
+
+					if (solarArray[i].toLowerCase().match(textureRegex) && solarArray[i].toLowerCase().match(nameRegex).join().indexOf("planet_") != -1) {
+						var textureFileString = solarArray[i].toLowerCase().match(textureRegex)[0].replace(textureFluffStringRegex,"");
+						solarArchObject.texturePath = planetTextureRootPath + textureFileString + "/01.jpg";
+					}
+
+					if (solarArray[i].toLowerCase().match(solarTypeRegex)) {
+						solarArchObject.type = solarArray[i].toLowerCase().match(solarTypeRegex)[1];
+					}
+
+					if (solarArray[i].toLowerCase().match(solarRadiusRegex)) {
+						solarArchObject.radius = solarArray[i].toLowerCase().match(solarRadiusRegex)[1];
+					}
+
+					if (solarArray[i].toLowerCase().match(solarShapeRegex)) {
+						solarArchObject.shape = solarArray[i].toLowerCase().match(solarShapeRegex)[1];
+					}
+					
+					solarArchArray[nicknameString.toLowerCase()] = solarArchObject;
 				}
 			}
 			solarArchArrayState = "ready";
-			console.log("Texture lookup array generated");
+			console.log("Solar Archetype lookup array generated");
 		});
 		
 		/* systemIdsNameArray maps system nicknames to IDS infocard numbers for their in-game names. */
@@ -728,7 +748,6 @@
 			}
 			/* add base names to search array */
 			var universeBaseArray = universeFileGetResult.match(baseRegex);
-			console.log(universeBaseArray);
 			for (i = 0; i < universeBaseArray.length; i++) {
 				if (universeBaseArray[i].toLowerCase().indexOf("proxy_base") == -1 
 					&& universeBaseArray[i].toLowerCase().indexOf("miners") == -1
@@ -1364,14 +1383,53 @@
 						if (sysObjectArray[i].indexOf("reputation =") != -1) {
 							object.dataset.reputation = sysObjectArray[i].match(repRegex).join().substring(13);
 						}
-						if (object.className.indexOf("star") != -1) {
-							var innerStar = document.createElement("div");
-							innerStar.className = "star";
-							innerStar.style.top = "50%";
-							innerStar.style.left = "50%";
-							innerStar.style.position = "absolute";
-							object.appendChild(innerStar);
+						if (sysObjectArray[i].indexOf("archetype") != -1) {
+							var objectArchetype = sysObjectArray[i].match(archetypeRegex).join().substring(12).replace(/ /g,"");
+							object.dataset.archetype = objectArchetype;
+							if (typeof solarArchArray[objectArchetype] !== "undefined") {
+								if (typeof solarArchArray[objectArchetype].texturePath !== "undefined") {
+									object.style.backgroundImage = "url("+solarArchArray[objectArchetype].texturePath+")";
+								}
+								if (typeof solarArchArray[objectArchetype].radius !== "undefined" && (object.className.indexOf("star") != -1 || object.className.indexOf("planet") != -1)) {
+									var rawObjectRadius = parseFloat(solarArchArray[objectArchetype].radius);
+									var objectRadius = parseFloat(solarArchArray[objectArchetype].radius/2000*systemScaleFactor);
+									object.dataset.radius = solarArchArray[objectArchetype].radius;
+									object.style.width = objectRadius*2 + "%";
+									object.style.height = objectRadius*2 + "%";
+									object.style.marginTop = -objectRadius + "%";
+									object.style.marginLeft = -objectRadius + "%";
+									object.style.zIndex = Math.floor(-objectRadius*2);
+								}
+							}
 						}
+						if (objectRadius && sysObjectArray[i].indexOf("atmosphere_range =") != -1) {
+							if (object.className.indexOf("star") != -1 || object.className.indexOf("planet") != -1) {
+								var atmosphere = document.createElement("div");
+								var rawAtmosphereRadius = parseFloat(sysObjectArray[i].match(atmosphereRadiusRegex).join().substring(19));
+								var atmosphereRadius = 50*rawAtmosphereRadius/rawObjectRadius;
+
+								atmosphere.className = "atmosphere";
+								atmosphere.style.top = "50%";
+								atmosphere.style.left = "50%";
+								atmosphere.style.marginTop = -atmosphereRadius + "%";
+								atmosphere.style.marginLeft = -atmosphereRadius + "%";
+								atmosphere.style.position = "absolute";
+
+								atmosphere.style.width = atmosphereRadius*2 + "%";
+								atmosphere.style.height = atmosphereRadius*2 + "%";
+
+								atmosphere.style.zIndex = -1;
+
+								object.style.zIndex = Math.floor(-rawAtmosphereRadius/2000*systemScaleFactor);
+
+								object.appendChild(atmosphere);
+
+								if (rawAtmosphereRadius < rawObjectRadius*1.25 || (objectRadius < 2 && rawAtmosphereRadius < rawObjectRadius*1.5)) {
+									atmosphere.style.display = "none";
+								}
+							}
+						}
+
 						if (sysObjectArray[i].indexOf("burn_color") != -1) {
 							var burnColourString = sysObjectArray[i].match(burnColourRegex).join().substring(13).replace(/ /g,"");
 							var burnColourArray = burnColourString.split(",");
@@ -1379,30 +1437,7 @@
 							object.style.backgroundColor = burnColourString;
 							if (object.className.indexOf("star") != -1) {
 								object.style.boxShadow += " "+burnColourString;
-								innerStar.style.boxShadow += " "+burnColourString;
-								innerStar.style.backgroundColor = burnColourString;
-							}
-						}
-						if (sysObjectArray[i].indexOf("archetype") != -1) {
-							var objectArchetype = sysObjectArray[i].match(archetypeRegex).join().substring(12).replace(/ /g,"");
-							object.dataset.archetype = objectArchetype;
-							if (typeof solarArchArray[objectArchetype] !== "undefined") {
-								object.style.backgroundImage = "url("+solarArchArray[objectArchetype]+")";
-							}
-						}
-						if (sysObjectArray[i].indexOf("atmosphere_range =") != -1) {
-							var objectRadius = parseFloat(sysObjectArray[i].match(atmosphereRadiusRegex).join().substring(19))/2000*systemScaleFactor;
-							object.style.width = objectRadius*2 + "%";
-							object.style.height = objectRadius*2 + "%";
-							object.style.marginTop = -objectRadius + "%";
-							object.style.marginLeft = -objectRadius + "%";
-							object.style.zIndex = Math.floor(-objectRadius);
-							if (object.className.indexOf("star") != -1) {
-								object.style.borderSizing = "border-box";
-								object.style.border = "solid red 1px";
-								object.style.boxShadow = "none";
-								object.style.backgroundColor = "transparent";
-								object.style.background = "transparent";
+								atmosphere.style.boxShadow += " "+burnColourString;
 							}
 						}
 						if (object.className == "object") {
@@ -1459,7 +1494,7 @@
 			for (var zoneNickname in sysLootableZoneArray) {
 				zoneNickname = zoneNickname.toLowerCase();
 				if (document.querySelector("[data-internal-nickname="+zoneNickname+"] label") !== null) {
-					console.log("adding mineable zone "+zoneNickname);
+					console.log("Adding lootable zone "+zoneNickname);
 					var currentZone = document.querySelector("[data-internal-nickname="+zoneNickname+"]");
 					var currentZoneLabel = document.querySelector("[data-internal-nickname="+zoneNickname+"] label");
 					var mineIcon = '<svg class="mineableIcon" id="Слой_1" style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M256.001,6C117.928,6,6,117.929,6,256c0,138.071,111.928,250,250.001,250  C394.072,506,506,394.071,506,256C506,117.929,394.072,6,256.001,6z M217.135,399.953c-1.43,3.027-5.043,4.315-8.068,2.881  l-32.872-15.559c-3.022-1.43-4.311-5.041-2.881-8.066l8.401-17.02c1.133,0.677,2.166,1.252,3.045,1.667  c8.685,4.096,29.274,7.318,44.631,9.271L217.135,399.953z M294.363,291.966c-2.992,6.319-10.547,9.021-16.873,6.029  c6.326,2.992,9.029,10.546,6.034,16.87c-2.992,6.321-10.547,9.023-16.873,6.029c6.326,2.994,9.028,10.544,6.032,16.868  c-2.991,6.324-10.548,9.021-16.87,6.029c6.323,2.992,9.028,10.546,6.032,16.87c-2.481,5.242-8.091,7.934-13.538,7.018l-0.007,0.056  c0,0-47.308-4.48-60.319-10.61c-0.008-0.007-0.015-0.008-0.028-0.016c-7.87-3.725-30.067-21.676-40.265-30.074  c-3.42-2.823-6.494-6.006-9.171-9.547c-1.74-2.305-5.301-5.199-7.909-6.434l-42.835-20.277c-5.457-2.584-8.383-8.585-7.046-14.469  c4.223-18.568,12.183-37.279,28.923-60.216c3.645-4.995,10.298-6.7,15.889-4.053l39.03,18.478  c10.448,4.945,27.898,5.808,38.78,1.918l6.535-2.334c4.491-1.606,11.68-1.249,15.99,0.79l7.516,3.56  c1.277,0.601,1.824,2.134,1.223,3.409l-2.233,4.72c-2.14,8.37,5.245,14.681,15.448,19.51c13.981,6.618,33.247,10.454,40.505,13.004  C294.655,278.088,297.355,285.64,294.363,291.966z M430.383,263.831c-1.004,0.586-2.281,0.384-3.056-0.482  c-30.99-34.623-67.257-63.727-108.513-86.006l-39.883,87.315c-8.446-2.268-19.427-5.299-27.916-9.317  c-4.489-2.126-11.708-6.194-11.494-10.263l42.138-85.371c-43.573-17.951-89.281-27.625-135.923-29.657  c-1.164-0.054-2.127-0.914-2.313-2.062c-0.181-1.144,0.469-2.263,1.556-2.674c52.527-19.817,106.815-22.695,156.165-5.084  l3.191-6.473c1.435-3.027,5.046-4.316,8.071-2.885l24.829,11.752c3.022,1.43,4.315,5.044,2.881,8.071l-3.03,6.634  c44.552,27.036,76.507,70.68,94.382,123.602C431.839,262.034,431.387,263.244,430.383,263.831z" style="fill:#FFFFFF;"/></svg>';
@@ -1505,7 +1540,9 @@
 		if (objectString.indexOf("loadout =") != -1 && (nameString.toLowerCase().indexOf("wplatform") != -1 || objectString.toLowerCase().indexOf("261164") != -1)) {
 			classArray.push("wPlatform");
 		}
-		if (objectString.indexOf("loadout =") != -1 && objectString.indexOf("reputation =") == -1) {
+
+		/* the jumphole bit is required since we have some very silly jumpholes with loadouts in the mod. */
+		if (objectString.indexOf("loadout =") != -1 && objectString.indexOf("reputation =") == -1 && objectString.toLowerCase().indexOf("archetype = jumphole") == -1) {
 			/* hides unnamed wrecks */
 			if (objectString.indexOf("ids_name") != -1) {
 				classArray.push("wreck");
@@ -2499,7 +2536,7 @@
 	}
 	
 	.map div.object.star label {
-		top: 65%;
+		top: 110%;
 	}
 	
 	.showAllObjects .object.unclassified,
@@ -2740,7 +2777,7 @@
 		background-size: cover;
 	}
 	
-	.planet:after, .star .star:after {
+	.planet:after, .star:after {
 		content: "";
 		background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0, rgba(0,0,0,0) 45%,rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.6) 90%, rgba(0,0,0,1) 100%);
 		width: 100%;
@@ -2748,8 +2785,15 @@
 		display: block;
 		border-radius: 100%;
 		position: absolute;
-    		top: 0;
-    		left: 0;
+		top: 0;
+		left: 0;
+	}
+
+	.atmosphere {
+		border-radius: 50%;
+		border: 1px solid red;
+		z-index: -1;
+		box-sizing: content-box;
 	}
 	
 	.zone.roundZone.zoneMinefield2:after,
@@ -4133,7 +4177,7 @@
 </head>
 <body>
 	<nav class="navContainer">
-		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (23.11)</span></a>
+		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (25.11)</span></a>
 		<span id="showUniverseMap" onClick="generateUniverseMap()"><i class="fa fa-times-circle-o"></i><span class="infoSpace"> </span><span class="infoText">Show all systems</span></span>
 		<span id="navSystemTitle"></span>
 		<i id="screenshotButton" class="fa fa-camera"></i>
