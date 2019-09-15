@@ -1,0 +1,51 @@
+{
+	"fl_path": "",
+	"files": [
+		{
+			"path": "DATA/MISSIONS/mbases.ini",
+			"dest": "mbases.ini"
+		},
+		{
+			"path": "DATA/INTERFACE/infocardmap.ini",
+			"dest": "infocardmap.ini"
+		},
+		{
+			"path": "DATA/SOLAR/solararch.ini",
+			"dest": "solararch.ini"
+		},
+		{
+			"path": "DATA/UNIVERSE/universe.ini",
+			"dest": "universe/universe.ini"
+		},
+		{
+			"path": "DATA/UNIVERSE/multiuniverse.ini",
+			"dest": "universe/multiuniverse.ini"
+		},
+		{
+			"path": "DATA/UNIVERSE/shortest_illegal_path.ini",
+			"dest": "universe/shortest_illegal_path.ini"
+		},
+		{
+			"path": "DATA/UNIVERSE/shortest_legal_path.ini",
+			"dest": "universe/shortest_legal_path.ini"
+		},
+		{
+			"path": "DATA/UNIVERSE/systems_shortest_path.ini",
+			"dest": "universe/systems_shortest_path.ini"
+		}
+	],
+	"directories": [
+		{
+			"path": "IONCROSS",
+			"dest": ""
+		},
+		{
+			"path": "DATA/SOLAR/ASTEROIDS",
+			"dest": "solar/asteroids"
+		},
+		{
+			"path": "DATA/UNIVERSE/SYSTEMS",
+			"dest": "universe/systems"
+		}
+	]
+}
