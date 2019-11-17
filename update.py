@@ -146,7 +146,7 @@ def build_update():
 
 	fl_path = Path(config["fl_path"])
 	if config["fl_path"] == "":
-		print("No FL path set in \"update/build.json\", looking for for Discovery install...")
+		print("No FL path set in \"update/build.json\", looking for Discovery install...")
 		found_fl_path = get_freelancer_path(os.getenv('LOCALAPPDATA'))
 		if found_fl_path == "":
 			print("Discovery install directory not found, aborting")
