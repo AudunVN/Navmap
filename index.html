@@ -348,6 +348,12 @@
 		} else {
 			$(".map").addClass("showOldPlayerShipPositions");
 		}
+
+		if (document.querySelector(".configOption#showInternalNicknames input").checked) {
+			$(".map").addClass("showInternalNicknames");
+		} else {
+			$(".map").removeClass("showInternalNicknames");
+		}
 		
 		if (document.querySelector(".configOption#wreckLabels input").checked) {
 			$(".object.wreck label").removeClass("hidden");
@@ -473,9 +479,7 @@
 			$(".map").removeClass("showInfocardedObjectLabels");
 		}
 		
-		if (document.querySelector(".map .system") == null) {
-			generateTooltips();
-		}
+		generateTooltips();
 		
 		console.log("Config classes updated");
 	}
@@ -1714,28 +1718,31 @@
 	
 	function generateTooltips() {
 		$( ".qtip" ).remove();
-		$('.zone[data-z-pos][data-z-pos!=""][data-z-pos!=0], .object[data-z-pos][data-z-pos!=""][data-z-pos!=0], .object[data-ids-name]:has(label:hidden), .zone[data-ids-name]:has(label:hidden), .object.unclassified').qtip({
+		$('.zone[data-z-pos][data-z-pos!=""][data-z-pos!=0], .object[data-z-pos][data-z-pos!=""][data-z-pos!=0], .object[data-ids-name]:has(label:hidden), .zone[data-ids-name]:has(label:hidden), .object.unclassified, .map.showInternalNicknames [data-internal-nickname], .map.showInternalNicknames [data-system-nickname]').qtip({
 			content: {
 				text: function(event, api) {
+					var internalNicknameShown = false;
 					var tooltipString = "";
 
-					if ($(this).has("label:hidden").length !== 0 && $(this).attr('data-ids-name') !== "undefined" && typeof infocardArray[$(this).attr('data-ids-name')] !== "undefined") {
+					if ($(this).has("label:hidden").length !== 0 && typeof $(this).attr('data-ids-name') !== "undefined" && typeof infocardArray[$(this).attr('data-ids-name')] !== "undefined") {
 						if (parseInfocard(infocardArray[$(this).attr('data-ids-name')]).trim() == "") {
 							/* this is a trade lane or something else with a blank infocard. */
 							if ($(this).hasClass("tradelane")) {
 								tooltipString += "Trade Lane";
 							} else {
 								tooltipString += $(this).attr('data-internal-nickname');
+								internalNicknameShown = true;
 							}
 						} else {
 							tooltipString += parseInfocard(infocardArray[$(this).attr('data-ids-name')]);
 						}
 					} else if ($(this).hasClass("unclassified")) {
 						tooltipString += $(this).attr('data-internal-nickname');
+						internalNicknameShown = true;
 					} else if ($(this).hasClass("playerShip")) {
 						tooltipString += $(this).children("label").text();
 					}
-					if ($(this).attr('data-z-pos') !== "undefined" && $(this).attr('data-z-pos') !== "0") {
+					if (typeof $(this).attr('data-z-pos') !== "undefined" && $(this).attr('data-z-pos') !== "0") {
 						if (tooltipString !== "") {
 							tooltipString += ", ";
 						}
@@ -1751,6 +1758,14 @@
 							tooltipString += Math.abs(zHeight)+"K down";
 						}
 					}
+
+					if (document.querySelector(".map.showInternalNicknames") && typeof $(this).data('internal-nickname') !== "undefined" && !internalNicknameShown) {
+						tooltipString += " [" + $(this).data('internal-nickname') + "]";
+					}
+					if (document.querySelector(".map.showInternalNicknames") && typeof $(this).data('system-nickname') !== "undefined") {
+						tooltipString += " [" + $(this).data('system-nickname') + "]";
+					}
+
 					if (tooltipString !== "") {
 						return tooltipString;
 					}
@@ -3363,6 +3378,14 @@
 	.map.showOldPlayerShipPositions .object.playerShip {
 		display: block;
 	}
+
+	.map .internalNickname {
+		display: none;
+	}
+	
+	.map.showInternalNicknames .internalNickname {
+		display: inline;
+	}
 	
 	.object.playerShip.latestPos {
 		display: block;
@@ -4179,7 +4202,7 @@
 </head>
 <body>
 	<nav class="navContainer">
-		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (28.03)</span></a>
+		<a href="http://discoverygc.com/forums/showthread.php?tid=132266" id="helpLink" target="_blank"><i class="fa fa-question-circle"></i><span class="infoSpace"> </span><span class="infoText">Post issues/suggestions here ~Space/Error (12.04)</span></a>
 		<span id="showUniverseMap" onClick="generateUniverseMap()"><i class="fa fa-times-circle-o"></i><span class="infoSpace"> </span><span class="infoText">Show all systems</span></span>
 		<span id="navSystemTitle"></span>
 		<i id="screenshotButton" class="fa fa-camera"></i>
@@ -4254,6 +4277,10 @@
 		<div class="configOption" id="showAllObjectLabels">
 			<input type="checkbox" id="switch14" name="switch14" class="switch" />
 			<label for="switch14">show all object labels</label>
+		</div>
+		<div class="configOption" id="showInternalNicknames">
+			<input type="checkbox" id="switch17" name="switch17" class="switch" />
+			<label for="switch17">show internal nicknames on hover</label>
 		</div>
 		<div class="configOption" id="onlyShowLatestPosition">
 			<input type="checkbox" checked="checked" id="switch16" name="switch16" class="switch" />
