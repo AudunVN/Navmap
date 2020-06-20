@@ -6,6 +6,14 @@
 			"dest": "mbases.ini"
 		},
 		{
+			"path": "DATA/initialworld.ini",
+			"dest": "initialworld.ini"
+		},
+		{
+			"path": "DATA/EQUIPMENT/select_equip.ini",
+			"dest": "select_equip.ini"
+		},
+		{
 			"path": "DATA/INTERFACE/infocardmap.ini",
 			"dest": "infocardmap.ini"
 		},
@@ -35,10 +43,6 @@
 		}
 	],
 	"directories": [
-		{
-			"path": "IONCROSS",
-			"dest": ""
-		},
 		{
 			"path": "DATA/SOLAR/ASTEROIDS",
 			"dest": "solar/asteroids"

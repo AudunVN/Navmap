@@ -24,10 +24,9 @@
 	var scaleRegex = /navmapscale = (.*)/g;
 	var commentRegex = /[\n\r]+;+.*/g;
 	var currentSystemNickname = "Sirius";
-	var baseNameFile = dataRootPath+"gamedata_bases.txt";
 	var systemNameFile = dataRootPath+"special_systems.txt";
-	var factionNameFile = dataRootPath+"gamedata_factions.txt";
-	var commodityNameFile = dataRootPath+"gamedata_cargo.txt";
+	var initialWorldFile = dataRootPath+"initialworld.ini";
+	var commodityFile = dataRootPath+"select_equip.ini";
 	var systemPathFile = dataRootPath+"universe/systems_shortest_path.ini";
 	var systemLegalPathFile = dataRootPath+"universe/shortest_legal_path.ini";
 	var infocardFile = dataRootPath+"infocards.txt";
@@ -76,6 +75,8 @@
 	var lootableZoneAsteroidDifficultyRegex = /asteroid_loot_difficulty = (.*)/g;
 	var lootableZoneAsteroidCountRegex = /asteroid_loot_count = (.*)/g;
 	var activeAsteroidGetRequests = -1;
+	var groupRegex = /(\n[^\r\n;]*\[[Gg]roup\])([^;\[]*(?=\n\w*|$))/g;
+	var commodityRegex = /(\n[^\r\n;]*\[[Cc]ommodity\])([^;\[]*(?=\n\w*|$))/g
 	var ambientRegex = /(\n[^\r\n;]*\[[Aa]mbient\])([^;\[]*(?=\n\w*|$))/g;
 	var systemRegex = /(\n[^\r\n;]*\[[Ss]ystem\])([^;\[]*(?=\n\w*|$))/g;
 	var solarRegex = /(\n[^\r\n;]*\[[Ss]olar\])([^;\[]*(?=\n\w*|$))/g;
@@ -510,18 +511,6 @@
 			cache: true
 		});
 		
-		/* baseNameArray references internal nicknames to base names from the IONCROSS data included with the mod. This is... unused? Uh. Should probably be removed! */
-		/* Using the IONCROSS files was mostly a relic from the early days of the map, when they seemed like the quickest way to get the data I was looking for, but 
-		   they are relatively seldom updated and /not/ recommended for use. */
-		$.get(baseNameFile, function(data) {
-			var nameArray = data.split("\n");
-			for (i = 0; i < nameArray.length; i++) { 
-				var keyPairArray = nameArray[i].split(" = ");
-				baseNameArray[keyPairArray[0].toLowerCase()] = keyPairArray[1];
-			}
-			console.log("Base nickname lookup array generated");
-		});
-		
 		/* systemNameArray and systemClassArray reference internal nicknames to system names and classes (i.e. houses). */
 		/* systemClassArray and systemNameFile are a bit special, as systemNameFile is not automagically generated; 
 		   there is no resource to do so, so these are set in special_systems.txt in the current data directory. */
@@ -537,24 +526,32 @@
 		});
 
 		/* commodityNameArray references internal nicknames to commodity names. */
-		/* This is another IONCROSS data-based function that is pending replacement. */
-		$.get(commodityNameFile, function(data) {
-			var nameArray = data.split("\n");
-			for (i = 0; i < nameArray.length; i++) { 
-				var keyPairArray = nameArray[i].substring(13).split(", ");
-				commodityNameArray[keyPairArray[0].toLowerCase()] = keyPairArray[1];
+		$.get(commodityFile, function(data) {
+			commodityFileGetResult = data.replace(commentRegex,"");
+			var commodityArray = commodityFileGetResult.match(commodityRegex);
+			for (i = 0; i < commodityArray.length; i++) {
+				if (commodityArray[i].toLowerCase().indexOf("nickname =") != -1 && commodityArray[i].toLowerCase().indexOf("ids_name =") != -1) {
+					var idsNameString = commodityArray[i].toLowerCase().match(idsNameRegex).join().substring(11);
+					var nameString = commodityArray[i].toLowerCase().match(nameRegex).join().substring(11);
+					commodityNameArray[nameString.toLowerCase()] = idsNameString;
+				}
 			}
+			
 			console.log("Commodity nickname lookup array generated");
 		});
 		
-		/* factionNameArray references internal nicknames to faction names. */
-		/* This is another IONCROSS data-based function that is pending replacement. */
-		$.get(factionNameFile, function(data) {
-			var nameArray = data.split("\n");
-			for (i = 0; i < nameArray.length; i++) { 
-				var keyPairArray = nameArray[i].split(" = ");
-				factionNameArray[keyPairArray[0].toLowerCase()] = keyPairArray[1].trim();
+		/* factionNameArray references internal nicknames to faction name infocards. */
+		$.get(initialWorldFile, function(data) {
+			intialWorldFileGetResult = data.replace(commentRegex,"");
+			var groupArray = intialWorldFileGetResult.match(groupRegex);
+			for (i = 0; i < groupArray.length; i++) {
+				if (groupArray[i].toLowerCase().indexOf("nickname =") != -1 && groupArray[i].toLowerCase().indexOf("ids_name =") != -1) {
+					var idsNameString = groupArray[i].toLowerCase().match(idsNameRegex).join().substring(11);
+					var nameString = groupArray[i].toLowerCase().match(nameRegex).join().substring(11);
+					factionNameArray[nameString.toLowerCase()] = idsNameString;
+				}
 			}
+			
 			console.log("Faction nickname lookup array generated");
 		});
 		
@@ -571,7 +568,7 @@
 			console.log("Infocard map lookup array generated");
 		});
 		
-		/* infocardMapArray references infocard IDS numbers to infocards. */		
+		/* infocardMapArray references infocard IDS numbers to infocards. */
 		$.get(infocardFile, function(data) {
 			var rawInfocardArray = data.replace(/\r/g,"").split("\n");
 			for (i = 0; i < rawInfocardArray.length-1; i += 2) { 
@@ -839,7 +836,7 @@
 				planePosition = "non-standard in relation to";
 			}
 			if (typeof factionNickname !== "undefined") {
-				var ownerString = " It belongs to "+factionNameArray[factionNickname]+".";
+				var ownerString = " It belongs to "+infocardArray[factionNameArray[factionNickname]]+".";
 			} else {
 				var ownerString = "";
 			}
@@ -853,7 +850,7 @@
 					amountString = "one unit";
 				}
 				var commodityName = dynamicCommodity;
-				var commodityArrayName = commodityNameArray[dynamicCommodity.toLowerCase()];
+				var commodityArrayName = infocardArray[commodityNameArray[dynamicCommodity.toLowerCase()]];
 				if (typeof commodityArrayName !== "undefined") {
 					commodityName = commodityArrayName;
 				}
@@ -890,13 +887,8 @@
 				return "Jump Gate";
 			}
 		}
-		if (baseNameArray[internalNickname.toLowerCase()] != null) {
-			return baseNameArray[internalNickname.toLowerCase()];
-		} else if (baseNameArray[internalNickname.toLowerCase()+"_base"] != null) {
-			return baseNameArray[internalNickname.toLowerCase()+"_base"];
-		} else {
-			return internalNickname + " (int)";
-		}
+
+		return internalNickname + " (int)";
 	}
 	
 	function createLoadAnimation() {
