@@ -49,7 +49,6 @@ body.screenshotMode .navContainer #screenshotButton {
 	font-family: "Agency FB", "Oswald", sans-serif;
 	margin: 0 auto;
 	border: 0.2em solid rgb(30, 166, 197);
-	border-bottom: none;
 	box-shadow: 0em 0em 0.5em 0em rgb(30, 166, 197);
 	z-index: 99;
 	background: url("../images/nnwall.jpg") black;
@@ -140,11 +139,11 @@ body.screenshotMode .navContainer #screenshotButton {
 	height: 60em;
 	width: 60em;
 	margin: 0 auto;
-	border: 0.22em rgb(25, 47, 96) solid;
+	/* border: border: 0.22em rgb(25, 47, 96) solid; */
 	box-sizing: border-box;
     box-shadow: 0 0 1em 0.1em rgb(25, 47, 96);
 	border-radius: 0em;
-	/*background-color: rgb(30, 167, 198);*/
+	/* background-color: rgb(30, 167, 198); */
 	overflow: hidden;
 	overflow: -moz-hidden-unscrollable;
 	overflow: -webkit-hidden-unscrollable;
@@ -1385,6 +1384,13 @@ body.responsive .map {
 	width: 100vw;
 }
 
+@media (max-aspect-ratio: 1/1) {
+	body.responsive .map {
+		height: calc(100vh - 2.4em);
+		width: calc(100vh - 2.4em);
+	}
+}
+
 body.responsive {
 	min-width: 0;
 	min-height: 0;
@@ -1432,10 +1438,6 @@ body.responsive {
 		left: 0 !important;
 		right: 0 !important;
 		margin: 0 auto;
-	}
-	
-	body.responsive .navContainer, body.responsive .configMenu {
-		width: 90vw;
 	}
 	
 	body.responsive .mapLegend {
