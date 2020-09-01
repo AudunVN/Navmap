@@ -947,6 +947,7 @@ function showObjectInfo(idsNameNumber, idsInfoNumber, classString, zPosition, fa
 		}
 		console.log("Infocard "+idsInfoNumber+" for "+infocardArray[idsNameNumber]+" fetched");
 		$(".remodal.infocardContainer").remodal().open();
+		document.querySelector(".remodal-wrapper").scrollTo(0, 0);
 	}
 }
 
@@ -970,7 +971,6 @@ function findObjectName(internalNickname, classString) {
 function createLoadAnimation() {
 	/* Adds the loading overlay. Used on page state transitions and the first load. */
 	if (document.querySelector(".loadingOverlay") == null) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
 		panzoom.reset();
 		var loader = document.createElement("div");
 		loader.innerHTML = "<div class='loadTextContainer'><h2 class='loaderTitle'>Loading...</h2><div class='loader'></div></div>";
@@ -989,15 +989,31 @@ $.extend($.expr[":"], {
 function createHighlightAnimation(element) {
 	/* Adds and sets the animation used to highlight search results or linking to objects. */
 	$(".highlighter").remove();
-	console.log("Attempted to create highlight for "+element);
+	console.log("Attempted to create highlight for " + element);
 	if ($(element).length) {
 		var highlight = document.createElement("div");
 		highlight.className = "highlighter";
 		element.append(highlight);
-		$('html, body').animate({
-			scrollTop: $(".highlighter").offset().top-$(window).height()/2,
-			scrollLeft: $(".highlighter").offset().left-$(window).width()/2
-		}, 1000);
+		requestAnimationFrame(
+			function(){
+				console.log(element);
+				var scale = panzoom.getScale();
+				console.log(element.position());
+				var x = element.offset().left;
+				var y = element.offset().top + map.getBoundingClientRect().top;
+				console.log(x);
+				console.log(y);
+				panzoom.zoomToPoint(1.25,
+					{
+						clientX: x,
+						clientY: y
+					},
+					{
+						animate: true
+					}
+				);
+			}
+		);
 		$(".highlighter").mouseover(function() {
 			$(".highlighter").remove();
 		});
@@ -2110,7 +2126,7 @@ function overlaps(objectA,objectB){
 	var debounce = function (func, threshold, execAsap) {
 		var timeout;
 		
-		return function debounced () {
+		return function debounced() {
 			var obj = this, args = arguments;
 			function delayed () {
 				if (!execAsap)
