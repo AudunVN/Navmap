@@ -231,7 +231,7 @@ var lastY = 0;
 map.addEventListener('panzoompan', (event) => {
 	var deltaX = lastX - event.detail.x;
 	var deltaY = lastY - event.detail.y;
-	dragSinceLastMouseUp += deltaX*deltaX + deltaY*deltaY;
+	dragSinceLastMouseUp += (deltaX*deltaX + deltaY*deltaY);
 	lastX = event.detail.x;
 	lastY = event.detail.y;
 });
@@ -241,11 +241,11 @@ function onMouseUp() {
 }
 
 map.querySelector(".contents").addEventListener('click', (event) => {
-	onMouseUp();
+	setTimeout(onMouseUp, 10);
 });
 
 document.addEventListener('click', (event) => {
-	onMouseUp();
+	setTimeout(onMouseUp, 10);
 });
 
 function hasNotPannedRecently() {
