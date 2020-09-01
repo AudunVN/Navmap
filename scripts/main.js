@@ -249,7 +249,7 @@ document.addEventListener('click', (event) => {
 });
 
 function hasNotPannedRecently() {
-	return (dragSinceLastMouseUp == 0);
+	return (dragSinceLastMouseUp < 10);
 }
 
 /**
@@ -1052,8 +1052,8 @@ function generateUniverseMap() {
 		document.querySelector(".loaderTitle").innerHTML = "Generating map...";
 		document.querySelector("#searchField").value = "";
 		currentSystemNickname = "Sirius";
-		document.querySelector(".grid").style.background = "url('./images/SiriusMap.jpg') black"
-		document.querySelector(".grid").style.backgroundSize = "cover !important"
+		document.querySelector(".grid").style.background = "url('./images/SiriusMap.jpg') black";
+		document.querySelector(".grid").style.backgroundSize = "cover !important";
 		/* empty the map div before doing anything else */
 		$(".contents").children().not(".systemConnectionProp").remove();
 		while (document.querySelector(".infocardContainer").firstChild) {
