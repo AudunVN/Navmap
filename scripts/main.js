@@ -141,18 +141,59 @@ var panzoom = Panzoom(map, {
 	minScale: 1,
 	panOnlyWhenZoomed: false,
 	canvas: true,
-	contain: "outside"
+	contain: "outside",
+	handleStartEvent: (event) => {
+		event.preventDefault()
+	}
 });
 
 map.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 map.addEventListener('panzoomchange', (event) => {
 	var xOffset = map.offsetWidth*(event.detail.scale - 1);
 	var yOffset = map.offsetHeight*(event.detail.scale - 1);
-	console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
-	console.log(xOffset);
 	$(".vertGridLine h3").css("transform","translateY(" + (-1*event.detail.y) + "px)");
 	$(".hzGridLine h3").css("transform","translateX(" + (-1*event.detail.x) + "px)");
 });
+
+var lastPanTime = 0;
+var lastMouseUpTime = 0;
+var dragSinceLastMouseUp = 0;
+var lastDragElement = null;
+var lastX = 0;
+var lastY = 0;
+var clickAfterPanTreshold = 500;
+
+map.addEventListener('panzoompan', (event) => {
+	var deltaX = lastX - event.detail.x;
+	var deltaY = lastY - event.detail.y;
+	lastDragDistance = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+	lastX = event.detail.x;
+	lastY = event.detail.y;
+	dragSinceLastMouseUp += lastDragDistance;
+
+	lastPanTime = Date.now();
+});
+
+function onMouseUp() {
+	lastMouseUpTime = Date.now();
+	dragSinceLastMouseUp = 0;
+}
+
+map.querySelector(".contents").addEventListener('click', (event) => {
+	onMouseUp();
+});
+
+document.addEventListener('click', (event) => {
+	onMouseUp();
+});
+
+map.addEventListener('panzoomend', (event) => {
+	lastPanTime = Date.now();
+});
+
+function hasNotPannedRecently() {
+	return (dragSinceLastMouseUp == 0);
+}
 
 /**
 * Copyright 2009 by David Kerkeslager
@@ -1224,8 +1265,10 @@ function generateMap(system) {
 						if (sysZoneArray[i].indexOf("ids_info") != -1 && sysZoneArray[i].match(idsInfoRegex)) {
 							var idsInfoNumber = sysZoneArray[i].match(idsInfoRegex).join().substring(11);
 							zone.dataset.idsInfo = idsInfoNumber;
-							zone.addEventListener("click", function() {
-								showInfoEventHandler(this);
+							zone.addEventListener("click", function(event) {
+								if (hasNotPannedRecently()) {
+									showInfoEventHandler(this);
+								}
 							});
 						} else {
 							zone.className += " noInfo";
@@ -1324,15 +1367,19 @@ function generateMap(system) {
 						var idsInfoNumber = sysObjectArray[i].match(idsInfoRegex).join().substring(11);
 						object.dataset.idsInfo = idsInfoNumber;
 						object.addEventListener("click", function() {
-							if (this.className.indexOf("jump") != -1 && typeof this.dataset.jumpDest !== "undefined" && this.className.indexOf("unusableJump") == -1) {
-								generateMap(this.dataset.jumpDest);
-							} else {
-								showObjectInfo(this.dataset.idsName, this.dataset.idsInfo, this.className, this.dataset.zPos, this.dataset.reputation, document.querySelector(".contents").dataset.systemNickname, undefined, undefined, undefined, this.dataset.internalNickname);
+							if (hasNotPannedRecently()) {
+								if (this.className.indexOf("jump") != -1 && typeof this.dataset.jumpDest !== "undefined" && this.className.indexOf("unusableJump") == -1) {
+									generateMap(this.dataset.jumpDest);
+								} else {
+									showObjectInfo(this.dataset.idsName, this.dataset.idsInfo, this.className, this.dataset.zPos, this.dataset.reputation, document.querySelector(".contents").dataset.systemNickname, undefined, undefined, undefined, this.dataset.internalNickname);
+								}
 							}
 						});
 					} else if (sysObjectArray[i].match(gotoRegex) && objectClasses.indexOf("unusableJump") == -1) {
 						object.addEventListener("click", function() {
-							generateMap(this.dataset.jumpDest);
+							if (hasNotPannedRecently()) {
+								generateMap(this.dataset.jumpDest);
+							}
 						});
 					}
 					var objectPosArray = posString.split(",");
@@ -1488,7 +1535,9 @@ function addLootableZoneData() {
 				var eventData = $._data(this, 'events');
 				if (!(eventData && eventData.click)) {
 					currentZone.addEventListener("click", function() {
-						showInfoEventHandler(this);
+						if (hasNotPannedRecently()) {
+							showInfoEventHandler(this);
+						}
 					});	
 				}
 			}

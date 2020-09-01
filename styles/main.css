@@ -104,7 +104,6 @@ body.screenshotMode .navContainer #screenshotButton {
 
 .configMenu {
 	position: absolute;
-	width: 59em;
 	height: auto;
 	z-index: 9;
 	background: #000 url("../images/nnwall.jpg") repeat scroll 0% 0%;
@@ -112,7 +111,6 @@ body.screenshotMode .navContainer #screenshotButton {
 	border: 0.2em solid #1EA6C5;
 	color: #FFF;
 	font-family: "Agency FB","Oswald",sans-serif;
-	left: 2.35em;
 	opacity: 1;
 	top: 3.6em;
 	transition: top 1s ease, opacity 1s ease;
@@ -1174,6 +1172,7 @@ a {
 	display: inline-block;
 	margin: 0;
 	padding: 0.25em 0.25em 0.25em 0.5em;
+	box-sizing: border-box;
 }
 
 .configOption {
