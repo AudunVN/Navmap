@@ -134,6 +134,55 @@ var universeMapState = "nope";
 var sysLootableZoneArray = {};
 var asteroidsURIArray = {};
 
+function getDimensions(elem) {
+	var parent = elem.parentNode;
+	var style = window.getComputedStyle(elem);
+	var parentStyle = window.getComputedStyle(parent);
+	var rectElem = elem.getBoundingClientRect();
+	var rectParent = parent.getBoundingClientRect();
+
+	return {
+		elem: {
+			style,
+			width: rectElem.width,
+			height: rectElem.height,
+			top: rectElem.top,
+			bottom: rectElem.bottom,
+			left: rectElem.left,
+			right: rectElem.right
+		},
+		parent: {
+			style: parentStyle,
+			width: rectParent.width,
+			height: rectParent.height,
+			top: rectParent.top,
+			bottom: rectParent.bottom,
+			left: rectParent.left,
+			right: rectParent.right
+		}
+	};
+}
+
+function getConstraints(element, scale) {
+	var dims = getDimensions(element);
+	var realWidth = dims.elem.width / scale;
+	var realHeight = dims.elem.height / scale;
+	var scaledWidth = realWidth * scale;
+	var scaledHeight = realHeight * scale;
+	var diffHorizontal = (scaledWidth - realWidth) / 2;
+	var diffVertical = (scaledHeight - realHeight) / 2;
+	var minX = (-(scaledWidth - dims.parent.width) + diffHorizontal) / scale;
+	var maxX = (diffHorizontal) / scale;
+	var minY = (-(scaledHeight - dims.parent.height) + diffVertical) / scale;
+	var maxY = (diffVertical) / scale;
+	return {
+		minX: minX,
+		maxX: maxX,
+		minY: minY,
+		maxY: maxY
+	};
+}
+
 var map = document.querySelector('.map');
 
 var panzoom = Panzoom(map, {
@@ -147,35 +196,47 @@ var panzoom = Panzoom(map, {
 	}
 });
 
+var lastScale = 1;
+var constraintsCache = null;
+
+function shiftGrid(map, event) {
+	if (constraintsCache == null || lastScale != event.detail.scale) {
+		lastScale = event.detail.scale;
+		constraintsCache = getConstraints(map, event.detail.scale);
+	}
+
+	var constraints = constraintsCache;
+
+	var xOffset = constraints.maxX;
+	var yOffset = constraints.maxY;
+
+	$(".vertGridLine h3").css("transform","translateY(" + (-1*event.detail.y + yOffset) + "px)");
+	$(".hzGridLine h3").css("transform","translateX(" + (-1*event.detail.x + xOffset) + "px)");
+}
+
 map.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+
 map.addEventListener('panzoomchange', (event) => {
-	var xOffset = map.offsetWidth*(event.detail.scale - 1);
-	var yOffset = map.offsetHeight*(event.detail.scale - 1);
-	$(".vertGridLine h3").css("transform","translateY(" + (-1*event.detail.y) + "px)");
-	$(".hzGridLine h3").css("transform","translateX(" + (-1*event.detail.x) + "px)");
+	if (event.detail.scale == 1) {
+		shiftGrid(map, event);
+	} else {
+		requestAnimationFrame(() => shiftGrid(map, event));
+	}
 });
 
-var lastPanTime = 0;
-var lastMouseUpTime = 0;
 var dragSinceLastMouseUp = 0;
-var lastDragElement = null;
 var lastX = 0;
 var lastY = 0;
-var clickAfterPanTreshold = 500;
 
 map.addEventListener('panzoompan', (event) => {
 	var deltaX = lastX - event.detail.x;
 	var deltaY = lastY - event.detail.y;
-	lastDragDistance = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+	dragSinceLastMouseUp += deltaX*deltaX + deltaY*deltaY;
 	lastX = event.detail.x;
 	lastY = event.detail.y;
-	dragSinceLastMouseUp += lastDragDistance;
-
-	lastPanTime = Date.now();
 });
 
 function onMouseUp() {
-	lastMouseUpTime = Date.now();
 	dragSinceLastMouseUp = 0;
 }
 
@@ -185,10 +246,6 @@ map.querySelector(".contents").addEventListener('click', (event) => {
 
 document.addEventListener('click', (event) => {
 	onMouseUp();
-});
-
-map.addEventListener('panzoomend', (event) => {
-	lastPanTime = Date.now();
 });
 
 function hasNotPannedRecently() {
@@ -807,7 +864,6 @@ function generateSearchArray() {
 function parseInfocard(infocard) {
 	/* Parses an MSXML infocard into displayable HTML. */
 	/* Note: This currently ignores all formatting, and requires a rework. */
-	console.log(infocard);
 	if (infocard.toLowerCase().indexOf("<text>") == -1) {
 		return infocard;
 	} else {
