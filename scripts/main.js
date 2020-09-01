@@ -996,13 +996,9 @@ function createHighlightAnimation(element) {
 		element.append(highlight);
 		requestAnimationFrame(
 			function(){
-				console.log(element);
 				var scale = panzoom.getScale();
-				console.log(element.position());
 				var x = element.offset().left;
 				var y = element.offset().top + map.getBoundingClientRect().top;
-				console.log(x);
-				console.log(y);
 				panzoom.zoomToPoint(1.25,
 					{
 						clientX: x,
