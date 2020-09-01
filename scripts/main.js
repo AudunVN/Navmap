@@ -1052,7 +1052,7 @@ function generateUniverseMap() {
 		document.querySelector(".loaderTitle").innerHTML = "Generating map...";
 		document.querySelector("#searchField").value = "";
 		currentSystemNickname = "Sirius";
-		document.querySelector(".grid").style.background = "url('../images/SiriusMap.jpg') black"
+		document.querySelector(".grid").style.background = "url('./images/SiriusMap.jpg') black"
 		document.querySelector(".grid").style.backgroundSize = "cover !important"
 		/* empty the map div before doing anything else */
 		$(".contents").children().not(".systemConnectionProp").remove();
