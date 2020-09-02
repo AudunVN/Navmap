@@ -1242,7 +1242,7 @@ function generateMap(system) {
 			if (sysAmbientObject.join().indexOf("color") != -1) {
 				var ambientColourString = sysAmbientObject.join().match(colourRegex).join().substring(8).replace(/ /g,"");
 				var ambientColourArray = ambientColourString.split(",");
-				var ambientColourString = "rgba("+parseInt(ambientColourArray[0]*0.3)+","+parseInt(ambientColourArray[1]*0.3)+","+parseInt(ambientColourArray[2]*0.3)+",0.95)";
+				var ambientColourString = "rgb("+parseInt(ambientColourArray[0]*0.3)+","+parseInt(ambientColourArray[1]*0.3)+","+parseInt(ambientColourArray[2]*0.3)+")";
 				document.querySelector(".grid").style.background = ambientColourString;
 			}
 			//grab lootable field files

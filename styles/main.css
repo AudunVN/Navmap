@@ -6,35 +6,6 @@ body {
 	background-color: transparent;
 }
 
-body:after {
-	content: '';
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	background: rgb(9, 12, 21);
-	/*background: url("../images/blue_space_with_planets_by_darkdissolution-updCont.jpg") black;*/
-	background-size: cover;
-	z-index: -1;
-	/* create new paint layer */
-	transform: translateZ(0);
-	-webkit-transform: translateZ(0);
-}
-
-body.screenshotMode:after {
-	background: #090909;
-}
-
-body.screenshotMode .navContainer {
-	top: -5em;
-}
-
-body.screenshotMode .navContainer #screenshotButton {
-	top: 5.25em;
-	left: -2.5em;
-}
-
 .navContainer {
 	height: 2em;
 	vertical-align: center;
