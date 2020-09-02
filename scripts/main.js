@@ -418,10 +418,6 @@ $(document).ready(function () {
 		event.stopPropagation();
 	});
 	
-	$("#screenshotButton").click(function(event) {
-		$("body").toggleClass("screenshotMode");
-	});
-	
 	$.cookie.json = true;
 	repopulateFormElements();
 	/* initialise rising/falling edge detector */
