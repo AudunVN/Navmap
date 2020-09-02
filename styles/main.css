@@ -415,8 +415,9 @@ body.screenshotMode .navContainer #screenshotButton {
 	margin-top: -0.2em;
 	margin-left: -0.2em;
 	background-image: url("../textures/Red_X.svg");
-	background-size: cover;
-	background-color: transparent;
+    background-size: contain;
+    background-color: transparent;
+    background-repeat: no-repeat;
 }
 
 .wreck:hover {
@@ -652,6 +653,46 @@ a {
 
 .jump.gate {
 	background: gray;
+}
+
+.zoomedIn .contents div label {
+    transform: scale(0.8) translateY(-0.5em);
+}
+
+.zoomedIn .hzGridLine h3,
+.zoomedIn .vertGridLine h3,
+.zoomedIn .zone.mineable label {
+    font-size: 0.9em;
+}
+
+body[data-mapscale^="3"].zoomedIn .contents div label {
+    transform: scale(0.6) translateY(-0.6em);
+}
+
+body[data-mapscale^="3"].zoomedIn .hzGridLine h3,
+body[data-mapscale^="3"].zoomedIn .vertGridLine h3,
+body[data-mapscale^="3"].zoomedIn .zone.mineable label {
+    font-size: 0.6em;
+}
+
+body[data-mapscale^="4"].zoomedIn .contents div label {
+    transform: scale(0.5) translateY(-0.8em);
+}
+
+body[data-mapscale^="4"].zoomedIn .hzGridLine h3,
+body[data-mapscale^="4"].zoomedIn .vertGridLine h3,
+body[data-mapscale^="4"].zoomedIn .zone.mineable label {
+    font-size: 0.5em;
+}
+
+body[data-mapscale^="5"].zoomedIn .contents div label {
+    transform: scale(0.4) translateY(-1.4em);
+}
+
+body[data-mapscale^="5"].zoomedIn .hzGridLine h3,
+body[data-mapscale^="5"].zoomedIn .vertGridLine h3,
+body[data-mapscale^="5"].zoomedIn .zone.mineable label {
+    font-size: 0.4em;
 }
 
 .zoomedIn .jump.hole:hover,
