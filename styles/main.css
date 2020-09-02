@@ -1,7 +1,12 @@
 html {
-	background-image: url(../images/blue_space_with_planets_by_darkdissolution-updCont.jpg);
-	background-size: cover;
-	background-repeat: no-repeat;
+    background-image: url(../images/blue_space_with_planets_by_darkdissolution-updCont.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 body {
