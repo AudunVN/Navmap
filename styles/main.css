@@ -26,10 +26,6 @@ body.screenshotMode:after {
 	background: #090909;
 }
 
-.systemTitle {
-	display: none !important;
-}
-
 body.screenshotMode .navContainer {
 	top: -5em;
 }
@@ -92,7 +88,7 @@ body.screenshotMode .navContainer #screenshotButton {
 
 #configButton {
 	position: absolute;
-	left: 25.25em;
+	right: 32.75em;
 	top: 0.5em;
 }
 
@@ -1339,8 +1335,8 @@ body[data-mapscale^="5"].zoomedIn .zone.mineable label {
 #navSystemTitle {
 	position: absolute;
 	top: 0.45em;
-	left: 8.75em;
-	width: 13.5em;
+    left: 7.5em;
+    right: 37em;
 	text-align: center;
 }
 
@@ -1603,12 +1599,13 @@ body.responsive {
 	body.responsive #configButton, body.responsive #screenshotButton, body.responsive #helpLink, body.responsive #showUniverseMap, body.responsive #navSystemTitle {
 		float: left;
 		left: auto;
+		right: auto;
 		top: auto;
 		padding: 0.45em;
 		position: relative;
 	}
 	
-	body.responsive #helpLink .infoText, body.responsive #showUniverseMap .infoText {
+	body.responsive .navContainer .infoText {
 		display: none;
 	}
 	
@@ -1641,7 +1638,7 @@ body.responsive {
 		right: 0.2em;
 		position: relative;
 		top: 0.25em;
-		margin-left: 7.35em;
+		margin-left: 5.35em;
 		margin-right: 0.25em;
 		width: auto;
 		height: 1.5em;
