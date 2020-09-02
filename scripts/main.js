@@ -143,7 +143,7 @@ function getDimensions(elem) {
 
 	return {
 		elem: {
-			style,
+			style: style,
 			width: rectElem.width,
 			height: rectElem.height,
 			top: rectElem.top,
