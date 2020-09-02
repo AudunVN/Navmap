@@ -541,7 +541,7 @@ body.screenshotMode .navContainer #screenshotButton {
 .contents div[data-jump-dest]:hover,
 .contents div[data-system-nickname]:hover,
 .contents div.mineable:hover {
-	box-shadow: 0em 0em 0.4em 0.2em rgb(237, 112, 7);
+	box-shadow: 0em 0em 0.4em 0.2em rgb(237, 112, 7), inset 0em 0em 0.15em 0em rgb(237, 112, 7);
 	color: rgb(255, 167, 6);
 }
 
@@ -658,7 +658,7 @@ a {
 .zoomedIn .jump.gate:hover,
 .zoomedIn .base:hover,
 .zoomedIn .tradelane:hover {
-	background-color: rgba(237, 112, 7, 0.75) !important;
+	background-color: rgba(237, 112, 7, 0.2) !important;
 }
 
 .zoomedIn .jump.hole {
@@ -680,187 +680,6 @@ a {
 	height: 0.6em;
 	margin-top: -0.3em;
 	margin-left: -0.3em;
-}
-
-.zoomedIn .object[data-archetype="Roid_Miner"] {
-	background: url(../images/icons/miningship-edit.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	width: 0.4em;
-	height: 0.4em;
-	margin-top: -0.2em;
-	margin-left: -0.2em;
-}
-
-.zoomedIn .object[data-archetype="largestation1"] {
-	background: url(../images/icons/largespacestation.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="smallstation1"],
-.zoomedIn .object[data-archetype="smallstation1_old_conn"] {
-	background: url(../images/icons/smallspacestation.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="space_police01"],
-.zoomedIn .object[data-archetype="space_police01_fighter"],
-.zoomedIn .object[data-archetype="depot"] {
-	background: url(../images/icons/depot.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="l_dreadnought"] {
-	background: url(../images/icons/Li_dreadnough_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="r_battleship"] {
-	background: url(../images/icons/Rh_battleship_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="b_battleship"] {
-	background: url(../images/icons/Br_battleship_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="dsy_dockable_ga2_battleship"] {
-	background: url(../images/icons/Gallicbs_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="dsy_dockable_gallicc"],
-.zoomedIn .object[data-archetype="dsy_gallicc"] {
-	background: url(../images/icons/Gallicc_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="dsy_static_gal_liner"] {
-	background: url(../images/icons/Gal_liner_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="dsy_zephyrbase"] {
-	background: url(../images/icons/Zephyr-s_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="k_battleship"] {
-	background: url(../images/icons/Ku_battleship_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="dsy_ku_bc_dockable"] {
-	background: url(../images/icons/Kusari_bc_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="cou_battleship"],
-.zoomedIn .object[data-archetype="ga_battleship"] {
-	background: url(../images/icons/Gallicbs_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="dsy_jormungand_stationary"] {
-	background: url(../images/icons/Jormungand.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
-}
-
-.zoomedIn .object[data-archetype="dsy_dockable_rh_carrier"] {
-	background: url(../images/icons/Rheinland_assault_carrier_icon.png);
-    background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: 0.25em;
-    width: 0.25em;
-    margin-top: -0.125em;
-    margin-left: -0.125em;
 }
 
 .jump.unusableJump:not([data-ids-name]) {
@@ -990,13 +809,98 @@ a {
 }
 
 .zoomedIn .base {
-	background: url(../images/map/nav_outpost.3db-outpost.png);
+	background-image: url(../images/map/nav_outpost.3db-outpost.png);
     background-size: contain;
 	background-repeat: no-repeat;
-	height: 0.25em;
-	width: 0.25em;
-	margin-top: -0.125em;
-	margin-left: -0.125em;
+	background-position: center center;
+	background-color: transparent;
+	height: 0.3em;
+	width: 0.3em;
+	margin-top: -0.15em;
+	margin-left: -0.15em;
+}
+
+.zoomedIn .base[data-archetype="Roid_Miner"] {
+	background: url(../images/icons/miningship-edit.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 0.4em;
+	height: 0.4em;
+	margin-top: -0.2em;
+	margin-left: -0.2em;
+}
+
+.zoomedIn .base[data-archetype="largestation1"] {
+	background-image: url(../images/icons/largespacestation.png);
+}
+
+.zoomedIn .base[data-archetype="smallstation1"],
+.zoomedIn .base[data-archetype="smallstation1_old_conn"] {
+	background-image: url(../images/icons/smallspacestation.png);
+}
+
+.zoomedIn .base[data-archetype="space_police01"],
+.zoomedIn .base[data-archetype="space_police01_fighter"],
+.zoomedIn .base[data-archetype="depot"] {
+	background-image: url(../images/icons/depot.png);
+}
+
+.zoomedIn .base[data-archetype="l_dreadnought"] {
+	background-image: url(../images/icons/Li_dreadnough_icon.png);
+}
+
+.zoomedIn .base[data-archetype="r_battleship"] {
+	background-image: url(../images/icons/Rh_battleship_icon.png);
+}
+.zoomedIn .base[data-archetype="o_osiris"] {
+	background-image: url(../images/icons/Or_osiris_icon.png);
+}
+
+.zoomedIn .base[data-archetype="dsy_venator_stationary"] {
+	background-image: url(../images/icons/Sair_BS1_icon.png);
+}
+
+.zoomedIn .base[data-archetype="b_battleship"] {
+	background-image: url(../images/icons/Br_battleship_icon.png);
+}
+
+.zoomedIn .base[data-archetype="dsy_dockable_ga2_battleship"] {
+	background-image: url(../images/icons/Gallicbs_icon.png);
+}
+
+.zoomedIn .base[data-archetype="dsy_dockable_gallicc"],
+.zoomedIn .base[data-archetype="dsy_gallicc"] {
+	background-image: url(../images/icons/Gallicc_icon.png);
+}
+
+.zoomedIn .base[data-archetype="dsy_static_gal_liner"] {
+	background-image: url(../images/icons/Gal_liner_icon.png);
+}
+
+.zoomedIn .base[data-archetype="dsy_zephyrbase"] {
+	background-image: url(../images/icons/Zephyr-s_icon.png);
+}
+
+.zoomedIn .base[data-archetype="k_battleship"] {
+	background-image: url(../images/icons/Ku_battleship_icon.png);
+}
+
+.zoomedIn .base[data-archetype="dsy_ku_bc_dockable"] {
+	background-image: url(../images/icons/Kusari_bc_icon.png);
+}
+
+.zoomedIn .base[data-archetype="cou_battleship"],
+.zoomedIn .base[data-archetype="ga_battleship"] {
+	background-image: url(../images/icons/Gallicbs_icon.png);
+}
+
+.zoomedIn .base[data-archetype="dsy_jormungand_stationary"] {
+	background-image: url(../images/icons/Jormungand.png);
+}
+
+.zoomedIn .base[data-archetype="dsy_dockable_rh_carrier"] {
+	background-image: url(../images/icons/Rheinland_assault_carrier_icon.png);
 }
 
 .proxyBase {
