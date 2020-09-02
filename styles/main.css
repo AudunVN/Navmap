@@ -1,7 +1,8 @@
 html {
     background-image: url(../images/blue_space_with_planets_by_darkdissolution-updCont.jpg);
     background-size: cover;
-    background-repeat: no-repeat;
+	background-repeat: no-repeat;
+	background-color: rgb(9, 15, 24);
     position: absolute;
     top: 0;
     left: 0;
