@@ -800,6 +800,10 @@ a {
 	border-radius: 100%;
 }
 
+.object {
+	transition: background 0.25s ease;
+}
+
 .base {
 	height: 0.25em;
 	width: 0.25em;
