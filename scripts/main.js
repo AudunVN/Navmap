@@ -191,7 +191,7 @@ var panzoom = Panzoom(map, {
 	panOnlyWhenZoomed: false,
 	canvas: true,
 	contain: "outside",
-	handleStartEvent: (event) => {
+	handleStartEvent: function(event) {
 		event.preventDefault()
 	}
 });
@@ -217,11 +217,13 @@ function shiftGrid(map, event) {
 
 map.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
-map.addEventListener('panzoomchange', (event) => {
+map.addEventListener('panzoomchange', function(event) {
 	if (event.detail.scale == 1) {
 		shiftGrid(map, event);
 	} else {
-		requestAnimationFrame(() => shiftGrid(map, event));
+		requestAnimationFrame(function(){
+			shiftGrid(map, event);
+		});
 	}
 
 	$("body").attr("data-mapscale", event.detail.scale);
@@ -237,7 +239,7 @@ var dragSinceLastMouseUp = 0;
 var lastX = 0;
 var lastY = 0;
 
-map.addEventListener('panzoompan', (event) => {
+map.addEventListener('panzoompan', function(event) {
 	var deltaX = lastX - event.detail.x;
 	var deltaY = lastY - event.detail.y;
 	dragSinceLastMouseUp += (deltaX*deltaX + deltaY*deltaY);
@@ -249,11 +251,11 @@ function onMouseUp() {
 	dragSinceLastMouseUp = 0;
 }
 
-map.querySelector(".contents").addEventListener('click', (event) => {
+map.querySelector(".contents").addEventListener('click', function(event) {
 	setTimeout(onMouseUp, 10);
 });
 
-document.addEventListener('click', (event) => {
+document.addEventListener('click', function(event) {
 	setTimeout(onMouseUp, 10);
 });
 
