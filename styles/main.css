@@ -420,7 +420,7 @@ body.screenshotMode .navContainer #screenshotButton {
 }
 
 .wreck:hover {
-	background-color: rgba(237, 112, 7, 0.9);
+	background-color: rgba(237, 112, 7, 0.8);
 }
 
 .wreck.hidden, .zone.hidden, .system.hidden, .systemConnectionProp.hidden, label.hidden {
@@ -650,6 +650,17 @@ a {
 	/* box-shadow: 0em 0em 0.025em 0.3em rgba(0, 0, 0, 0.42); */
 }
 
+.jump.gate {
+	background: gray;
+}
+
+.zoomedIn .jump.hole:hover,
+.zoomedIn .jump.gate:hover,
+.zoomedIn .base:hover,
+.zoomedIn .tradelane:hover {
+	background-color: rgba(237, 112, 7, 0.75) !important;
+}
+
 .zoomedIn .jump.hole {
 	background: url(../images/map/nav_jumphole.3db-jumphole.png);
     background-size: contain;
@@ -660,18 +671,196 @@ a {
 	margin-left: -0.4em;
 }
 
-.jump.gate {
-	background: gray;
-}
-
 .zoomedIn .jump.gate {
 	background: url(../images/map/nav_jumpgate.3db-jumpgate.png);
     background-size: contain;
 	background-repeat: no-repeat;
+	background-position: center center;
 	width: 0.6em;
 	height: 0.6em;
 	margin-top: -0.3em;
 	margin-left: -0.3em;
+}
+
+.zoomedIn .object[data-archetype="Roid_Miner"] {
+	background: url(../images/icons/miningship-edit.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 0.4em;
+	height: 0.4em;
+	margin-top: -0.2em;
+	margin-left: -0.2em;
+}
+
+.zoomedIn .object[data-archetype="largestation1"] {
+	background: url(../images/icons/largespacestation.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="smallstation1"],
+.zoomedIn .object[data-archetype="smallstation1_old_conn"] {
+	background: url(../images/icons/smallspacestation.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="space_police01"],
+.zoomedIn .object[data-archetype="space_police01_fighter"],
+.zoomedIn .object[data-archetype="depot"] {
+	background: url(../images/icons/depot.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="l_dreadnought"] {
+	background: url(../images/icons/Li_dreadnough_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="r_battleship"] {
+	background: url(../images/icons/Rh_battleship_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="b_battleship"] {
+	background: url(../images/icons/Br_battleship_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="dsy_dockable_ga2_battleship"] {
+	background: url(../images/icons/Gallicbs_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="dsy_dockable_gallicc"],
+.zoomedIn .object[data-archetype="dsy_gallicc"] {
+	background: url(../images/icons/Gallicc_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="dsy_static_gal_liner"] {
+	background: url(../images/icons/Gal_liner_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="dsy_zephyrbase"] {
+	background: url(../images/icons/Zephyr-s_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="k_battleship"] {
+	background: url(../images/icons/Ku_battleship_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="dsy_ku_bc_dockable"] {
+	background: url(../images/icons/Kusari_bc_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="cou_battleship"],
+.zoomedIn .object[data-archetype="ga_battleship"] {
+	background: url(../images/icons/Gallicbs_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="dsy_jormungand_stationary"] {
+	background: url(../images/icons/Jormungand.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
+}
+
+.zoomedIn .object[data-archetype="dsy_dockable_rh_carrier"] {
+	background: url(../images/icons/Rheinland_assault_carrier_icon.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 0.25em;
+    width: 0.25em;
+    margin-top: -0.125em;
+    margin-left: -0.125em;
 }
 
 .jump.unusableJump:not([data-ids-name]) {
