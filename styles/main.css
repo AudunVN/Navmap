@@ -650,8 +650,28 @@ a {
 	/* box-shadow: 0em 0em 0.025em 0.3em rgba(0, 0, 0, 0.42); */
 }
 
+.zoomedIn .jump.hole {
+	background: url(../images/map/nav_jumphole.3db-jumphole.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	width: 0.8em;
+	height: 0.8em;
+	margin-top: -0.4em;
+	margin-left: -0.4em;
+}
+
 .jump.gate {
 	background: gray;
+}
+
+.zoomedIn .jump.gate {
+	background: url(../images/map/nav_jumpgate.3db-jumpgate.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	width: 0.6em;
+	height: 0.6em;
+	margin-top: -0.3em;
+	margin-left: -0.3em;
 }
 
 .jump.unusableJump:not([data-ids-name]) {
@@ -701,6 +721,16 @@ a {
 	margin-top: -0.1em;
 	margin-left: -0.15em;
 	background-color: gray;
+}
+
+.zoomedIn .tradelane {
+    height: 0.3em;
+    width: 0.3em;
+    margin-top: -0.15em;
+    margin-left: -0.15em;
+    background: url(../textures/nav_tlr.png);
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .wPlatform {
@@ -768,6 +798,16 @@ a {
 	margin-top: -0.125em;
 	margin-left: -0.125em;
 	background: white;
+}
+
+.zoomedIn .base {
+	background: url(../images/map/nav_outpost.3db-outpost.png);
+    background-size: contain;
+	background-repeat: no-repeat;
+	height: 0.25em;
+	width: 0.25em;
+	margin-top: -0.125em;
+	margin-left: -0.125em;
 }
 
 .proxyBase {
@@ -1137,6 +1177,7 @@ a {
 .hzGridLine h3, .vertGridLine h3, #nullGridCell {
 	color: white;
 	font-family: "Agency FB", "Oswald", sans-serif;
+	z-index: 1;
 }
 
 .hzGridLine h3 {

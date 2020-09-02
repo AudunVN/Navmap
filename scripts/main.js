@@ -196,6 +196,7 @@ var panzoom = Panzoom(map, {
 	}
 });
 
+var zoomInTreshold = 1.3;
 var lastScale = 1;
 var constraintsCache = null;
 
@@ -221,6 +222,14 @@ map.addEventListener('panzoomchange', (event) => {
 		shiftGrid(map, event);
 	} else {
 		requestAnimationFrame(() => shiftGrid(map, event));
+	}
+
+	$("body").attr("data-mapscale", event.detail.scale);
+
+	if (event.detail.scale > zoomInTreshold) {
+		$("body").addClass("zoomedIn");
+	} else {
+		$("body").removeClass("zoomedIn");
 	}
 });
 
