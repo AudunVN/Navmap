@@ -4,6 +4,7 @@ body {
 	/* fixes a font rendering issue on OS X */
 	-webkit-font-smoothing: subpixel-antialiased;
 	background-color: transparent;
+	background: rgb(9, 15, 24);
 }
 
 .navContainer {
@@ -16,7 +17,6 @@ body {
 	font-family: "Agency FB", "Oswald", sans-serif;
 	margin: 0 auto;
 	border: 0.2em solid rgb(30, 166, 197);
-	box-shadow: 0em 0em 0.5em 0em rgb(30, 166, 197);
 	z-index: 99;
 	background: url("../images/nnwall.jpg") black;
 	padding: 0;
@@ -928,7 +928,7 @@ body[data-mapscale^="5"].zoomedIn .zone.mineable label {
 	height: 100%;
 	background: url("../images/SiriusMap.jpg") black;
 	background-size: cover !important;
-	border-radius: 0.5em;
+	border-radius: 0em;
 }
 
 .grid .hzGridLine, .grid .vertGridLine {
@@ -1522,8 +1522,6 @@ input.switch:checked ~ label:after {
 	}
 }
 
-/* responsive option styles */
-
 body.responsive .map {
 	height: 100vw;
 	width: 100vw;
@@ -1536,12 +1534,27 @@ body.responsive .map {
 	}
 }
 
+@media (min-aspect-ratio: 1/1) and (min-width: 65em) and (min-height: 40em) {
+	body.responsive .mapContainer {
+		position: absolute;
+		top: 2.4em;
+		margin: 0 auto;
+		height: calc(100vh - 2.4em);
+		width: calc(100vh - 2.4em);
+		border: 0.2em rgb(25, 47, 96) solid;
+	}
+	
+	body.responsive .map {
+		height: 100%;
+		width: 100%;
+	}
+}
+
+
+
 body.responsive {
 	min-width: 0;
 	min-height: 0;
-}
-
-body.responsive {
 	padding-left: 0 !important;
 	padding-right: 0 !important;
 }
