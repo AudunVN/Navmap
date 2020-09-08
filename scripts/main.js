@@ -1,6 +1,5 @@
 /* jquery cookie management methods */
 !function(e){"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e(require("jquery")):e(jQuery)}(function(e){function n(e){return u.raw?e:encodeURIComponent(e)}function o(e){return u.raw?e:decodeURIComponent(e)}function i(e){return n(u.json?JSON.stringify(e):String(e))}function t(e){0===e.indexOf('"')&&(e=e.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\/g,"\\"));try{return e=decodeURIComponent(e.replace(c," ")),u.json?JSON.parse(e):e}catch(n){}}function r(n,o){var i=u.raw?n:t(n);return e.isFunction(o)?o(i):i}var c=/\+/g,u=e.cookie=function(t,c,s){if(arguments.length>1&&!e.isFunction(c)){if(s=e.extend({},u.defaults,s),"number"==typeof s.expires){var a=s.expires,d=s.expires=new Date;d.setMilliseconds(d.getMilliseconds()+864e5*a)}return document.cookie=[n(t),"=",i(c),s.expires?"; expires="+s.expires.toUTCString():"",s.path?"; path="+s.path:"",s.domain?"; domain="+s.domain:"",s.secure?"; secure":""].join("")}for(var f=t?void 0:{},p=document.cookie?document.cookie.split("; "):[],l=0,m=p.length;m>l;l++){var x=p[l].split("="),g=o(x.shift()),j=x.join("=");if(t===g){f=r(j,c);break}t||void 0===(j=r(j))||(f[g]=j)}return f};u.defaults={},e.removeCookie=function(n,o){return e.cookie(n,"",e.extend({},o,{expires:-1})),!e.cookie(n)}});
-var dataRootPath = "data/v4930p6/";
 var currentSystem;
 var nameRegex = /nickname = (.*)/g;
 var idsNameRegex = /ids_name = (.*)/g;
@@ -89,7 +88,7 @@ var textureFileRegex = /(\\)([^;\\\r\n\.]*)(?=[\.\r\n])/;
 var rotationRegex = /rotate = (.*)/g;
 var textRegex = /(<(text|TEXT)>.+?<\/(text|TEXT)>|<(para|PARA)\/>)/g;
 /* oorpArray contains systems which should be considered as OORP or otherwise inaccessible by the universe map. See also:  */
-var oorpArray = ["st02","bw17","hi10","li14","ew17","ku16","hlp1","hlp2","bw11","ev03","ew05","hi03","ew45","ew18","ku17","ew85","hi22","ew12","rh11","rh12","rh10","li11","br17","br19","ew63","ga11","ga13","ga09","ga12","ga05","ga06","ga10","ga14","br10","iw09","li06","ca01","ev01","bw14", "bw13","st02c","st03b","hi19","hi08","hi08","ew37", "ku15", "li07","br22","br14","li10","bw21","bw58","li13","ev02","br09", "iw13", "ew19", "hi18"];
+var oorpArray = ["hi05","st02","bw17","hi10","li14","ew17","ku16","hlp1","hlp2","bw11","ev03","ew05","hi03","ew45","ew18","ku17","ew85","hi22","ew12","rh11","rh12","rh10","li11","br17","br19","ew63","ga11","ga13","ga09","ga12","ga05","ga06","ga10","ga14","br10","iw09","li06","ca01","ev01","bw14", "bw13","st02c","st03b","hi19","hi08","hi08","ew37", "ku15", "li07","br22","br14","li10","bw21","bw58","li13","ev02","br09", "iw13", "ew19", "hi18"];
 var systemScaleFactor = 1;
 var searchTimedOut = "nope";
 var universeFileGetResult;
@@ -824,13 +823,20 @@ function generateSearchArray() {
 		setTimeout(function(){generateSearchArray()},10);
 	} else {
 		/* add system names to search array */
+
+
 		for (systemNickname in systemIdsNameArray) {
 			if (systemNickname.toLowerCase().indexOf("sector") == -1) {
-				matchArray.push(infocardArray[systemIdsNameArray[systemNickname]]);
-				searchArray[infocardArray[systemIdsNameArray[systemNickname]]] = systemNickname;
-				searchArray[infocardArray[systemIdsNameArray[systemNickname]].toLowerCase()] = systemNickname;
+				try {
+					matchArray.push(infocardArray[systemIdsNameArray[systemNickname]]);
+					searchArray[infocardArray[systemIdsNameArray[systemNickname]]] = systemNickname;
+					searchArray[infocardArray[systemIdsNameArray[systemNickname]].toLowerCase()] = systemNickname;
+				} catch(e) {
+					console.log("Could not add " + systemNickname);
+				}
 			}
 		}
+
 		/* add base names to search array */
 		var universeBaseArray = universeFileGetResult.match(baseRegex);
 		for (i = 0; i < universeBaseArray.length; i++) {
