@@ -563,7 +563,7 @@ function updateConfigClasses() {
 		$(".contents").removeClass("showInfocardedObjectLabels");
 	}
 
-	$(".system, .object").addClass("panzoom-exclude");
+	//$(".system, .object").addClass("panzoom-exclude");
 	
 	generateTooltips();
 	
