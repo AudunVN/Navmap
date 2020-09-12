@@ -1109,6 +1109,18 @@ function generateUniverseMap() {
 				}
 			}
 		}
+
+		$(".system").hover(
+			function() {
+				var internalNickname = $(this).attr("data-system-nickname");
+				$("[data-connected-points*=" + internalNickname + "] > .systemConnectionProp").addClass("highlightedConnection");
+			},
+			function() {
+				var internalNickname = $(this).attr("data-system-nickname");
+				$("[data-connected-points*=" + internalNickname + "] > .systemConnectionProp").removeClass("highlightedConnection");
+			}
+		);
+
 		console.log("Universe map generated");
 		updateConfigClasses();
 		$(".contents div label").hAlign();
