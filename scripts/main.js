@@ -562,6 +562,8 @@ function updateConfigClasses() {
 	} else if (document.querySelector(".contents .system") == null) {
 		$(".contents").removeClass("showInfocardedObjectLabels");
 	}
+
+	$(".system, .object").addClass("panzoom-exclude");
 	
 	generateTooltips();
 	
