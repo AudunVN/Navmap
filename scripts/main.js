@@ -1111,13 +1111,12 @@ function generateUniverseMap() {
 		}
 
 		$(".system").hover(
-			function() {
+			function() { 
 				var internalNickname = $(this).attr("data-system-nickname");
 				$("[data-connected-points*=" + internalNickname + "] > .systemConnectionProp").addClass("highlightedConnection");
 			},
 			function() {
-				var internalNickname = $(this).attr("data-system-nickname");
-				$("[data-connected-points*=" + internalNickname + "] > .systemConnectionProp").removeClass("highlightedConnection");
+				$(".highlightedConnection").removeClass("highlightedConnection");
 			}
 		);
 
