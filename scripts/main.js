@@ -42,14 +42,14 @@ var ignoreObjectRegex = new RegExp(
 	"|" + 
 	"archetype\\s*=\\s*(" + archetypeIgnoreArray.join("|") + ")", 'g'
 	);
-	var archetypeShowArray = [
-		"ithaca_station",
-		"junction_wreck",
-		"space_beamx_messina"
-	];
-	var showObjectRegex = new RegExp(
-		"archetype\\s*=\\s*(" + archetypeShowArray.join("|") + ")", 'g'
-	);
+var archetypeShowArray = [
+	"ithaca_station",
+	"junction_wreck",
+	"space_beamx_messina"
+];
+var showObjectRegex = new RegExp(
+	"archetype\\s*=\\s*(" + archetypeShowArray.join("|") + ")", 'g'
+);
 var zoneRegex = /(\n[^\r\n;]*\[[Zz]one\])([^;\[]*(?=\n\w*|$))/g;
 var zoneNicknameRegex = /zone = ([^\r\n;]*)/g;
 var asteroidsRegex = /(\[[Aa]steroids\])(\r\n.+)*/g;
@@ -92,8 +92,6 @@ var oorpArray = ["hi05","st02","bw17","li14","ew17","ku16","hlp1","hlp2","bw11",
 var systemScaleFactor = 1;
 var searchTimedOut = "nope";
 var universeFileGetResult;
-var prevResponsiveState;
-var prevResponsiveModeState;
 var prevLabelMoveState;
 var lastSearch;
 var longSystemName;
@@ -281,7 +279,7 @@ var URIHash =
 	* Dump the contents of the URI hash into an associative array. If the hash is invalid, the method returns
 	* undefined.
 	*/
-	dump : function()
+	dump: function()
 	{
 		var hash = document.location.hash;
 		var dump = new Array();
@@ -308,7 +306,7 @@ var URIHash =
 	* Takes an associative array and stores it in the URI as a hash after the # prefix, replacing any pre-
 	* existing hash.
 	*/
-	load : function(array)
+	load: function(array)
 	{
 		var first = true;
 		var hash = '';
@@ -323,18 +321,18 @@ var URIHash =
 	},
 	
 	/**
-	* Get the value of a key from the hash.  If the hash does not contain the key or the hash is invalid,
+	* Get the value of a key from the hash. If the hash does not contain the key or the hash is invalid,
 	* the function returns undefined.
 	*/
-	get : function(key)
+	get: function(key)
 	{
 		return this.dump()[key];
 	},
 	
 	/**
-	* Set the value of a key in the hash.  If the key does not exist, the key/value pair is added.
+	* Set the value of a key in the hash. If the key does not exist, the key/value pair is added.
 	*/
-	set : function(key,value)
+	set: function(key,value)
 	{
 		var dump = this.dump();
 		dump[key] = value;
