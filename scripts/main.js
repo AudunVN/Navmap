@@ -770,43 +770,8 @@ function generateLookupArrays() {
 		}
 		/* manually moved systems, usually oorp/removed ones */
 		/* 0,0 in upper left corner, first coordinate is x and second is y */
-		systemPosArray["ev01"] = [6,1];
-		systemPosArray["ca01"] = [-1,16];
-		systemPosArray["ew18"] = [16,12];
-		systemPosArray["ew85"] = [16,10];
-		systemPosArray["st03b"] = [15,6];
-		systemPosArray["ew05"] = [16,0];
-		systemPosArray["ev02"] = [14,-1];
-		systemPosArray["hi08"] = [6,0];
-		systemPosArray["ew37"] = [4,16];
-		systemPosArray["li13"] = [12,6];
-		systemPosArray["rh11"] = [12,3];
-		systemPosArray["rh10"] = [11,6];
-		systemPosArray["li11"] = [11,7];
-		systemPosArray["li10"] = [14,4];
-		systemPosArray["ku15"] = [14,6];
-		systemPosArray["ew12"] = [13,1];
-		systemPosArray["hi22"] = [15,4];
-		systemPosArray["hi19"] = [15,7];
-		systemPosArray["ga12"] = [15,3];
-		systemPosArray["hi03"] = [9,5];
-		systemPosArray["ga14"] = [9,6];
-		systemPosArray["ga11"] = [9,4];
-		systemPosArray["ga10"] = [13,7];
-		systemPosArray["ga09"] = [13,8];
-		systemPosArray["ga06"] = [11,8];
-		systemPosArray["ew45"] = [16,4];
-		systemPosArray["bw58"] = [16,3];
-		systemPosArray["bw14"] = [14,8];
-		systemPosArray["br22"] = [14,9];
-		systemPosArray["br19"] = [10,7];
-		systemPosArray["br17"] = [8,5];
-		systemPosArray["ew37"] = [0,14];
 		systemPosArray["li09"] = [7,9.25];
-		
-		/* moved to match in-game map */
-		systemPosArray["st03"] = [16,5];
-		systemPosArray["fp7_system"] = [16,7];
+
 		systemIdsNameArrayState = "ready";
 		systemScaleFactorArrayState = "ready";
 		systemPosArrayState = "ready";
