@@ -88,7 +88,7 @@ var textureFileRegex = /(\\)([^;\\\r\n\.]*)(?=[\.\r\n])/;
 var rotationRegex = /rotate = (.*)/g;
 var textRegex = /(<(text|TEXT)>.+?<\/(text|TEXT)>|<(para|PARA)\/>)/g;
 /* oorpArray contains systems which should be considered as OORP or otherwise inaccessible by the universe map. See also:  */
-var oorpArray = ["ew08","ew11","bw46","li08","ew14","ku08","hi05","st02","bw17","li14","ew17","ku16","hlp1","hlp2","bw11","ev03","ew05","hi03","ew45","ew18","ku17","ew85","hi22","ew12","rh11","rh12","rh10","li11","br17","br19","ew63","ga11","ga13","ga09","ga12","ga05","ga06","ga10","ga14","br10","iw09","li06","ca01","ev01","bw14", "bw13","st02c","st03b","hi19","hi08","hi08","ew37", "ku15", "li07","br22","br14","li10","bw21","bw58","li13","ev02","br09", "iw13", "ew19", "hi18"];
+var oorpArray = ["ew08","ew11","bw46","li08","ew14","ku08","hi05","st02","bw17","li14","ew17","ku16","hlp1","hlp2","bw11","ev03","ew05","hi03","ew45","ew18","ku17","ew85","hi22","ew12","rh11","rh12","rh10","li11","br17","br19","ew63","ga11","ga13","ga09","ga12","ga06","ga10","ga14","br10","iw09","li06","ca01","ev01","bw14", "bw13","st02c","st03b","hi19","hi08","hi08","ew37", "ku15", "li07","br22","br14","li10","bw21","bw58","li13","ev02","br09", "iw13", "ew19", "hi18"];
 var systemScaleFactor = 1;
 var searchTimedOut = "nope";
 var universeFileGetResult;
@@ -1297,99 +1297,105 @@ function generateMap(system) {
 			var sysZoneArray = data.match(zoneRegex);
 			if (sysZoneArray !== null) {
 				for (i = 0; i < sysZoneArray.length; i++) {
-					var nameString = sysZoneArray[i].match(nameRegex).join().substring(11);
-					if (asteroidsURIArray[nameString.toLowerCase()]  != null || sysZoneArray[i].indexOf("66170") == -1) {
-						var zoneName;
-						var zone = document.createElement("div");
-						zone.className += "zone";
-						zone.dataset.internalNickname = nameString.toLowerCase();
-						if (sysZoneArray[i].indexOf("ids_name") != -1) {
-							var idsNameNumber = sysZoneArray[i].match(idsNameRegex).join().substring(11);
-							zone.dataset.idsName = idsNameNumber;
-							zoneName = infocardArray[idsNameNumber];
-						} else {
-							zone.className += " noName";
-						}
-						var zoneLabel = document.createElement("label");
-						zoneLabel.innerHTML = zoneName;
-						zone.appendChild(zoneLabel);
-						var posString = sysZoneArray[i].match(posRegex).join().substring(6).replace(/ /g,"");
-						var zonePosArray = posString.split(",");
-						zone.style.top = parseFloat(zonePosArray[2])/2000*systemScaleFactor + "%";
-						zone.style.left = parseFloat(zonePosArray[0])/2000*systemScaleFactor + "%";
-						zone.dataset.zPos = zonePosArray[1]*systemScaleFactor;
-						zone.style.position = "absolute";
-						if (sysZoneArray[i].indexOf("ids_info") != -1 && sysZoneArray[i].match(idsInfoRegex)) {
-							var idsInfoNumber = sysZoneArray[i].match(idsInfoRegex).join().substring(11);
-							zone.dataset.idsInfo = idsInfoNumber;
-							zone.addEventListener("click", function(event) {
-								if (hasNotPannedRecently()) {
-									showInfoEventHandler(this);
-								}
-							});
-						} else {
-							zone.className += " noInfo";
-						}
-						if (sysZoneArray[i].indexOf("rotate") != -1) {
-							var rotateString = sysZoneArray[i].match(rotationRegex).join().substring(10).replace(/ /g,"");
-							var zoneRotateArray = rotateString.split(",");
-							var rotationSign = 1;
-							if(parseInt(zoneRotateArray[0]) == -180 || parseInt(zoneRotateArray[0]) == 180) {
-								rotationSign = -1*rotationSign;
+					try {
+						var nameString = sysZoneArray[i].match(nameRegex).join().substring(11);
+						if (asteroidsURIArray[nameString.toLowerCase()]  != null || sysZoneArray[i].indexOf("66170") == -1) {
+							var zoneName;
+							var zone = document.createElement("div");
+							zone.className += "zone";
+							zone.dataset.internalNickname = nameString.toLowerCase();
+							if (sysZoneArray[i].indexOf("ids_name") != -1) {
+								var idsNameNumber = sysZoneArray[i].match(idsNameRegex).join().substring(11);
+								zone.dataset.idsName = idsNameNumber;
+								zoneName = infocardArray[idsNameNumber];
+							} else {
+								zone.className += " noName";
 							}
-							/*if(parseFloat(zoneRotateArray[2]) == -180 || parseFloat(zoneRotateArray[2]) == 180) {
-								rotationSign = -1*rotationSign;
-							}*/
-							zone.style.transform = "rotate("+-rotationSign*parseFloat(zoneRotateArray[1])+"deg)";
-							zone.style.webkitTransform = "rotate("+-rotationSign*parseFloat(zoneRotateArray[1])+"deg)";
-							zoneLabel.style.transform = "rotate("+rotationSign*parseFloat(zoneRotateArray[1])+"deg)";
-							zoneLabel.style.webkitTransform = "rotate("+rotationSign*parseFloat(zoneRotateArray[1])+"deg)";
+							var zoneLabel = document.createElement("label");
+							zoneLabel.innerHTML = zoneName;
+							zone.appendChild(zoneLabel);
+							var posString = sysZoneArray[i].match(posRegex).join().substring(6).replace(/ /g,"");
+							var zonePosArray = posString.split(",");
+							zone.style.top = parseFloat(zonePosArray[2])/2000*systemScaleFactor + "%";
+							zone.style.left = parseFloat(zonePosArray[0])/2000*systemScaleFactor + "%";
+							zone.dataset.zPos = zonePosArray[1]*systemScaleFactor;
+							zone.style.position = "absolute";
+							if (sysZoneArray[i].indexOf("ids_info") != -1 && sysZoneArray[i].match(idsInfoRegex)) {
+								var idsInfoNumber = sysZoneArray[i].match(idsInfoRegex).join().substring(11);
+								zone.dataset.idsInfo = idsInfoNumber;
+								zone.addEventListener("click", function(event) {
+									if (hasNotPannedRecently()) {
+										showInfoEventHandler(this);
+									}
+								});
+							} else {
+								zone.className += " noInfo";
+							}
+							if (sysZoneArray[i].indexOf("rotate") != -1) {
+								var rotateString = sysZoneArray[i].match(rotationRegex).join().substring(10).replace(/ /g,"");
+								var zoneRotateArray = rotateString.split(",");
+								var rotationSign = 1;
+								if(parseInt(zoneRotateArray[0]) == -180 || parseInt(zoneRotateArray[0]) == 180) {
+									rotationSign = -1*rotationSign;
+								}
+								/*if(parseFloat(zoneRotateArray[2]) == -180 || parseFloat(zoneRotateArray[2]) == 180) {
+									rotationSign = -1*rotationSign;
+								}*/
+								zone.style.transform = "rotate("+-rotationSign*parseFloat(zoneRotateArray[1])+"deg)";
+								zone.style.webkitTransform = "rotate("+-rotationSign*parseFloat(zoneRotateArray[1])+"deg)";
+								zoneLabel.style.transform = "rotate("+rotationSign*parseFloat(zoneRotateArray[1])+"deg)";
+								zoneLabel.style.webkitTransform = "rotate("+rotationSign*parseFloat(zoneRotateArray[1])+"deg)";
+							}
+							var sizeString = sysZoneArray[i].match(sizeRegex).join().substring(7).replace(/ /g,"");
+							var zoneSizeArray = sizeString.split(",");
+							// 131072: exclusion zone type 2, these are weird
+							if (sysZoneArray[i].indexOf("131072") != -1) {
+								zone.style.height = systemScaleFactor*parseFloat(zoneSizeArray[2])/2000 + "%";
+								zone.style.width = systemScaleFactor*parseFloat(zoneSizeArray[0])/2000 + "%";
+							} else {
+								zone.style.height = systemScaleFactor*parseFloat(zoneSizeArray[2])/1000 + "%";
+								zone.style.width = systemScaleFactor*parseFloat(zoneSizeArray[0])/1000 + "%";
+							}
+							zone.style.zIndex = Math.floor(-systemScaleFactor*parseFloat(zoneSizeArray[2])/1000*systemScaleFactor*parseFloat(zoneSizeArray[0])/1000);
+							if (sysZoneArray[i].toLowerCase().indexOf("ellipsoid") != -1) {
+								zone.className += " roundZone";
+							} else if (sysZoneArray[i].toLowerCase().indexOf("sphere") != -1) {
+								zone.style.height = zone.style.width;
+								zone.className += " roundZone";
+							} else if (sysZoneArray[i].toLowerCase().indexOf("cylinder") != -1) {
+								zone.className += " cylinderZone";
+							} else if (sysZoneArray[i].toLowerCase().indexOf("box") != -1) {
+								zone.className += " boxZone";
+							}
+							if (sysZoneArray[i].indexOf("property_fog_color") != -1) {
+								var fogColourString = sysZoneArray[i].match(fogColourRegex).join().substring(21).replace(/ /g,"");
+								var fogColourArray = fogColourString.split(",");
+								var fogColourString = "rgba("+parseInt(fogColourArray[0])+","+parseInt(fogColourArray[1])+","+parseInt(fogColourArray[2])+",0.45)";
+								zone.style.backgroundColor = fogColourString;
+							}
+							if (sysZoneArray[i].indexOf("property_flags") != -1) {
+								var zoneTypeNumber = sysZoneArray[i].match(zoneTypeRegex).join().substring(17).replace(/ /g,"");
+								zone.className += " "+zoneFlagArray[zoneTypeNumber];
+							} else {
+								zone.className += " noZoneType";
+							}
+							if (sysZoneArray[i].indexOf("131072") != -1) {
+								zone.style.marginTop = -systemScaleFactor*parseFloat(zoneSizeArray[2])/4000 + "%";
+								zone.style.marginLeft = -systemScaleFactor*parseFloat(zoneSizeArray[0])/4000 + "%";
+							} else {
+								zone.style.marginTop = -systemScaleFactor*parseFloat(zoneSizeArray[2])/2000 + "%";
+								zone.style.marginLeft = -systemScaleFactor*parseFloat(zoneSizeArray[0])/2000 + "%";
+							}
+							if (sysZoneArray[i].toLowerCase().indexOf("sphere") != -1) {
+								zone.style.marginTop  = zone.style.marginLeft;
+								zone.style.zIndex = Math.floor(-systemScaleFactor*parseFloat(zoneSizeArray[0])/1000*systemScaleFactor*parseFloat(zoneSizeArray[0])/1000);
+							}
+							document.querySelector(".contents").appendChild(zone);
 						}
-						var sizeString = sysZoneArray[i].match(sizeRegex).join().substring(7).replace(/ /g,"");
-						var zoneSizeArray = sizeString.split(",");
-						// 131072: exclusion zone type 2, these are weird
-						if (sysZoneArray[i].indexOf("131072") != -1) {
-							zone.style.height = systemScaleFactor*parseFloat(zoneSizeArray[2])/2000 + "%";
-							zone.style.width = systemScaleFactor*parseFloat(zoneSizeArray[0])/2000 + "%";
-						} else {
-							zone.style.height = systemScaleFactor*parseFloat(zoneSizeArray[2])/1000 + "%";
-							zone.style.width = systemScaleFactor*parseFloat(zoneSizeArray[0])/1000 + "%";
-						}
-						zone.style.zIndex = Math.floor(-systemScaleFactor*parseFloat(zoneSizeArray[2])/1000*systemScaleFactor*parseFloat(zoneSizeArray[0])/1000);
-						if (sysZoneArray[i].toLowerCase().indexOf("ellipsoid") != -1) {
-							zone.className += " roundZone";
-						} else if (sysZoneArray[i].toLowerCase().indexOf("sphere") != -1) {
-							zone.style.height = zone.style.width;
-							zone.className += " roundZone";
-						} else if (sysZoneArray[i].toLowerCase().indexOf("cylinder") != -1) {
-							zone.className += " cylinderZone";
-						} else if (sysZoneArray[i].toLowerCase().indexOf("box") != -1) {
-							zone.className += " boxZone";
-						}
-						if (sysZoneArray[i].indexOf("property_fog_color") != -1) {
-							var fogColourString = sysZoneArray[i].match(fogColourRegex).join().substring(21).replace(/ /g,"");
-							var fogColourArray = fogColourString.split(",");
-							var fogColourString = "rgba("+parseInt(fogColourArray[0])+","+parseInt(fogColourArray[1])+","+parseInt(fogColourArray[2])+",0.45)";
-							zone.style.backgroundColor = fogColourString;
-						}
-						if (sysZoneArray[i].indexOf("property_flags") != -1) {
-							var zoneTypeNumber = sysZoneArray[i].match(zoneTypeRegex).join().substring(17).replace(/ /g,"");
-							zone.className += " "+zoneFlagArray[zoneTypeNumber];
-						} else {
-							zone.className += " noZoneType";
-						}
-						if (sysZoneArray[i].indexOf("131072") != -1) {
-							zone.style.marginTop = -systemScaleFactor*parseFloat(zoneSizeArray[2])/4000 + "%";
-							zone.style.marginLeft = -systemScaleFactor*parseFloat(zoneSizeArray[0])/4000 + "%";
-						} else {
-							zone.style.marginTop = -systemScaleFactor*parseFloat(zoneSizeArray[2])/2000 + "%";
-							zone.style.marginLeft = -systemScaleFactor*parseFloat(zoneSizeArray[0])/2000 + "%";
-						}
-						if (sysZoneArray[i].toLowerCase().indexOf("sphere") != -1) {
-							zone.style.marginTop  = zone.style.marginLeft;
-							zone.style.zIndex = Math.floor(-systemScaleFactor*parseFloat(zoneSizeArray[0])/1000*systemScaleFactor*parseFloat(zoneSizeArray[0])/1000);
-						}
-						document.querySelector(".contents").appendChild(zone);
+					} catch(error) {
+						console.warn("Could not add zone!");
+						console.log(sysZoneArray[i]);
+						console.error(error);
 					}
 				}
 			}	
@@ -1398,132 +1404,138 @@ function generateMap(system) {
 			var sysObjectArray = data.match(objectRegex);
 			if (sysObjectArray !== null) {
 				for (i = 0; i < sysObjectArray.length; i++) {
-					if (sysObjectArray[i].toLowerCase().match(ignoreObjectRegex)) {
-						continue;
-					}
-					var objectName;
-					var object = document.createElement("div");
-					var posString = sysObjectArray[i].match(posRegex).join().substring(6).replace(/ /g,"");
-					var nameString = sysObjectArray[i].match(nameRegex).join().substring(11);
-					object.dataset.internalNickname = nameString.toLowerCase();
-					var objectClasses = getObjectClasses(sysObjectArray[i]);
-					if (sysObjectArray[i].indexOf("ids_name") != -1) {
-						var idsNameNumber = sysObjectArray[i].match(idsNameRegex).join().substring(11);
-						object.dataset.idsName = idsNameNumber;
-						objectName = infocardArray[idsNameNumber];
-					} else {
-						objectName = findObjectName(nameString, objectClasses);
-						if (objectName.indexOf("???") != -1 && objectClasses.indexOf("tradelane") == -1) {
-							object.style.display = "none";
+					try {
+						if (sysObjectArray[i].toLowerCase().match(ignoreObjectRegex)) {
+							continue;
 						}
-					}
-					var objectLabel = document.createElement("label");
-					objectLabel.innerHTML = objectName;
-					object.appendChild(objectLabel);
-					if (sysObjectArray[i].indexOf("ids_info") != -1 && sysObjectArray[i].match(idsInfoRegex)) {
-						var idsInfoNumber = sysObjectArray[i].match(idsInfoRegex).join().substring(11);
-						object.dataset.idsInfo = idsInfoNumber;
-						object.addEventListener("click", function() {
-							if (hasNotPannedRecently()) {
-								if (this.className.indexOf("jump") != -1 && typeof this.dataset.jumpDest !== "undefined" && this.className.indexOf("unusableJump") == -1) {
+						var objectName;
+						var object = document.createElement("div");
+						var posString = sysObjectArray[i].match(posRegex).join().substring(6).replace(/ /g,"");
+						var nameString = sysObjectArray[i].match(nameRegex).join().substring(11);
+						object.dataset.internalNickname = nameString.toLowerCase();
+						var objectClasses = getObjectClasses(sysObjectArray[i]);
+						if (sysObjectArray[i].indexOf("ids_name") != -1) {
+							var idsNameNumber = sysObjectArray[i].match(idsNameRegex).join().substring(11);
+							object.dataset.idsName = idsNameNumber;
+							objectName = infocardArray[idsNameNumber];
+						} else {
+							objectName = findObjectName(nameString, objectClasses);
+							if (objectName.indexOf("???") != -1 && objectClasses.indexOf("tradelane") == -1) {
+								object.style.display = "none";
+							}
+						}
+						var objectLabel = document.createElement("label");
+						objectLabel.innerHTML = objectName;
+						object.appendChild(objectLabel);
+						if (sysObjectArray[i].indexOf("ids_info") != -1 && sysObjectArray[i].match(idsInfoRegex)) {
+							var idsInfoNumber = sysObjectArray[i].match(idsInfoRegex).join().substring(11);
+							object.dataset.idsInfo = idsInfoNumber;
+							object.addEventListener("click", function() {
+								if (hasNotPannedRecently()) {
+									if (this.className.indexOf("jump") != -1 && typeof this.dataset.jumpDest !== "undefined" && this.className.indexOf("unusableJump") == -1) {
+										generateMap(this.dataset.jumpDest);
+									} else {
+										showObjectInfo(this.dataset.idsName, this.dataset.idsInfo, this.className, this.dataset.zPos, this.dataset.reputation, document.querySelector(".contents").dataset.systemNickname, undefined, undefined, undefined, this.dataset.internalNickname);
+									}
+								}
+							});
+						} else if (sysObjectArray[i].match(gotoRegex) && objectClasses.indexOf("unusableJump") == -1) {
+							object.addEventListener("click", function() {
+								if (hasNotPannedRecently()) {
 									generateMap(this.dataset.jumpDest);
-								} else {
-									showObjectInfo(this.dataset.idsName, this.dataset.idsInfo, this.className, this.dataset.zPos, this.dataset.reputation, document.querySelector(".contents").dataset.systemNickname, undefined, undefined, undefined, this.dataset.internalNickname);
+								}
+							});
+						}
+						var objectPosArray = posString.split(",");
+						object.style.top = parseFloat(objectPosArray[2])/2000*systemScaleFactor + "%";
+						object.style.left = parseFloat(objectPosArray[0])/2000*systemScaleFactor + "%";
+						object.dataset.zPos = objectPosArray[1]*systemScaleFactor;
+						object.style.position = "absolute";
+						object.className = objectClasses;
+						document.querySelector(".contents").appendChild(object);
+						if (sysObjectArray[i].indexOf("rotate =") != -1 && object.className.indexOf("tradelane") != -1) {
+							var rotateString = sysObjectArray[i].match(rotationRegex).join().substring(9).replace(/ /g,"");
+							var objectRotateArray = rotateString.split(",");
+							if (sysObjectArray[i].indexOf("ga_lane") != -1) {
+								object.style.transform = "rotate("+(-parseFloat(objectRotateArray[0]))+"deg)";
+								object.style.webkitTransform = "rotate("+(-parseFloat(objectRotateArray[0]))+"deg)";
+							} else {
+								object.style.transform = "rotate("+(-parseFloat(objectRotateArray[1]))+"deg)";
+								object.style.webkitTransform = "rotate("+(-parseFloat(objectRotateArray[1]))+"deg)";
+							}
+						}
+						if (object.className.indexOf("jump") != -1 && sysObjectArray[i].match(gotoRegex)) {
+							object.dataset.jumpDest = sysObjectArray[i].match(gotoRegex).join().substring(7).replace(/ /g,"").split(",")[0].toLowerCase();
+						}
+						if (sysObjectArray[i].indexOf("reputation =") != -1) {
+							object.dataset.reputation = sysObjectArray[i].match(repRegex).join().substring(13);
+						}
+						if (sysObjectArray[i].indexOf("archetype") != -1) {
+							var objectArchetype = sysObjectArray[i].match(archetypeRegex).join().substring(12).replace(/ /g,"");
+							object.dataset.archetype = objectArchetype;
+							if (typeof solarArchArray[objectArchetype] !== "undefined") {
+								if (typeof solarArchArray[objectArchetype].texturePath !== "undefined") {
+									object.style.backgroundImage = "url("+solarArchArray[objectArchetype].texturePath+")";
+								}
+								if (typeof solarArchArray[objectArchetype].radius !== "undefined" && (object.className.indexOf("star") != -1 || object.className.indexOf("planet") != -1)) {
+									var rawObjectRadius = parseFloat(solarArchArray[objectArchetype].radius);
+									var objectRadius = parseFloat(solarArchArray[objectArchetype].radius/2000*systemScaleFactor);
+									object.dataset.radius = solarArchArray[objectArchetype].radius;
+									object.style.width = objectRadius*2 + "%";
+									object.style.height = objectRadius*2 + "%";
+									object.style.marginTop = -objectRadius + "%";
+									object.style.marginLeft = -objectRadius + "%";
+									object.style.zIndex = Math.floor(-objectRadius*2);
 								}
 							}
-						});
-					} else if (sysObjectArray[i].match(gotoRegex) && objectClasses.indexOf("unusableJump") == -1) {
-						object.addEventListener("click", function() {
-							if (hasNotPannedRecently()) {
-								generateMap(this.dataset.jumpDest);
-							}
-						});
-					}
-					var objectPosArray = posString.split(",");
-					object.style.top = parseFloat(objectPosArray[2])/2000*systemScaleFactor + "%";
-					object.style.left = parseFloat(objectPosArray[0])/2000*systemScaleFactor + "%";
-					object.dataset.zPos = objectPosArray[1]*systemScaleFactor;
-					object.style.position = "absolute";
-					object.className = objectClasses;
-					document.querySelector(".contents").appendChild(object);
-					if (sysObjectArray[i].indexOf("rotate =") != -1 && object.className.indexOf("tradelane") != -1) {
-						var rotateString = sysObjectArray[i].match(rotationRegex).join().substring(9).replace(/ /g,"");
-						var objectRotateArray = rotateString.split(",");
-						if (sysObjectArray[i].indexOf("ga_lane") != -1) {
-							object.style.transform = "rotate("+(-parseFloat(objectRotateArray[0]))+"deg)";
-							object.style.webkitTransform = "rotate("+(-parseFloat(objectRotateArray[0]))+"deg)";
-						} else {
-							object.style.transform = "rotate("+(-parseFloat(objectRotateArray[1]))+"deg)";
-							object.style.webkitTransform = "rotate("+(-parseFloat(objectRotateArray[1]))+"deg)";
 						}
-					}
-					if (object.className.indexOf("jump") != -1 && sysObjectArray[i].match(gotoRegex)) {
-						object.dataset.jumpDest = sysObjectArray[i].match(gotoRegex).join().substring(7).replace(/ /g,"").split(",")[0].toLowerCase();
-					}
-					if (sysObjectArray[i].indexOf("reputation =") != -1) {
-						object.dataset.reputation = sysObjectArray[i].match(repRegex).join().substring(13);
-					}
-					if (sysObjectArray[i].indexOf("archetype") != -1) {
-						var objectArchetype = sysObjectArray[i].match(archetypeRegex).join().substring(12).replace(/ /g,"");
-						object.dataset.archetype = objectArchetype;
-						if (typeof solarArchArray[objectArchetype] !== "undefined") {
-							if (typeof solarArchArray[objectArchetype].texturePath !== "undefined") {
-								object.style.backgroundImage = "url("+solarArchArray[objectArchetype].texturePath+")";
-							}
-							if (typeof solarArchArray[objectArchetype].radius !== "undefined" && (object.className.indexOf("star") != -1 || object.className.indexOf("planet") != -1)) {
-								var rawObjectRadius = parseFloat(solarArchArray[objectArchetype].radius);
-								var objectRadius = parseFloat(solarArchArray[objectArchetype].radius/2000*systemScaleFactor);
-								object.dataset.radius = solarArchArray[objectArchetype].radius;
-								object.style.width = objectRadius*2 + "%";
-								object.style.height = objectRadius*2 + "%";
-								object.style.marginTop = -objectRadius + "%";
-								object.style.marginLeft = -objectRadius + "%";
-								object.style.zIndex = Math.floor(-objectRadius*2);
+						if (objectRadius && sysObjectArray[i].indexOf("atmosphere_range =") != -1) {
+							if (object.className.indexOf("star") != -1 || object.className.indexOf("planet") != -1) {
+								var atmosphere = document.createElement("div");
+								var rawAtmosphereRadius = parseFloat(sysObjectArray[i].match(atmosphereRadiusRegex).join().substring(19));
+								var atmosphereRadius = 50*rawAtmosphereRadius/rawObjectRadius;
+								
+								atmosphere.className = "atmosphere";
+								atmosphere.style.top = "50%";
+								atmosphere.style.left = "50%";
+								atmosphere.style.marginTop = -atmosphereRadius + "%";
+								atmosphere.style.marginLeft = -atmosphereRadius + "%";
+								atmosphere.style.position = "absolute";
+								
+								atmosphere.style.width = atmosphereRadius*2 + "%";
+								atmosphere.style.height = atmosphereRadius*2 + "%";
+								
+								atmosphere.style.zIndex = -1;
+								
+								object.style.zIndex = Math.floor(-rawAtmosphereRadius/2000*systemScaleFactor);
+								
+								object.appendChild(atmosphere);
+								
+								if (rawAtmosphereRadius < rawObjectRadius*1.25 || (objectRadius < 2 && rawAtmosphereRadius < rawObjectRadius*1.5)) {
+									atmosphere.style.display = "none";
+								}
 							}
 						}
-					}
-					if (objectRadius && sysObjectArray[i].indexOf("atmosphere_range =") != -1) {
-						if (object.className.indexOf("star") != -1 || object.className.indexOf("planet") != -1) {
-							var atmosphere = document.createElement("div");
-							var rawAtmosphereRadius = parseFloat(sysObjectArray[i].match(atmosphereRadiusRegex).join().substring(19));
-							var atmosphereRadius = 50*rawAtmosphereRadius/rawObjectRadius;
-							
-							atmosphere.className = "atmosphere";
-							atmosphere.style.top = "50%";
-							atmosphere.style.left = "50%";
-							atmosphere.style.marginTop = -atmosphereRadius + "%";
-							atmosphere.style.marginLeft = -atmosphereRadius + "%";
-							atmosphere.style.position = "absolute";
-							
-							atmosphere.style.width = atmosphereRadius*2 + "%";
-							atmosphere.style.height = atmosphereRadius*2 + "%";
-							
-							atmosphere.style.zIndex = -1;
-							
-							object.style.zIndex = Math.floor(-rawAtmosphereRadius/2000*systemScaleFactor);
-							
-							object.appendChild(atmosphere);
-							
-							if (rawAtmosphereRadius < rawObjectRadius*1.25 || (objectRadius < 2 && rawAtmosphereRadius < rawObjectRadius*1.5)) {
-								atmosphere.style.display = "none";
+						
+						if (sysObjectArray[i].indexOf("burn_color") != -1) {
+							var burnColourString = sysObjectArray[i].match(burnColourRegex).join().substring(13).replace(/ /g,"");
+							var burnColourArray = burnColourString.split(",");
+							var burnColourString = "rgb("+parseInt(burnColourArray[0])+","+parseInt(burnColourArray[1])+","+parseInt(burnColourArray[2])+")";
+							object.style.backgroundColor = burnColourString;
+							if (object.className.indexOf("star") != -1) {
+								object.style.boxShadow += " "+burnColourString;
+								if (atmosphere) {
+									atmosphere.style.boxShadow += " "+burnColourString;
+								}
 							}
 						}
-					}
-					
-					if (sysObjectArray[i].indexOf("burn_color") != -1) {
-						var burnColourString = sysObjectArray[i].match(burnColourRegex).join().substring(13).replace(/ /g,"");
-						var burnColourArray = burnColourString.split(",");
-						var burnColourString = "rgb("+parseInt(burnColourArray[0])+","+parseInt(burnColourArray[1])+","+parseInt(burnColourArray[2])+")";
-						object.style.backgroundColor = burnColourString;
-						if (object.className.indexOf("star") != -1) {
-							object.style.boxShadow += " "+burnColourString;
-							if (atmosphere) {
-								atmosphere.style.boxShadow += " "+burnColourString;
-							}
+						if (object.className == "object") {
+							object.className = "object unclassified";
 						}
-					}
-					if (object.className == "object") {
-						object.className = "object unclassified";
+					} catch(error) {
+						console.warn("Could not add object!");
+						console.log(sysObjectArray[i]);
+						console.error(error);
 					}
 				}
 			}
