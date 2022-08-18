@@ -464,6 +464,12 @@ function updateConfigClasses() {
 	} else {
 		$(".contents").removeClass("showInternalNicknames");
 	}
+
+	if (document.querySelector(".configOption#fitToWindow input").checked) {
+		$("body").addClass("fitToWindow");
+	} else {
+		$("body").removeClass("fitToWindow");
+	}
 	
 	if (document.querySelector(".configOption#wreckLabels input").checked) {
 		$(".object.wreck label").removeClass("hidden");
@@ -1020,7 +1026,7 @@ function generateUniverseMap() {
 	if (infocardArrayState != "ready" || systemScaleFactorArrayState != "ready" || searchArrayState != "ready" || systemConnectionsEvaluated != true || systemNameArrayState != "ready") {
 		setTimeout(function(){generateUniverseMap()},10);
 	} else {
-		if (document.querySelector(".configOption#connections  input").checked) {
+		if (document.querySelector(".configOption#connections input").checked) {
 			$(".systemConnectionProp").show();
 		}
 		document.querySelector(".loaderTitle").innerHTML = "Generating map...";

@@ -1532,23 +1532,23 @@ input.switch:checked ~ label:after {
 		padding: 0;
 	}
 	
-	.navContainer {
+	body.responsive .navContainer {
 		position: fixed !important;
 		left: 0 !important;
 		right: 0 !important;
 		border-bottom: 0.2em solid rgb(30, 166, 197) !important;
 	}
 	
-	.map {
+	body.responsive .map {
 		top: 0.0em !important;
 	}
 	
-	.infocardContainer span.infocardText {
+	body.responsive .infocardContainer span.infocardText {
 		padding-left: 0;
 		padding-right: 0;
 	}
 	
-	.configMenu, .mapLegend {
+	body.responsive .configMenu, body.responsive .mapLegend {
 		position: fixed !important;
 		margin: 0px auto !important;
 		left: 0 !important;
@@ -1585,8 +1585,6 @@ body.responsive .map {
 		width: 100%;
 	}
 }
-
-
 
 body.responsive {
 	min-width: 0;
@@ -1692,6 +1690,36 @@ body.responsive {
 	}
 }
 
+/* fit to window option */
+
+body.responsive.fitToWindow .mapContainer {
+	position: absolute;
+	top: 2.4em;
+	margin: 0 auto;
+	height: calc(100vw - 2.4em);
+	width: calc(100vw - 2.4em);
+	border: 0.2em rgb(25, 47, 96) solid;
+	box-sizing: border-box;
+}
+
+@media (min-aspect-ratio: 1/1) {
+	body.responsive.fitToWindow .mapContainer {
+		height: calc(100vh - 2.4em);
+		width: calc(100vh - 2.4em);
+	}
+}
+
+@media (max-aspect-ratio: 95/100) {
+	body.responsive.fitToWindow .mapContainer {
+		height: 100vw !important;
+		width: 100vw !important;
+	}
+}
+
+body.responsive.fitToWindow .map {
+	height: 100%;
+	width: 100%;
+}
 
 /* responsive styles end */
 
