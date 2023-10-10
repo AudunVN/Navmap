@@ -150,6 +150,7 @@ St03b = ST Omicron Major Inner
 ST04 = ST Omicron Delta
 ST05 = ST Omicron Iota
 ST06 = ST Omicron-99
+EW10 = ST Omicron Pi
 ST07 = EW Omicron Zeta
 ST08 = EW Omicron Mu
 ST39 = EW Omicron-100 (The Order)
