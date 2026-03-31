@@ -6,7 +6,6 @@ from pathlib import PurePath, Path
 import json
 import fileinput
 import codecs
-from distutils.dir_util import copy_tree
 import fnmatch
 
 build = {
